@@ -4,7 +4,7 @@ const { loginController, signupController, requestResetPasswordController, reset
 const router = express.Router()
 
 router.post('/login', loginController)
-router.post('/register', signupController)
+router.post('/signup', signupController)
 router.post('/forgot-password', requestResetPasswordController)
 
 router.use(authMiddleware.isAuth)

@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "crypto-js": "^4.1.1",
     "dotenv": "^10.0.0",

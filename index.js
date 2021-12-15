@@ -1,7 +1,7 @@
 const express = require('express')
 const dotenv = require('dotenv')
 const mongoose = require('mongoose')
-
+var cors = require('cors')
 const authRoute = require('./src/auth/route')
 const userRoute = require('./src/user/route')
 const gameRoute = require('./src/game/route')
@@ -21,7 +21,12 @@ mongoose
         console.log(err)
     })
 
+// Middleware
 app.use(express.json())
+
+// Allow CORS
+app.use(cors());
+
 app.use('/api/auth', authRoute)
 app.use('/api/user', userRoute)
 app.use('/api/game', gameRoute)
