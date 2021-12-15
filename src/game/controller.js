@@ -1,43 +1,43 @@
-const {gameCreate, gameDetail, gameEdit, gameDelete } = require("./service")
+const {create, detail, edit, deletee } = require("./service")
 
 
-const gameCreateController = async (req, res, next) => {
-    const result = await gameCreate({
+const createController = async (req, res, next) => {
+    const result = await create({
         userId: req.user._id,
-        game: req.body
+        item: req.body
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
-const gameEditController = async (req, res, next) => {
-    const result = await gameEdit({
+const editController = async (req, res, next) => {
+    const result = await edit({
         userId: req.user._id,
-        gameId: req.params.id,
-        game: req.body
+        _id: req.params.id,
+        item: req.body
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
-const gameDetailController = async (req, res, next) => {
-    const result = await gameDetail({
+const detailController = async (req, res, next) => {
+    const result = await detail({
         userId: req.user._id,
-        gameId: req.params.id
+        _id: req.params.id
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
-const gameDeleteController = async (req, res, next) => {
-    const result = await gameDelete({
+const deleteController = async (req, res, next) => {
+    const result = await deletee({
         userId: req.user._id,
-        gameId: req.params.id
+        _id: req.params.id
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
 
 module.exports = {
-    gameCreateController,
-    gameEditController,
-    gameDetailController,
-    gameDeleteController
+    createController,
+    editController,
+    detailController,
+    deleteController
 }

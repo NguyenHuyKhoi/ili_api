@@ -1,5 +1,5 @@
 const User = require('./model')
-const profileEdit = async (data) => {
+const edit = async (data) => {
     try {
         const {avatar, banner, username, name, userId} = data
 
@@ -26,7 +26,7 @@ const profileEdit = async (data) => {
     }
 }
 
-const profileDelete = async (data) => {
+const deletee = async (data) => {
     try {
         const {userId} = data
 
@@ -47,7 +47,7 @@ const profileDelete = async (data) => {
     }
 }
 
-const profileDetail = async (data) => {
+const detail = async (data) => {
     try {
         const {userId} = data
         const user = await User.findOne({_id: userId})
@@ -64,7 +64,7 @@ const profileDetail = async (data) => {
     }
 }
 module.exports = {
-    profileEdit,
-    profileDetail,
-    profileDelete
+    edit,
+    deletee,
+    detail
 }

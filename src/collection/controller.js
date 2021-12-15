@@ -1,43 +1,43 @@
-const {collectionCreate, collectionDetail, collectionEdit, collectionDelete } = require("./service")
+const {create, detail, edit, deletee } = require("./service")
 
 
-const collectionCreateController = async (req, res, next) => {
-    const result = await collectionCreate({
+const createController = async (req, res, next) => {
+    const result = await create({
         userId: req.user._id,
-        collection: req.body
+        item: req.body
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
-const collectionEditController = async (req, res, next) => {
-    const result = await collectionEdit({
+const editController = async (req, res, next) => {
+    const result = await edit({
         userId: req.user._id,
-        collectionId: req.params.id,
-        collection: req.body
+        _id: req.params.id,
+        item: req.body
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
-const collectionDetailController = async (req, res, next) => {
-    const result = await collectionDetail({
+const detailController = async (req, res, next) => {
+    const result = await detail({
         userId: req.user._id,
-        collectionId: req.params.id
+        _id: req.params.id
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
-const collectionDeleteController = async (req, res, next) => {
-    const result = await collectionDelete({
+const deleteController = async (req, res, next) => {
+    const result = await deletee({
         userId: req.user._id,
-        collectionId: req.params.id
+        _id: req.params.id
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
 
 module.exports = {
-    collectionCreateController,
-    collectionEditController,
-    collectionDetailController,
-    collectionDeleteController
+    createController,
+    editController,
+    detailController,
+    deleteController
 }

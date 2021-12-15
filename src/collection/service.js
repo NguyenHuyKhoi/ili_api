@@ -1,16 +1,16 @@
 const Collection = require('./model')
-const collectionCreate = async (data) => {
+const create = async (data) => {
     try {
-        const {collection, userId} = data
-        if (userId == undefined || collection == undefined) {
+        const {item, userId} = data
+        if (userId == undefined || item == undefined) {
             throw new Error('Missing fields')
         }
 
         await new Collection({
-            ...collection,
+            ...item,
             userId
         }).save()
-        return 'Collection create successfully'
+        return 'Create successfully'
     }
     catch (err) {
         return {
@@ -19,17 +19,17 @@ const collectionCreate = async (data) => {
     }
 }
 
-const collectionDetail = async (data) => {
+const detail = async (data) => {
     try {
-        const {collectionId, userId} = data
-        if (collectionId == undefined || userId == undefined) {
+        const {_id, userId} = data
+        if (_id == undefined || userId == undefined) {
             throw new Error('Missing fields')
         }
-        const collection = await Collection.findOne({_id: collectionId})
-        if (!collection) {
-            throw new Error('No collection found')
+        const saved = await Collection.findOne({_id})
+        if (!saved) {
+            throw new Error('Not found')
         }
-        return collection
+        return saved
     }
     catch (err) {
         return {
@@ -39,26 +39,25 @@ const collectionDetail = async (data) => {
 }
 
 
-const collectionEdit= async (data) => {
+const edit= async (data) => {
     try {
-        const {collection, userId, collectionId} = data
-        if (userId == undefined || collectionId == undefined || collection == undefined) {
+        const {item, userId, _id} = data
+        if (userId == undefined || _id == undefined || collection == undefined) {
             throw new Error('Missing fields')
         }
-        const savedCollection = await Collection.findOne({_id: collectionId})
-        if (!savedCollection) {
-            throw new Error('No collection found')
+        const saved = await Collection.findOne({_id})
+        if (!saved) {
+            throw new Error('Not found')
         }
-        if (savedCollection.userId != userId) {
-            throw new Error('Can not edit other\'s collection')
+        if (saved.userId != userId) {
+            throw new Error('Can not edit other\'s')
         }
         await Collection.updateOne(
-            { _id: collectionId },
-            { $set: { ...collection}},
+            { _id },
+            { $set: { ...item}},
             { new: true}
         )
-        console.log("Collection edit :", collection)
-        return 'Collection edit successfully'
+        return 'Edit successfully'
     }
     catch (err) {
         return {
@@ -68,23 +67,23 @@ const collectionEdit= async (data) => {
 }
 
 
-const collectionDelete = async (data) => {
+const deletee = async (data) => {
     try {
-        const {userId, collectionId} = data
-        if (userId == undefined || collectionId == undefined) {
+        const {userId, _id} = data
+        if (userId == undefined || _id == undefined) {
             throw new Error('Missing fields')
         }
-        const savedCollection = await Collection.findOne({_id: collectionId, userId})
-        if (!savedCollection) {
-            throw new Error('No collection found')
+        const saved = await Collection.findOne({_id})
+        if (!saved) {
+            throw new Error('Not found')
         }
 
-        if (savedCollection.userId != userId) {
-            throw new Error('Can not delete other\'s collection')
+        if (saved.userId != userId) {
+            throw new Error('Can not delete other\'s')
         }
 
-        await Collection.deleteOne({ _id: collectionId })
-        return 'Collection Delete successfully'
+        await Collection.deleteOne({ _id })
+        return 'Delete successfully'
     }
     catch (err) {
         return {
@@ -93,8 +92,8 @@ const collectionDelete = async (data) => {
     }
 }
 module.exports = {
-    collectionEdit,
-    collectionCreate,
-    collectionDetail,
-    collectionDelete
+    edit,
+    create,
+    detail,
+    deletee
 }

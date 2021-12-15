@@ -1,17 +1,17 @@
 const Game = require('./model')
-const gameCreate = async (data) => {
+const create = async (data) => {
     try {
-        const {game, userId} = data
-        if (userId == undefined || game == undefined) {
+        const {item, userId} = data
+        if (userId == undefined || item == undefined) {
             throw new Error('Missing fields')
         }
 
 
         await new Game({
-            ...game,
+            ...item,
             userId
         }).save()
-        return 'Game create successfully'
+        return 'Create successfully'
 
     }
     catch (err) {
@@ -21,27 +21,27 @@ const gameCreate = async (data) => {
     }
 }
 
-const gameEdit = async (data) => {
+const edit = async (data) => {
     try {
-        const {game, userId, gameId} = data
-        if (userId == undefined || game == undefined) {
+        const {item, userId, _id} = data
+        if (userId == undefined || item == undefined) {
             throw new Error('Missing fields')
         }
 
-        const savedGame = await Game.findOne({_id: gameId})
-        if (!savedGame) {
-            throw new Error('Game not exist')
+        const saved = await Game.findOne({_id})
+        if (!saved) {
+            throw new Error('Not exist')
         }
 
-        if (savedGame.userId != userId) {
-            throw new Error('Can not edit other\'s game')
+        if (saved.userId != userId) {
+            throw new Error('Not edit other\'s')
         }
         await Game.updateOne(
-            { _id: gameId },
-            { $set: { ...game }},
+            { _id },
+            { $set: { ...item }},
             { new: true}
         )
-        return 'Game edit successfully'
+        return 'Edit successfully'
 
     }
     catch (err) {
@@ -51,17 +51,17 @@ const gameEdit = async (data) => {
     }
 }
 
-const gameDetail = async (data) => {
+const detail = async (data) => {
     try {
-        const {gameId, userId} = data
-        if (gameId == undefined || userId == undefined) {
+        const {_id, userId} = data
+        if (_id == undefined || userId == undefined) {
             throw new Error('Missing fields')
         }
-        const game = await Game.findOne({_id: gameId})
-        if (!game) {
-            throw new Error('No game found')
+        const saved = await Game.findOne({_id})
+        if (!saved) {
+            throw new Error('Not found')
         }
-        return game
+        return saved
     }
     catch (err) {
         return {
@@ -70,22 +70,22 @@ const gameDetail = async (data) => {
     }
 }
 
-const gameDelete = async (data) => {
+const deletee = async (data) => {
     try {
-        const {gameId, userId} = data
-        if (gameId == undefined || userId == undefined) {
+        const {_id, userId} = data
+        if (_id == undefined || userId == undefined) {
             throw new Error('Missing fields')
         }
-        const savedGame = await Game.findOne({_id: gameId})
-        if (!savedGame) {
-            throw new Error('No game found')
+        const saved = await Game.findOne({_id})
+        if (!saved) {
+            throw new Error('Not found')
         }
-        if (savedGame.userId != userId) {
-            throw new Error('Can not delete other\'s game')
+        if (saved.userId != userId) {
+            throw new Error('Can not delete other\'s')
         }
 
-        await Game.deleteOne({_id: gameId})
-        return "Delete game success"
+        await Game.deleteOne({_id})
+        return "Delete success"
     }
     catch (err) {
         return {
@@ -95,8 +95,8 @@ const gameDelete = async (data) => {
 }
 
 module.exports = {
-    gameCreate,
-    gameEdit,
-    gameDetail,
-    gameDelete
+    create,
+    edit,
+    detail,
+    deletee
 }
