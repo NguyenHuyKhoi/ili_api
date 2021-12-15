@@ -1,4 +1,4 @@
-const { login, signup, forgotPassword, resetPassword, changePassword } = require("./service")
+const { login, signup, requestResetPassword, resetPassword, changePassword } = require("./service")
 
 const loginController = async (req, res, next) => {
     const result = await login(req.body)
@@ -15,9 +15,12 @@ const signupController = async (req, res, next) => {
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
-const forgotPasswordController = async (req, res, next) => {
-    const result = await forgotPassword(req.body)
-    return res.json(result)
+const requestResetPasswordController = async (req, res, next) => {
+    const {email} = req.body
+    const result = await requestResetPassword({
+        email
+    })
+    return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
 const resetPasswordController = async (req, res, next) => {
@@ -33,7 +36,7 @@ const changePasswordController = async (req, res, next) => {
 module.exports = {
     loginController,
     signupController,
-    forgotPasswordController,
+    requestResetPasswordController,
     resetPasswordController,
     changePasswordController
 }

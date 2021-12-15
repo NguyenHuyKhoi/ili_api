@@ -1,7 +1,8 @@
-const { encrypt, decrypt } = require("../util/secure")
-const jwt = require('jsonwebtoken')
+const { encrypt, decrypt, generateToken, generateRandomToken } = require("../util/secure")
 
 const User = require('../user/model')
+const Token = require('./model')
+const { sendRequestResetPasswordEmail } = require("../util/email")
 const login = async (data) => {
     try {
         let {email, password} = data
@@ -19,11 +20,7 @@ const login = async (data) => {
             throw new Error('Password not correct')
         }
 
-        const accessToken = jwt.sign(
-            {_id: user._id, isAdmin: user.isAdmin},
-            process.env.SECRET_KEY,
-            {expiresIn: '30d'}
-        )
+        const accessToken = generateToken({_id: user._id, isAdmin: user.isAdmin})
         let {...infor} = user._doc
         infor.password = null
         return {...infor, accessToken}
@@ -57,8 +54,40 @@ const signup = async (data) => {
 }
 
 
-const forgotPassword = async (data) => {
-    return "forgotPassword response"
+const requestResetPassword = async (data) => {
+    try {
+        const {email} = data
+        if (email == undefined) {
+            throw new Error('Missing fields')
+        }
+        const user = await User.findOne({email})
+        if (!user) {
+            throw new Error('User not found')
+        }
+
+        const oldToken = await Token.findOne({userId: user._id})
+        if (oldToken) await oldToken.deleteOne()
+
+        let newToken = generateRandomToken()
+
+        await new Token({
+            userId: user._id,
+            token: newToken
+        }).save()
+
+        const clientUrl = process.env.CLIENT_URL
+        const resetLink = `${clientUrl}/auth/reset-password?token=${newToken}&id=${user._id}`
+
+        sendRequestResetPasswordEmail(user, resetLink)
+
+        // For dev-test
+        return resetLink
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
 }
 
 
@@ -75,7 +104,7 @@ const changePassword = async (data) => {
 module.exports = {
     login,
     signup,
-    forgotPassword,
+    requestResetPassword,
     resetPassword,
     changePassword
 }
