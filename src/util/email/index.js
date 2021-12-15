@@ -3,6 +3,27 @@ const handlebars = require('handlebars')
 const fs = require('fs')
 const path = require('path')
 
+
+const sendRequestResetPasswordEmail = async (user, link) => {
+    sendMail(
+        user.email,
+        'Request reset password',
+        {
+            link
+        },
+        './template/requestResetPassword.hbs'
+        )
+}
+
+const sendCompleteResetPasswordEmail = async (user) => {
+    sendMail(
+        user.email,
+        'Complete reset password',
+        {
+        },
+        './template/resetPassword.hbs'
+        )
+}
 const sendMail = async (email, subject, payload, template) => {
     try {
         const config = selectConfig()
@@ -22,10 +43,10 @@ const sendMail = async (email, subject, payload, template) => {
         // Send email:
         transporter.sendMail(options(), (err, infor) => {
             if (err) {
-                console.log("Send email error:", err)
+               // console.log("Send email error:", err)
             }
             else {
-                console.log("Send email infor :", infor)
+               // console.log("Send email infor :", infor)
             }
         })
 
@@ -33,17 +54,6 @@ const sendMail = async (email, subject, payload, template) => {
     catch (err) {
         return err
     }
-}
-
-const sendRequestResetPasswordEmail = async (user, link) => {
-    sendMail(
-        user.email,
-        'Request reset password',
-        {
-            link
-        },
-        './template/requestResetPassword.hbs'
-        )
 }
 
 const selectConfig = () => {
@@ -73,5 +83,6 @@ const selectConfig = () => {
 }
 module.exports = {
     sendMail,
-    sendRequestResetPasswordEmail
+    sendRequestResetPasswordEmail,
+    sendCompleteResetPasswordEmail
 }

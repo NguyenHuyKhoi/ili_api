@@ -1,8 +1,8 @@
-const { encrypt, decrypt, generateToken, generateRandomToken } = require("../util/secure")
+const { encrypt, decrypt, generateToken } = require("../util/secure")
 
 const User = require('../user/model')
 const Token = require('./model')
-const { sendRequestResetPasswordEmail } = require("../util/email")
+const { sendRequestResetPasswordEmail, sendCompleteResetPasswordEmail } = require("../util/email")
 const login = async (data) => {
     try {
         let {email, password} = data
@@ -23,6 +23,13 @@ const login = async (data) => {
         const accessToken = generateToken({_id: user._id, isAdmin: user.isAdmin})
         let {...infor} = user._doc
         infor.password = null
+
+        await Token.findOneAndDelete({userId: user._id})
+        await new Token({
+            userId: user._id,
+            token: accessToken
+        }).save()
+
         return {...infor, accessToken}
     }
     catch (err) {
@@ -53,7 +60,6 @@ const signup = async (data) => {
     }
 }
 
-
 const requestResetPassword = async (data) => {
     try {
         const {email} = data
@@ -68,7 +74,10 @@ const requestResetPassword = async (data) => {
         const oldToken = await Token.findOne({userId: user._id})
         if (oldToken) await oldToken.deleteOne()
 
-        let newToken = generateRandomToken()
+        let newToken = generateToken({
+            _id: user._id,
+            isAdmin: user.isAdmin
+        })
 
         await new Token({
             userId: user._id,
@@ -76,7 +85,7 @@ const requestResetPassword = async (data) => {
         }).save()
 
         const clientUrl = process.env.CLIENT_URL
-        const resetLink = `${clientUrl}/auth/reset-password?token=${newToken}&id=${user._id}`
+        const resetLink = `${clientUrl}/auth/reset-password?token=${newToken}`
 
         sendRequestResetPasswordEmail(user, resetLink)
 
@@ -90,16 +99,81 @@ const requestResetPassword = async (data) => {
     }
 }
 
-
 const resetPassword = async (data) => {
-    return "resetPassword response"
-}
+    try {
+        const {userId, token, newPassword} = data
+        console.log("Reset data", data)
+        if (userId == undefined || token == undefined || newPassword == undefined) {
+            throw new Error('Missing fields')
+        }
+        
+        let savedToken = await Token.findOne({userId})
+        if (!savedToken) {
+            throw new Error('Token of this user not exist or used')
+        }
 
+        if (savedToken.token != token) {
+            throw new Error('Token is invalid')
+        }
+
+        const secureNewPassword = encrypt(newPassword)
+
+        await User.updateOne(
+            { _id: userId },
+            { $set: { password: secureNewPassword}},
+            { new: true}
+        )
+        
+        const user = await User.findById({ _id: userId})
+
+        sendCompleteResetPasswordEmail(user)
+        await savedToken.deleteOne()
+        return {
+            message: 'Change password success'
+        }
+
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
 
 const changePassword = async (data) => {
-    return "changePassword response"
-}
+    try {
+        const {oldPassword, newPassword, userId} = data
+        if (oldPassword == undefined || newPassword == undefined ) {
+            throw new Error('Missing fields')
+        }
 
+        const user = await User.findOne({_id: userId})
+        if (!user) {
+            throw new Error('User not exist')
+        }
+
+        const savedPassword = decrypt(user.password)
+
+        if (savedPassword != oldPassword) {
+            throw new Error('Old password not correct')
+        }
+
+        const secureNewPassword = encrypt(newPassword)
+
+        await User.updateOne(
+            { _id: userId },
+            { $set: { password: secureNewPassword}},
+            { new: true}
+        )
+
+        return 'Password has change'
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
 
 module.exports = {
     login,

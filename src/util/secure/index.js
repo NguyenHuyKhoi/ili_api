@@ -15,20 +15,15 @@ const decrypt = (secureData) => {
 
 const generateToken = (data) => {
     const token = jwt.sign(
-        {...data},
+        {...data, salt: Crypto.randomBytes(32).toString('hex')},
         process.env.SECRET_KEY,
         {expiresIn: '30d'}
     )
     return token
 }
 
-const generateRandomToken = () => {
-    const data = Crypto.randomBytes(32).toString('hex')
-    return generateToken(data)
-}
 module.exports = {
     encrypt,
     decrypt,
-    generateToken,
-    generateRandomToken
+    generateToken
 }
