@@ -14,7 +14,30 @@ const profileEdit = async (data) => {
             { $set: { avatar, banner, username, name }},
             { new: true}
         )
+
+        User.findOne
         return 'Update user successfully'
+
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
+
+const profileDelete = async (data) => {
+    try {
+        const {userId} = data
+
+        const user = await User.findOne({_id: userId})
+        if (!user) {
+            throw new Error('user not exists')
+        }
+
+        // handle uploaded files...
+        await User.deleteOne( { _id: userId })
+        return 'Delete user successfully'
 
     }
     catch (err) {
@@ -42,5 +65,6 @@ const profileDetail = async (data) => {
 }
 module.exports = {
     profileEdit,
-    profileDetail
+    profileDetail,
+    profileDelete
 }
