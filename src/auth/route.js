@@ -1,5 +1,4 @@
 const express = require('express')
-const { route } = require('express/lib/application')
 const authMiddleware = require('./middleware')
 const { loginController, signupController, requestResetPasswordController, resetPasswordController, changePasswordController } = require('./controller')
 const router = express.Router()
