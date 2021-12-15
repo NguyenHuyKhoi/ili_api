@@ -6,8 +6,13 @@ const loginController = async (req, res, next) => {
 }
 
 const signupController = async (req, res, next) => {
-    const result = await signup(req.body)
-    return res.json(result)
+    const {email, password} = req.body
+
+    const result = await signup({
+        email,
+        password
+    })
+    return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
 const forgotPasswordController = async (req, res, next) => {
