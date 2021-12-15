@@ -1,4 +1,4 @@
-const { profileEdit, profileView } = require("./service")
+const { profileEdit, profileDetail } = require("./service")
 
 
 const profileEditController = async (req, res, next) => {
@@ -9,8 +9,8 @@ const profileEditController = async (req, res, next) => {
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
-const profileViewController = async (req, res, next) => {
-    const result = await profileView({
+const profileDetailController = async (req, res, next) => {
+    const result = await profileDetail({
         userId: req.params.id
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
@@ -18,5 +18,5 @@ const profileViewController = async (req, res, next) => {
 
 module.exports = {
     profileEditController,
-    profileViewController
+    profileDetailController
 }

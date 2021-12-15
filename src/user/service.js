@@ -24,7 +24,7 @@ const profileEdit = async (data) => {
     }
 }
 
-const profileView = async (data) => {
+const profileDetail = async (data) => {
     try {
         const {userId} = data
         const user = await User.findOne({_id: userId})
@@ -42,5 +42,5 @@ const profileView = async (data) => {
 }
 module.exports = {
     profileEdit,
-    profileView
+    profileDetail
 }

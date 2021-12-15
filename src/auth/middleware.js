@@ -8,7 +8,6 @@ let isAuth = async (req, res, next) => {
             }
             else {
                 req.user = user
-                console.log("Decoded :", user)
                 next()
             }
         })

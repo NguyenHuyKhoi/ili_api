@@ -1,10 +1,10 @@
 const express = require('express')
 const authMiddleware = require('../auth/middleware')
-const { profileEditController, profileDetailController } = require('./controller')
+const {gameCreateController, gameDetailController } = require('./controller')
 const router = express.Router()
 
 router.use(authMiddleware.isAuth)
 
-router.post('/edit', profileEditController)
-router.get('/detail/:id', profileDetailController)
+router.post('/create', gameCreateController)
+router.get('/detail/:id', gameDetailController)
 module.exports = router
