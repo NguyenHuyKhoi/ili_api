@@ -53,8 +53,8 @@ const edit = async (data) => {
 
 const detail = async (data) => {
     try {
-        const {_id, userId} = data
-        if (_id == undefined || userId == undefined) {
+        const {_id} = data
+        if (_id == undefined) {
             throw new Error('Missing fields')
         }
         const saved = await Game.findOne({_id})
@@ -94,9 +94,40 @@ const deletee = async (data) => {
     }
 }
 
+const getCompletes = async (data) => {
+    try {
+        const {userId} = data
+        if (userId == undefined) {
+            throw new Error('Missing fields')
+        }
+        const games = await Game.find({userId})
+        return games
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
+
+const search = async (data) => {
+    try {
+        const {} = data
+        const games = await Game.find({})
+        return games
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
+
 module.exports = {
     create,
     edit,
     detail,
-    deletee
+    deletee,
+    getCompletes,
+    search
 }

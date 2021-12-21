@@ -39,6 +39,24 @@ const login = async (data) => {
     }
 }
 
+const logout = async (data) => {
+    try {
+        let {userId} = data
+        if (userId == undefined) {
+            throw new Error('Missing fields')
+        }
+
+        await Token.findOneAndDelete({userId})
+
+        return true
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
+
 const signup = async (data) => {
     try {
         const {email, password} = data
@@ -142,6 +160,7 @@ const resetPassword = async (data) => {
 
 const changePassword = async (data) => {
     try {
+        console.log("Field:", data)
         const {oldPassword, newPassword, userId} = data
         if (oldPassword == undefined || newPassword == undefined ) {
             throw new Error('Missing fields')
@@ -177,6 +196,7 @@ const changePassword = async (data) => {
 
 module.exports = {
     login,
+    logout,
     signup,
     requestResetPassword,
     resetPassword,

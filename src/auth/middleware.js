@@ -4,7 +4,7 @@ let isAuth = async (req, res, next) => {
     if (tokenFromClient) {
         jwt.verify(tokenFromClient, process.env.SECRET_KEY, (err, user) => {
             if (err) {
-                return res.status(401).json('Unauthorized') 
+                return res.status(401).json({error: 'Unauthorized'}) 
             }
             else {
                 req.user = user
@@ -13,7 +13,7 @@ let isAuth = async (req, res, next) => {
         })
     }
     else {
-        return res.status(403).json('No token provided')
+        return res.status(403).json({error: 'No token provided'})
     }
 }
 

@@ -1,8 +1,16 @@
-const { login, signup, requestResetPassword, resetPassword, changePassword } = require("./service")
+const { login, signup, requestResetPassword, resetPassword, changePassword, logout } = require("./service")
 
 const loginController = async (req, res, next) => {
     const result = await login(req.body)
     console.log("Result login:", result)
+    return res.status(result.error != undefined ? 500 : 200).json(result)
+}
+
+const logoutController = async (req, res, next) => {
+    console.log("User Id in logout :", req.user._id)
+    const result = await logout({
+        userId: req.user._id
+    })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
@@ -45,6 +53,7 @@ const changePasswordController = async (req, res, next) => {
 
 module.exports = {
     loginController,
+    logoutController,
     signupController,
     requestResetPasswordController,
     resetPasswordController,

@@ -15,8 +15,9 @@ const edit = async (data) => {
             { new: true}
         )
 
-        User.findOne
-        return 'Update user successfully'
+        const updatedUser = await User.findOne({ _id: userId})
+        updatedUser.password = null
+        return updatedUser
 
     }
     catch (err) {
