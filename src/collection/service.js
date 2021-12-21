@@ -1,6 +1,7 @@
 const Collection = require('./model')
 const Game = require('../game/model')
-const User = require('../user/model')
+const { getBriefUser } = require('../user/service')
+
 
 const create = async (data) => {
     try {
@@ -77,33 +78,17 @@ const getLibrary = async (data) => {
             throw new Error('Missing fields')
         }
         const list = await Collection.find({userId})
-        await Promise.all(list.map(async (collection, _) => {
-            // Get games
-            let gameDetails = []
-            let gameIds = collection.games
-            await Promise.all(gameIds.map(async (_id) => {
-                let game = await Game.findOne({_id})
-                if (game) {
-                    gameDetails.push(game._doc)
-                }
-            }))
-            collection._doc.games = gameDetails
-            // Get owner
-            const user = await User.findOne({_id: collection.userId})
-            let infor = {} 
-            if (user) {
-                infor.username = user.username
-                infor.avatar = user.avatar
-            }
-            else {
-                infor.username = 'Unknown'
-                infor.avatar = ''
-            }
-            collection._doc.owner = {...infor}
+        await Promise.all(list.map(async (collection) => {
+            collection._doc.owner = await getBriefUser(collection.userId)
+            console.log("Owner :", collection._doc.owner)
+            collection._doc.games = await getDetailGames(collection._id)
         }))
+
+
         return list
     }
     catch (err) {
+        console.log("err:", err)
         return {
             error: err.message
         }
@@ -134,6 +119,22 @@ const deletee = async (data) => {
         }
     }
 }
+
+const getDetailGames = async (collectionId) => {
+    let collection = await Collection.findOne({_id: collectionId})
+    if (!collection) return []
+
+    let games = []
+    await Promise.all(collection.games.map(async (_id) => {
+        let game = await Game.findOne({_id})
+        if (game) {
+            game._doc.owner = await getBriefUser(game.userId)
+            games.push(game)
+        }
+    }))
+    return games
+}
+
 module.exports = {
     edit,
     create,

@@ -1,4 +1,5 @@
 const Game = require('./model')
+const { getBriefUser } = require('../user/service')
 const create = async (data) => {
     try {
         const {item, userId} = data
@@ -100,10 +101,16 @@ const getCompletes = async (data) => {
         if (userId == undefined) {
             throw new Error('Missing fields')
         }
-        const games = await Game.find({userId})
+        let games = await Game.find({userId})
+
+        await Promise.all(games.map(async(game) => {
+            game._doc.owner = await getBriefUser(game.userId)
+        }))
+
         return games
     }
     catch (err) {
+        console.log("error: ",err)
         return {
             error: err.message
         }
@@ -113,7 +120,12 @@ const getCompletes = async (data) => {
 const search = async (data) => {
     try {
         const {} = data
-        const games = await Game.find({})
+        let games = await Game.find({})
+
+        await Promise.all(games.map(async (game) => {
+            game._doc.owner = await getBriefUser(game.userId)
+        }))
+
         return games
     }
     catch (err) {

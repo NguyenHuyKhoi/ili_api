@@ -7,7 +7,7 @@ router.use(authMiddleware.isAuth)
 
 router.post('/', createController)
 router.put('/:id', editController)
-router.get('/library', getLibraryController)
+router.get('/library/:userId', getLibraryController)
 router.get('/:id', detailController)
 router.delete('/:id', deleteController)
 

@@ -1,3 +1,4 @@
+
 const User = require('./model')
 const edit = async (data) => {
     try {
@@ -55,8 +56,9 @@ const detail = async (data) => {
         if (!user) {
             throw new Error('User not exist')
         }
-        const {email, avatar, banner, username, name, _id } = user
-        return {email, avatar, banner, username, name, _id }
+        user.isAdmin = null
+        user.password = null
+        return user
     }
     catch (err) {
         return {
@@ -64,8 +66,27 @@ const detail = async (data) => {
         }
     }
 }
+
+const getBriefUser = async (_id) => {
+    let user = await User.findOne({_id})
+    if (user) {
+        return {
+            username: user.username,
+            avatar: user.avatar,
+            id: user._id,
+        }
+    }
+    else {
+        return {
+            username: 'Unknowned',
+            avatar: '',
+            id: null,
+        }
+    }
+}
 module.exports = {
     edit,
     deletee,
-    detail
+    detail,
+    getBriefUser
 }

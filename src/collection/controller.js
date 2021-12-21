@@ -28,7 +28,7 @@ const detailController = async (req, res, next) => {
 
 const getLibraryController = async (req, res, next) => {
     const result = await getLibrary({
-        userId: req.user._id
+        userId: req.params.userId
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
