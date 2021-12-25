@@ -4,6 +4,4 @@ const {createController} = require('./controller')
 const router = express.Router()
 
 router.use(authMiddleware.isAuth)
-
-router.post('/', createController)
 module.exports = router

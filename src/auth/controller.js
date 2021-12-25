@@ -7,7 +7,6 @@ const loginController = async (req, res, next) => {
 }
 
 const logoutController = async (req, res, next) => {
-    console.log("User Id in logout :", req.user._id)
     const result = await logout({
         userId: req.user._id
     })
@@ -35,8 +34,8 @@ const requestResetPasswordController = async (req, res, next) => {
 const resetPasswordController = async (req, res, next) => {
     const result = await resetPassword({
         userId: req.user._id,
-        token: req.query.token,
-        newPassword: req.body.password
+        token: req.body.token,
+        password: req.body.password
     })
 
     return res.status(result.error != undefined ? 500 : 200).json(result)

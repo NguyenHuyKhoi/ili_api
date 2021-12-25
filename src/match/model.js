@@ -1,10 +1,13 @@
 const mongoose = require('mongoose')
 
 const MatchSchema = new mongoose.Schema({
-    title: {type: String, required: true},
-    gameId: {type: String, require: true, ref: 'Game'},
-    hostId: {type: String, require: true, ref: 'User'},
-    pinCode: {type: String, require: true},
+    game: {type: Object, require: true},
+    is_finished: {type: Boolean, default: false},
+    question_index: {type: Number},
+    pinCode: {type: String,  require: true},
+    host: { type: Object , require: true},
+    users: {type: [Object], required: true},
+    progress: {type: [Object]}
 })
 
 

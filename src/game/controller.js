@@ -34,9 +34,11 @@ const deleteController = async (req, res, next) => {
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
-const getCompletesController = async (req, res, next) => {
+const getLibraryController = async (req, res, next) => {
+    console.log("status: ", req.query.status)
     const result = await getCompletes({
         userId: req.user._id,
+        status: req.query.status
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
@@ -50,6 +52,6 @@ module.exports = {
     editController,
     detailController,
     deleteController,
-    getCompletesController,
+    getLibraryController,
     searchController
 }

@@ -119,9 +119,9 @@ const requestResetPassword = async (data) => {
 
 const resetPassword = async (data) => {
     try {
-        const {userId, token, newPassword} = data
+        const {userId, token, password} = data
         console.log("Reset data", data)
-        if (userId == undefined || token == undefined || newPassword == undefined) {
+        if (userId == undefined || token == undefined || password == undefined) {
             throw new Error('Missing fields')
         }
         
@@ -134,11 +134,11 @@ const resetPassword = async (data) => {
             throw new Error('Token is invalid')
         }
 
-        const secureNewPassword = encrypt(newPassword)
+        const securePassword = encrypt(password)
 
         await User.updateOne(
             { _id: userId },
-            { $set: { password: secureNewPassword}},
+            { $set: { password: securePassword}},
             { new: true}
         )
         

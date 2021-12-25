@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const QuestionSchema = new mongoose.Schema({
+    index: {type: Number, required: true},
     title: {type: String, required: true},
     image: {type: String},
     answers: {type: [String], required: true},

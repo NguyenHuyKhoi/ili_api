@@ -7,7 +7,6 @@ const create = async (data) => {
             throw new Error('Missing fields')
         }
 
-
         await new Game({
             ...item,
             userId
@@ -16,6 +15,7 @@ const create = async (data) => {
 
     }
     catch (err) {
+        console.log("Create game error : ", err.message)
         return {
             error: err.message
         }

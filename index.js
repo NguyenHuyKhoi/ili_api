@@ -25,7 +25,6 @@ const io = new Server(httpServer, {
 });
 
 const onConnection = (socket) => {
-    console.log('Socket connection :',socket.id)
     registerMatchHandlers(io, socket)
 }
 io.on("connection", onConnection);
