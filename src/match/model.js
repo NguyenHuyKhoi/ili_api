@@ -3,7 +3,8 @@ const { QuestionSchema } = require('../game/model')
 const PlayerSchema = new mongoose.Schema({
     socketId: {type: String, required: true},
     name: {type: String, required: true},
-    score: {type: Number, require: true}
+    score: {type: Number, require: true},
+    rank: {type: Number}
 })
 
 const AnswerPlayerSchema = new mongoose.Schema({
@@ -27,7 +28,9 @@ const MatchSchema = new mongoose.Schema({
     pinCode: {type: String,  require: true},
     host: { type: Object , require: true},
     players: {type: [PlayerSchema], required: true},
-    progress: {type: [ProgressSchema]}
+    progress: {type: [ProgressSchema]},
+    startAt: {type: Date, required: true },
+    finishAt: {type: Date, required: true}
 })
 
 

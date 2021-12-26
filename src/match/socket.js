@@ -94,6 +94,7 @@ module.exports =  (io, socket) => {
             callback(null)
             return 
         }
+        match.startAt = new Date()
         match.host = host
         match.players = []
         match.pinCode = (new Date()).getMilliseconds()
@@ -183,8 +184,12 @@ module.exports =  (io, socket) => {
     const handleEndMatch = async (pinCode) => {
         let match = await findMatch(pinCode) 
         if (!match) return 
-        
+
+        match.finishAt = new Date()
         match.isFinished = true 
+        match.players.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
+
+        match.players.forEach((player, index) => match.players[index].rank = index + 1)
         await updateMatch(match)
         io.to(pinCode).emit('match:onEnd', match)
     }

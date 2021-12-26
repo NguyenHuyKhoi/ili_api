@@ -1,5 +1,5 @@
 const Collection = require('./model')
-const Game = require('../game/model')
+const {Game} = require('../game/model')
 const { getBriefUser } = require('../user/service')
 
 
