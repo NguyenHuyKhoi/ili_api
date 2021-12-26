@@ -1,4 +1,4 @@
-const Game = require('./model')
+const {Game} = require('./model')
 const { getBriefUser } = require('../user/service')
 const create = async (data) => {
     try {

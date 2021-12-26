@@ -6,7 +6,8 @@ const QuestionSchema = new mongoose.Schema({
     image: {type: String},
     answers: {type: [String], required: true},
     correct_answers: {type: [Number], required: true},
-    time_limit: {type: Number, required: true}
+    time_limit: {type: Number, required: true},
+    score: {type: Number}
 })
 
 const GameSchema = new mongoose.Schema({
@@ -21,4 +22,8 @@ const GameSchema = new mongoose.Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model('Game', GameSchema)
+const Game =  mongoose.model('Game', GameSchema)
+module.exports = {
+    Game,
+    QuestionSchema
+}

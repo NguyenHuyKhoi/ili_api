@@ -1,6 +1,6 @@
 
 const Match = require('./model')
-const Game = require('../game/model')
+const {Game} = require('../game/model')
 // Pincode == id 
 const createMatch = async (match) => {
     return await new Match(match).save()
@@ -15,36 +15,36 @@ const updateMatch = async (match) => {
 }
 
 const findMatch = async (pinCode) => {
-    let match = await Match.findOne({pinCode, is_finished: false})
+    let match = await Match.findOne({pinCode, isFinished: false})
     return match
 }
 
-const findUser = (user, match) => {
-    return match.users.find((item) => user.socketId == item.socketId)
+const findPlayer = (player, match) => {
+    return match.players.find((item) => player.socketId == item.socketId)
 }
 
-const addUser = async (user, match) => {
-    console.log("Add user in match: ", user)
-    if (!findUser(user, match)){
-        match.users.push(user)
+const addPlayer = async (player, match) => {
+    console.log("Add Player in match: ", player)
+    if (!findPlayer(player, match)){
+        match.players.push(player)
         await updateMatch(match)
     }
 }
 
-const updateUser = async (user, match) => {
-    match.users.forEach((item, index) => {
-        if (item.socketId == user.socketId) {
-            match.users[index] = {...user}
+const updatePlayer = async (player, match) => {
+    match.players.forEach((item, index) => {
+        if (item.socketId == player.socketId) {
+            console.log("Find updated player: ", player)
+            match.players[index] = player
         }
     });
-    console.log("Updated Match after update user: ", match)
     await updateMatch(match)
 }
 
-const removeUser = async (user, match) => {
-    const index = match.users.findIndex((item) => user.socketId != item.socketId)
+const removePlayer = async (player, match) => {
+    const index = match.players.findIndex((item) => player.socketId != item.socketId)
     if (index != -1) {
-        match.users.splice(index, 1)
+        match.players.splice(index, 1)
         await updateMatch(match)
     }
 }
@@ -59,12 +59,11 @@ module.exports =  (io, socket) => {
     }
     
     const onJoin = async (pinCode, callback) => {
-        let user = { socketId: socket.id }
+        let player = { socketId: socket.id, score: 0, name: '???' }
         let match = await findMatch(pinCode)
         if (match) {
-            await addUser(user, match)
+            await addPlayer(player, match)
             socket.join(match.pinCode)
-
             syncData(pinCode)       
             callback(match)    
         }
@@ -74,11 +73,11 @@ module.exports =  (io, socket) => {
     }
 
     const onLeave = async (pinCode, callback) => {
-        let user = { socketId: socket.id }
+        let player = { socketId: socket.id }
         let match = await findMatch(pinCode)
-        console.log("Handler leave with user :",pinCode,  user)
+        console.log("Handler leave with player :",pinCode,  player)
         if (match) {
-            await removeUser(user, match)
+            await removePlayer(player, match)
             syncData(pinCode)
             callback(true)           
         }
@@ -96,28 +95,24 @@ module.exports =  (io, socket) => {
             return 
         }
         match.host = host
-        match.users = []
-        match.pinCode = '111'
-        //(new Date()).getMilliseconds()
-        console.log("create match: ", match)
+        match.players = []
+        match.pinCode = (new Date()).getMilliseconds()
         match = await createMatch(match)
-        console.log("after create match: ", match)
         socket.join(match.pinCode)
         syncData(match.pinCode)
         callback(match)
     }
 
-    const onUpdateUser = async (pinCode, updatedUser, callback) => {
+    const onUpdatePlayer = async (pinCode, updatedPlayer, callback) => {
         let match = await findMatch(pinCode)
+        console.log("Updated Player received: ", updatedPlayer)
         if (match) {
-            let user = findUser({socketId: socket.id}, match)
-            if (user) {
-                user = {
-                    ...user,
-                    ...updatedUser
-                }
-                console.log("Updated User:", user)
-                await updateUser(user, match)
+            let player = findPlayer({socketId: socket.id}, match)
+            if (player) {
+                // Because player is schema
+                player.name = updatedPlayer.name
+                console.log("Updated Player:", player)
+                await updatePlayer(player, match)
                 syncData(pinCode)
                 callback(true)
             }
@@ -141,24 +136,34 @@ module.exports =  (io, socket) => {
         if (!match) return 
 
 
-        const {progress, users, host} = match
+        const {progress, players, host} = match
         let current = progress[progress.length - 1 ]
         
-        users.forEach((user, index) => {
+        current.answers.find((answerPlayer, index) => {
+            let earnScore = calculateScore(current.question, answerPlayer)
+
+            current.answers[index].earnScore = earnScore
+        })
+
+        players.forEach((player, index) => {
             // If not answer: 
-            let answeredUser = current.answers.find((item) => item.socketId == user.socketId)
-            if (!answeredUser) {
-                io.to(user.socketId).emit('match:onNotAnswer')
+            let answerPlayer = current.answers.find((item) => item.socketId == player.socketId)
+            if (!answerPlayer) {
+                io.to(player.socketId).emit('match:onNotAnswer')
             }
-            else if (answeredUser.isCorrect) {
-                io.to(user.socketId).emit('match:onCorrectAnswer')
+            else if (answerPlayer.isCorrect) {
+                players[index].score = players[index].score + answerPlayer.earnScore
+                io.to(player.socketId).emit('match:onCorrectAnswer', answerPlayer.earnScore)
             }
             else {
-                io.to(user.socketId).emit('match:onWrongAnswer')
+                players[index].score = players[index].score + answerPlayer.earnScore
+                io.to(player.socketId).emit('match:onWrongAnswer', answerPlayer.earnScore)
             }  
         })
 
-        io.to(host.socketId).emit('match:onEndQuestion')
+        await updateMatch(match)
+
+        io.to(host.socketId).emit('match:onEndQuestion', match)
 
         let time = 5
         const waitingTimer = setInterval( () => {
@@ -185,14 +190,13 @@ module.exports =  (io, socket) => {
     }
     const handleNextQuestion = async (pinCode) => {
         let match = await findMatch(pinCode)
-        console.log("Find match: ", pinCode, match)
         if (!match) return 
         // play linear :
-        if (match.question_index == undefined) {
-            match.question_index = 0
+        if (match.questionIndex == undefined) {
+            match.questionIndex = 0
         }
-        else if (match.question_index < match.game.questions.length -1) {
-            match.question_index ++
+        else if (match.questionIndex < match.game.questions.length -1) {
+            match.questionIndex ++
         }
         else {
             handleEndMatch(pinCode)
@@ -200,7 +204,7 @@ module.exports =  (io, socket) => {
         }
 
         let item = {
-            question: match.game.questions[match.question_index],
+            question: match.game.questions[match.questionIndex],
             answers: [],
         }
         match.progress.push({...item})
@@ -238,31 +242,49 @@ module.exports =  (io, socket) => {
         }
     }
 
-    const onAnswer = async (pinCode, answerIndex) => {
+    const calculateScore = (question, answerPlayer) => {
+        console.log("Calculate score: ", question, answerPlayer)
+        const {isCorrect, answerTime} = answerPlayer
+        const {score, time_limit} = question
+
+        if (!isCorrect) return 0 
+        let correctScore = score != undefined ? score : 1000
+        let answerDuration = time_limit - answerTime
+        let bonusTimeScore = ( 1 - (answerDuration / time_limit / 2)) * correctScore
+
+        // Cal bonusStreakScore
+        return correctScore + bonusTimeScore
+    }
+
+    const onAnswer = async (pinCode, answerIndex, answerTime) => {
         let match = await findMatch(pinCode)
         if (!match) return 
-        let user = await findUser({socketId: socket.id}, match)
-        if (!user) return 
+        let player = await findPlayer({socketId: socket.id}, match)
+        if (!player) return 
 
         let current = match.progress[match.progress.length - 1]
-        let isCorrect = current.question.correct_answers.indexOf(answerIndex) != -1
+        
+        const {question} = current 
+        let isCorrect = question.correct_answers.indexOf(answerIndex) != -1
 
-        let userAnswer = {
+
+        let answerPlayer = {
             socketId: socket.id,
-            name: user.name,
+            name: player.name,
             answerIndex: answerIndex,
+            answerTime: answerTime,
             isCorrect
         }
 
-        current.answers.push({...userAnswer})
-        console.log("MAtch after receive user answer: ",current.answers)
+        console.log("Receive answer: ", answerPlayer)
+        current.answers.push({...answerPlayer})
         await updateMatch(match)
         syncData(pinCode)
     }
     socket.on('match:join', onJoin)
     socket.on('match:leave', onLeave)
     socket.on('match:host', onHost)
-    socket.on('match:updateUser', onUpdateUser)
+    socket.on('match:updatePlayer', onUpdatePlayer)
     socket.on('match:requireSync', onUpdate)
     socket.on('match:start', onStart)
     socket.on('match:answer', onAnswer)
