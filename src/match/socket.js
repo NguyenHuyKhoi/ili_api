@@ -187,9 +187,42 @@ module.exports =  (io, socket) => {
 
         match.finishAt = new Date()
         match.isFinished = true 
-        match.players.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
 
-        match.players.forEach((player, index) => match.players[index].rank = index + 1)
+        // Calculate 
+        match.players.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
+        match.players.forEach((player, index) => {
+            match.players[index].rank = index + 1
+
+            let quesNum = match.progress.length 
+            let correctNum = match.progress.filter((stage) => {
+              return stage.answers.find((answer) => answer.socketId == player.socketId && answer.isCorrect == true)
+            }).length
+
+            let incorrectNum = match.progress.filter((stage) => {
+                return stage.answers.find((answer) => answer.socketId == player.socketId && answer.isCorrect == false)
+            })
+
+            let unanswerNum = quesNum - correctNum -incorrectNum
+
+            match.players[index].correctNum = correctNum
+            match.players[index].incorrectNum = incorrectNum
+            match.players[index].unanswerNum = unanswerNum
+        })
+
+        match.progress.forEach((stage, index) => {
+            let correctNum = stage.answers.filter((answer) => answer.isCorrect).length
+            let incorrectNum = stage.answers.filter((answer) => answer.isCorrect == false).length
+            let unanswerNum = match.players.length - stage.answers.length 
+            let answerTimeAvg =  stage.answers.length == 0 ? 0 :
+                match.answers.reducer((res, answer) => res += (stage.question.time_limit) - answer.answerTime, 0) 
+                / stage.answers.length
+
+            match.progress[index].correctNum = correctNum
+            match.progress[index].incorrectNum = incorrectNum
+            match.progress[index].unanswerNum = unanswerNum
+            match.progress[index].answerTimeAvg = answerTimeAvg
+        })
+    
         await updateMatch(match)
         io.to(pinCode).emit('match:onEnd', match)
     }

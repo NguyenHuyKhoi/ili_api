@@ -4,7 +4,10 @@ const PlayerSchema = new mongoose.Schema({
     socketId: {type: String, required: true},
     name: {type: String, required: true},
     score: {type: Number, require: true},
-    rank: {type: Number}
+    rank: {type: Number},
+    correctNum: {type: Number},
+    incorrectNum: {type: Number},
+    unanswerNum: {type: Number}
 })
 
 const AnswerPlayerSchema = new mongoose.Schema({
@@ -18,7 +21,11 @@ const AnswerPlayerSchema = new mongoose.Schema({
 
 const ProgressSchema = new mongoose.Schema({
     question: {type: QuestionSchema, required: true},
-    answers: {type: [AnswerPlayerSchema], required: true}
+    answers: {type: [AnswerPlayerSchema], required: true},
+    correctNum: {type: Number},
+    incorrectNum: {type: Number},
+    unanswerNum: {type: Number},
+    answerTimeAvg: {type: Number}
 })
 
 const MatchSchema = new mongoose.Schema({
