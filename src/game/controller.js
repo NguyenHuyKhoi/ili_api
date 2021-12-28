@@ -1,4 +1,4 @@
-const {create, detail, edit, deletee, getCompletes, search } = require("./service")
+const {create, detail, edit, deletee, getCompletes, search } = require("../platform/youtube/service")
 
 
 const createController = async (req, res, next) => {
