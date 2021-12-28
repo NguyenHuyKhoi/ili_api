@@ -86,7 +86,7 @@ const requestResetPassword = async (data) => {
         }
         const user = await User.findOne({email})
         if (!user) {
-            throw new Error('User not found')
+            throw new Error('This email has not been registed.')
         }
 
         const oldToken = await Token.findOne({userId: user._id})

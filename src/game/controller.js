@@ -1,4 +1,4 @@
-const {create, detail, edit, deletee, getCompletes, search } = require("../platform/youtube/service")
+const {create, detail, edit, deletee, getLibrary, search } = require("./service")
 
 
 const createController = async (req, res, next) => {
@@ -36,7 +36,7 @@ const deleteController = async (req, res, next) => {
 
 const getLibraryController = async (req, res, next) => {
     console.log("status: ", req.query.status)
-    const result = await getCompletes({
+    const result = await getLibrary({
         userId: req.user._id,
         status: req.query.status
     })

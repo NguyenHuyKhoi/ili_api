@@ -95,7 +95,7 @@ const deletee = async (data) => {
     }
 }
 
-const getCompletes = async (data) => {
+const getLibrary = async (data) => {
     try {
         const {userId} = data
         if (userId == undefined) {
@@ -140,6 +140,6 @@ module.exports = {
     edit,
     detail,
     deletee,
-    getCompletes,
+    getLibrary,
     search
 }
