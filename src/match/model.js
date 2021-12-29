@@ -28,16 +28,18 @@ const ProgressSchema = new mongoose.Schema({
     answerTimeAvg: {type: Number}
 })
 
+// STATE = waiting - locking - playing - finished
+
 const MatchSchema = new mongoose.Schema({
     game: {type: Object, require: true},
-    isFinished: {type: Boolean, default: false},
+    state: {type: String},
     questionIndex: {type: Number},
     pinCode: {type: String,  require: true},
     host: { type: Object , require: true},
     players: {type: [PlayerSchema], required: true},
     progress: {type: [ProgressSchema]},
     startAt: {type: Date, required: true },
-    finishAt: {type: Date, required: true}
+    finishAt: {type: Date}
 })
 
 

@@ -3,8 +3,8 @@ const Match = require('./model')
 const getLibrary = async (data) => {
     try {   
         const {userId} = data 
-        let matchs = await Match.find({"host._id": userId, isFinished: true})
-        return matchs
+        let matches = await Match.find({"host._id": userId, state: 'finished'})
+        return matches
     }
     catch (err) {
         return {

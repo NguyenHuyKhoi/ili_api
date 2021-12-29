@@ -15,7 +15,7 @@ const updateMatch = async (match) => {
 }
 
 const findMatch = async (pinCode) => {
-    let match = await Match.findOne({pinCode, isFinished: false})
+    let match = await Match.findOne({pinCode})
     return match
 }
 
@@ -42,11 +42,14 @@ const updatePlayer = async (player, match) => {
 }
 
 const removePlayer = async (player, match) => {
-    const index = match.players.findIndex((item) => player.socketId != item.socketId)
+    const index = match.players.findIndex((item) => player.socketId == item.socketId)
     if (index != -1) {
+        let removedPlayer = {...match.players[index]._doc}
         match.players.splice(index, 1)
         await updateMatch(match)
+        return removedPlayer
     }
+
 }
 
 module.exports =  (io, socket) => {
@@ -61,7 +64,7 @@ module.exports =  (io, socket) => {
     const onJoin = async (pinCode, callback) => {
         let player = { socketId: socket.id, score: 0, name: '???' }
         let match = await findMatch(pinCode)
-        if (match) {
+        if (match && match.state == 'waiting') {
             await addPlayer(player, match)
             socket.join(match.pinCode)
             syncData(pinCode)       
@@ -77,7 +80,9 @@ module.exports =  (io, socket) => {
         let match = await findMatch(pinCode)
         console.log("Handler leave with player :",pinCode,  player)
         if (match) {
-            await removePlayer(player, match)
+            let removedPlayer = await removePlayer(player, match)
+            io.to(pinCode).emit('match:playerLeave', removedPlayer)
+            console.log("Removed player: ", removedPlayer)
             syncData(pinCode)
             callback(true)           
         }
@@ -98,6 +103,7 @@ module.exports =  (io, socket) => {
         match.host = host
         match.players = []
         match.pinCode = (new Date()).getMilliseconds()
+        match.state = 'waiting'
         match = await createMatch(match)
         socket.join(match.pinCode)
         syncData(match.pinCode)
@@ -171,7 +177,7 @@ module.exports =  (io, socket) => {
             time --
             if (time <= 0) {
                 clearInterval(waitingTimer)
-                handleNextQuestion(pinCode)
+                handleShowScoreBoard(pinCode)
             }
             else {
                 console.log("Countdown waiting:", time)
@@ -181,12 +187,31 @@ module.exports =  (io, socket) => {
         }, 1000)
     }
 
+    const handleShowScoreBoard = async (pinCode) => {
+        let match = await findMatch(pinCode) 
+        if (!match) return 
+        io.to(pinCode).emit('match:scoreboard', match)
+        let time = 5
+        const waitingTimer = setInterval( () => {
+            time --
+            if (time <= 0) {
+                clearInterval(waitingTimer)
+                handleNextQuestion(pinCode)
+            }
+            else {
+                console.log("Countdown waiting:", time)
+                io.to(pinCode).emit('match:onCountdown', time)
+            }
+           
+        }, 1000)
+    }    
+
     const handleEndMatch = async (pinCode) => {
         let match = await findMatch(pinCode) 
         if (!match) return 
 
         match.finishAt = new Date()
-        match.isFinished = true 
+        match.state = 'finished' 
 
         // Calculate 
         match.players.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
@@ -200,10 +225,11 @@ module.exports =  (io, socket) => {
 
             let incorrectNum = match.progress.filter((stage) => {
                 return stage.answers.find((answer) => answer.socketId == player.socketId && answer.isCorrect == false)
-            })
+            }).length
 
             let unanswerNum = quesNum - correctNum -incorrectNum
 
+            console.log("Calculate for player :", correctNum, incorrectNum, unanswerNum)
             match.players[index].correctNum = correctNum
             match.players[index].incorrectNum = incorrectNum
             match.players[index].unanswerNum = unanswerNum
@@ -214,7 +240,7 @@ module.exports =  (io, socket) => {
             let incorrectNum = stage.answers.filter((answer) => answer.isCorrect == false).length
             let unanswerNum = match.players.length - stage.answers.length 
             let answerTimeAvg =  stage.answers.length == 0 ? 0 :
-                match.answers.reducer((res, answer) => res += (stage.question.time_limit) - answer.answerTime, 0) 
+                stage.answers.reduce((res, answer) => res += (stage.question.time_limit) - answer.answerTime, 0) 
                 / stage.answers.length
 
             match.progress[index].correctNum = correctNum
@@ -240,6 +266,7 @@ module.exports =  (io, socket) => {
             handleEndMatch(pinCode)
             return 
         }
+        console.log("Question Index: ", match.questionIndex)
 
         let item = {
             question: match.game.questions[match.questionIndex],
@@ -275,6 +302,8 @@ module.exports =  (io, socket) => {
     const onStart = async (pinCode) => {
         console.log("Client require start match: ", pinCode)
         let match = await findMatch(pinCode)
+        match.state = 'playing'
+        await updateMatch(match)
         if (match) {
             await handleNextQuestion(pinCode)
         }
@@ -319,6 +348,46 @@ module.exports =  (io, socket) => {
         await updateMatch(match)
         syncData(pinCode)
     }
+
+    const onKickPlayer = async (pinCode, player, callback) =>  {
+        let match = await findMatch(pinCode)
+        console.log("Handler leave with player :",pinCode,  player)
+        if (match) {
+            let kickedPlayer = await removePlayer(player, match)
+            io.to(pinCode).emit('match:kickPlayerDone', kickedPlayer)
+            console.log("Kicked player: ", kickedPlayer)
+            syncData(pinCode)
+            callback(true)           
+        }
+        else {
+            callback(false)
+        }
+    }
+    const onLock = async (pinCode, callback) => {
+        let match = await findMatch(pinCode)
+        if (match) {
+            match.state = 'locking'
+            await updateMatch(match)
+            syncData(pinCode)
+            callback(true)
+        }
+        else {
+            callback(false)
+        }
+    }
+
+    const onUnlock = async (pinCode, callback) => {
+        let match = await findMatch(pinCode)
+        if (match) {
+            match.state = 'waiting'
+            await updateMatch(match)
+            syncData(pinCode)
+            callback(true)
+        }
+        else {
+            callback(false)
+        }
+    }
     socket.on('match:join', onJoin)
     socket.on('match:leave', onLeave)
     socket.on('match:host', onHost)
@@ -326,4 +395,7 @@ module.exports =  (io, socket) => {
     socket.on('match:requireSync', onUpdate)
     socket.on('match:start', onStart)
     socket.on('match:answer', onAnswer)
+    socket.on('match:kickPlayer', onKickPlayer)
+    socket.on('match:lock', onLock)
+    socket.on('match:unlock', onUnlock)
 }
