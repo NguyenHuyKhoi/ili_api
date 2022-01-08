@@ -6,7 +6,6 @@ const { Server } = require("socket.io")
 //Config socket 
 
 var cors = require('cors')
-const youtubeRoute = require('./src/platform/youtube/route')
 const authRoute = require('./src/auth/route')
 const userRoute = require('./src/user/route')
 const gameRoute = require('./src/game/route')
@@ -46,7 +45,6 @@ app.use(express.json())
 
 // Allow CORS
 app.use(cors());
-app.use('/api/platform/youtube', youtubeRoute)
 app.use('/api/auth', authRoute)
 app.use('/api/user', userRoute)
 app.use('/api/game', gameRoute)

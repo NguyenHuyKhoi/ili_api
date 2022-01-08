@@ -1,5 +1,7 @@
+const { MatchCenter } = require('.')
+const { Game } = require('../game/model')
 const Match = require('./model')
-
+const LivestreamHandlers = []
 const getLibrary = async (data) => {
     try {   
         const {userId} = data 
@@ -12,6 +14,62 @@ const getLibrary = async (data) => {
         }
     }
 }
+
+const createLivestream = async (data) => {
+    try {   
+        const {match} = data 
+        let matchHandler = await MatchCenter.hostMatch(match)
+        if (!matchHandler) {
+            throw new Error('Create match fail')
+        }
+        return matchHandler.match
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
+
+const completeLivestream = async (data) => {
+    try {   
+        const {pinCode} = data 
+        let matchHandler = await MatchCenter.findMatchHandler(pinCode)
+        if (!matchHandler) {
+            throw new Error('No Match found')
+        }
+
+        console.log("Call api end livestream")
+        matchHandler.handleEndMatch()
+        return true
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
+
+const startLivestream = async (data) => {
+    try {   
+        const {pinCode} = data 
+        let matchHandler = await MatchCenter.findMatchHandler(pinCode)
+        if (!matchHandler) {
+            throw new Error('No Match found')
+        }
+        console.log("Start livestream with pincode:", pinCode)
+        matchHandler.onStart()
+        return true
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
 module.exports = {
-    getLibrary
+    getLibrary,
+    createLivestream,
+    completeLivestream,
+    startLivestream
 }
