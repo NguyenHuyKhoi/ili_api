@@ -2,7 +2,7 @@ const fs = require('fs')
 const sw = 1280
 const sh = 720
 
-const drawWaiting = (canvas, data, bg, genImg = false) => {
+const drawWaiting = async (canvas, data, bg, genImg = false) => {
     
     let ctx = canvas.getContext('2d')
     let w = canvas.width 

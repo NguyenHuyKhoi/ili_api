@@ -53,15 +53,19 @@ const completeLivestream = async (data) => {
 const startLivestream = async (data) => {
     try {   
         const {pinCode} = data 
+        console.log("Start livestream with pincode:", pinCode)
         let matchHandler = await MatchCenter.findMatchHandler(pinCode)
         if (!matchHandler) {
+            console.log("No match found")
             throw new Error('No Match found')
         }
-        console.log("Start livestream with pincode:", pinCode)
+
+        console.log("Call matchhandle to start")
         matchHandler.onStart()
         return true
     }
     catch (err) {
+        console.log("Error startlivestream:", err)
         return {
             error: err.message
         }

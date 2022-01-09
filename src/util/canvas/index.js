@@ -17,6 +17,7 @@ const SCREENS = {
 }
 
 const test_screen = null
+
 class CanvasHandler {
 
     constructor(w, h) {
@@ -32,7 +33,40 @@ class CanvasHandler {
         this.sample_avatar = null 
         this.requiredFrames = 0
         this.skipFrames = 0
+        this.remoteImageObjs = []
+
+        // Array of objects : {url, image}
     }
+    
+    getRemoteImages = (url) => {
+        let obj = this.remoteImageObjs.find((item) => item.url == url)
+        if (!obj) {
+            return null
+        }
+        return obj.image
+    }
+
+    // All urls are difference each others
+    loadRemoteImages = async (urls) => {
+        console.log("Require to load remote image urls: ", urls)
+        await Promise.all(urls.map(async (url) => {
+            // Check if load remote image before
+            var obj = this.remoteImageObjs.find((item) => item.url == url)
+
+            if (!obj) {
+                console.log("No Load image url before or current batch: ", url)
+                let image = await loadImage(url)
+                this.remoteImageObjs.push({
+                    url,
+                    image
+                })
+            }
+            else {
+                console.log("Loaded image url before:", url)
+            }
+        }));
+    }
+
 
     loadImages = async () => {
         this.bg = await loadImage(__dirname + '/layer/background.jpg')
@@ -48,33 +82,39 @@ class CanvasHandler {
         this.sample_avatar = await loadImage(__dirname + '/layer/avatar.jpg')
     }
 
-    drawCanvas = (screen, data) => {
+    drawCanvas = async (screen, data) => {
         this.requiredFrames ++ 
-
+        var newCanvas = this.canvas
         let genImg = false
         //(test_screen != null)
         switch (screen) {
             case SCREENS.WAITING: 
-                return drawWaiting(this.canvas, data, this.bg, genImg)
+                newCanvas = await drawWaiting(this.canvas, data, this.bg, genImg)
+                break
             case SCREENS.QUESTION: 
-                return drawQuestion(this.canvas, data, this.bg, this.layer_question, genImg)
+                newCanvas = await drawQuestion(this.canvas, data, this.bg, this.layer_question, genImg)
+                break
             case SCREENS.QUESTION_END: 
                 let correct_answer = data.question.correct_answers[0]
-                return drawQuestionEnd(this.canvas, data, this.bg, this.layer_question_ends[correct_answer], this.sample_avatar, genImg)
+                newCanvas = await drawQuestionEnd(this.canvas, data, this.bg, this.layer_question_ends[correct_answer], genImg)
+                break
             case SCREENS.LEADER_BOARD: 
-                return drawLeaderBoard(this.canvas, data, this.bg, this.layer_leader_board, this.sample_avatar,genImg)
+                newCanvas = await drawLeaderBoard(this.canvas, data, this.bg, this.layer_leader_board, genImg)
+                break
             case SCREENS.SUMMARY: 
-                return drawSummary(this.canvas, data, this.bg, genImg)
+                newCanvas = await drawSummary(this.canvas, data, this.bg, genImg)
+                break
             case SCREENS.PRE_STREAM: 
-                return drawPreStream(this.canvas, this.bg, genImg)
+                newCanvas = await drawPreStream(this.canvas, this.bg, genImg)
+                break
             default: 
-                return null
+                break
+                
         }
+        return newCanvas
     }
     
 }
-
-
 
 module.exports = {
     CanvasHandler, 

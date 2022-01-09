@@ -2,30 +2,49 @@ const fs = require('fs')
 const sw = 1280
 const sh = 720
 
-const drawUserAnswers = (ctx, answers, avatar) => {
+const drawUserAnswers = async (ctx, answers, isLoading) => {
 	const anchorX = [666, 666, 666, 666]
 	const anchorY = [378, 462, 550, 632];
 	[0,1,2,3].forEach((answer_index) => {
 		let ax = anchorX[answer_index]
 		let ay = anchorY[answer_index]
-		answers
-			.filter((answer) => answer.answerIndex == answer_index)
-			.forEach((answer, i) => {
-				if (i > 5) return
-				ctx.drawImage(avatar, ax + i * 75, ay + 0, 50, 50)
+
+		if (isLoading) {
+			ctx.fillStyle = '#fff'
+			ctx.font = "20px Arial"
+			ctx.fillText("Retrieve answers...", ax + 125, ay + 25)
+		}
+		else {
+			let list = answers.filter((answer) => answer.answerIndex == answer_index)
+
+			list.forEach((answer, i) => {
+				if (i == 5) { //Draw others 
+					let otherNums = list.length - 5
+					ctx.fillStyle = '#fff'
+					ctx.font = "24px Arial"
+					ctx.fillText(`+ ${otherNums} others...`, ax + 60 + 90 * i, ay + 30)
+					return
+				}
+				else if (i > 5) {
+					return
+				}
+				let avatar = answer.avatarImg
+				if (avatar) ctx.drawImage(avatar, ax + i * 90, ay + 0, 45, 45)
 				ctx.fillStyle = '#fff'
-				ctx.font = "12px Arial"
-				ctx.fillText(answer.name, ax + 25 + 75 * i, ay + 60)
+				ctx.font = "18px Arial"
+				ctx.fillText(answer.name, ax + 22 + 90 * i, ay + 60)
 			})
+		}
+		
 	})
 
 }
-const drawQuestionEnd = (canvas, data, bg, layer, avatar, genImg = false) => {
+const drawQuestionEnd = async (canvas, data, bg, layer, genImg = false) => {
 	let ctx = canvas.getContext('2d')
 	let w = canvas.width 
 	let h = canvas.height
 
-	let {round_index, time, question, userAnswers} = data
+	let {round_index, time, question, userAnswers, isLoading} = data
 	let {title, answers, correct_answers} = question
 
 	ctx.clearRect(0, 0, w, h)
@@ -61,7 +80,7 @@ const drawQuestionEnd = (canvas, data, bg, layer, avatar, genImg = false) => {
 
 
 	// Filter user answers: 
-	drawUserAnswers(ctx, userAnswers, avatar)
+	await drawUserAnswers(ctx, userAnswers, isLoading)
 	if (genImg) {
 		const name = `/generated/question_end_screen_${time}.jpeg`
 		const out = fs.createWriteStream(__dirname + name)

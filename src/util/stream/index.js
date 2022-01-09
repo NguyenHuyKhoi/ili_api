@@ -12,7 +12,7 @@ class StreamHandler {
             '-thread_queue_size', '6144',
             // '-stream_loop', '1',
             '-i', '-',
-            '-vf', 'framerate=fps=16',
+            '-vf', 'framerate=fps=30',
             // '-vf', 'scale=1280:720',
             '-c:v', 'libx264',
             // '-c:a', 'aac',

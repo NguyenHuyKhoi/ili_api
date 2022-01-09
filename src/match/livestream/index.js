@@ -1,12 +1,13 @@
 const { default: axios } = require("axios");
-const {CanvasHandler, SCREENS, test_screen} = require("../../util/canvas");
+const {CanvasHandler, SCREENS, test_screen, ImageHelper} = require("../../util/canvas");
 const StreamHandler = require("../../util/stream");
 const { MATCH_EVENTS } = require("../handler");
 const  Match  = require('../model');
 const { emitEventNames } = require("../socket");
-const FPS = 16
-
+const FPS = 30
+const YOUTUBE_STREAM_LATENCY = 5
 const YOUTUBE_API_KEY = 'AIzaSyCpmqo8ByzMuPbZ8g97mSCRcs4Wi-bJTe0'
+const { loadImage } = require('canvas')
 class LiveStreamHandler {
     constructor(matchHandler) {
         this.match = matchHandler.match
@@ -18,6 +19,9 @@ class LiveStreamHandler {
         this.endMatch = false
         this.redrawCanvas = true
         this.nextPageToken = null
+
+        this.isRetrievedAnswers = false
+        this.legalAnswerPlayers = []
     }
 
     streamTillActive = () => {
@@ -62,9 +66,9 @@ class LiveStreamHandler {
 
     emit = (eventCode, data) => {
         const {match, time} = data
-        console.log("Start received emit event:", eventCode, time)
         switch (eventCode) {
             case MATCH_EVENTS.ON_SYNC:
+                // this.redrawCanvas = true
                 this.match = match
                 this.updateData()
                 break
@@ -81,32 +85,34 @@ class LiveStreamHandler {
                 //console.log("Emitted event PLAYER_ANSWER_WRONG:")
                 break
             case MATCH_EVENTS.ON_QUESTION_END:
-                //console.log("Emitted event ON_QUESTION_END:", match)
+                console.log("Emitted event ON_QUESTION_END:")
                 this.redrawCanvas = true
                 this.match = match
                 this.screen = SCREENS.QUESTION_END
                 this.updateData()
                 break 
             case MATCH_EVENTS.ON_COUNTDOWN:
+                console.log("Emitted event ON_COUNTDOWN:", time)
                 this.redrawCanvas = true
                 this.time = time
                 break
             case MATCH_EVENTS.ON_LEADERBOARD: 
-                //console.log("Emitted event ON_LEADERBOARD:", match)
+                console.log("Emitted event ON_LEADERBOARD:")
                 this.redrawCanvas = true
                 this.match = match
                 this.screen = SCREENS.LEADER_BOARD
                 this.updateData()
                 break
             case MATCH_EVENTS.ON_SUMMARY:
-                //console.log("Emitted event ON_SUMMARY:", match)
+                console.log("Emitted event ON_SUMMARY:")
                 this.redrawCanvas = true
                 this.match = match
                 this.screen = SCREENS.SUMMARY
                 this.updateData()
                 break
             case MATCH_EVENTS.ON_QUESTION:
-                //console.log("Emitted event ON_QUESTION:", match)
+                console.log("Emitted event ON_QUESTION:")
+                this.isRetrievedAnswers = false
                 this.redrawCanvas = true
                 this.match = match
                 this.screen = SCREENS.QUESTION
@@ -122,14 +128,14 @@ class LiveStreamHandler {
                 //console.log("Emitted event ON_COUNTDOWN_TO_END:")
                 break
             case MATCH_EVENTS.ON_END_MATCH: 
-                //console.log("Emitted event ON_END_MATCH:")
+                console.log("Emitted event ON_END_MATCH:")
                 this.onEndStream()
                 break
             case MATCH_EVENTS.ON_START: 
-                //console.log("Emitted event ON_START:")
+                console.log("Emitted event ON_START:")
                 //console.log("start stream")
                 this.redrawCanvas = true
-                this.screen = WAITING
+                this.screen = SCREENS.WAITING
                 this.match = match
                 break
         }
@@ -194,57 +200,128 @@ class LiveStreamHandler {
                 console.log("Stop listen to livechat ")
             }
             this.retrieveAnswers()
-        }, 5000)
+        }, 500)
     }
 
     retrieveAnswers =  async () => {
+        if (this.isRetrievedAnswers) return 
         let match = this.match
-        // if ((this.screen == SCREENS.WAITING) || (this.screen == SCREENS.SUMMARY)) {
-        //     console.log("Not rereice answer on Waiting and summary")
-        //     return 
-        // }
-        // if (this.question == {} || this.match.progress.length == 0) {
-        //     console.log("No question now ")
-        //     return 
-        // }
+        if (this.screen == SCREENS.QUESTION_END){
+            let duration = match.showQuestionEndTime - this.time
+            if  (duration >= YOUTUBE_STREAM_LATENCY && duration <= YOUTUBE_STREAM_LATENCY + 2) {
+                console.log("Only Retrieve answer after at least " + YOUTUBE_STREAM_LATENCY +" seconds on Question End Screen")
+                this.isRetrievedAnswers = true 
+            }
+          
+        }
+        if (!this.isRetrievedAnswers )  return
 
-        let stage = match.progress[match.progress.length -1]
         let liveChatId = match.livestream.liveChatId
-        console.log("Retrieve answers for chat Id", liveChatId)
         var url = `https://youtube.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${liveChatId}&part=id&part=snippet&part=authorDetails&key=${YOUTUBE_API_KEY}`
         
+        console.log("URL chat:", url)
         if (this.nextPageToken != null) {
             url += `&pageToken=${this.nextPageToken}`
         }
-        axios.get(url)
-        .then((res) => {
+        try {
+            let res = await axios.get(url)
+           // console.log("Data answers:", res.data)
             const {data} = res
             this.nextPageToken = data.nextPageToken
             let msgs = data.items
-            msgs.forEach((msg) => {
-                let player = {
-                    _id: msg.authorDetails.channelId,
-                    name: msg.authorDetails.displayName,
-                    profile: msg.authorDetails.channelUrl,
-                    avatar: msg.authorDetails.profileImageUrl,
-                }
-                let content = msg.snippet.textMessageDetails.messageText
-                let answerIndex = ['1','2','3','4'].indexOf(content)
-                if (answerIndex == -1) {
-                    console.log("Wrong answer format:", content, this.time, this.time, this.convertScreenName())
-                    return 
-                }
-                else {
-                    console.log("Correct answer format:" , content, this.time, this.convertScreenName())
-                }
-                //let answerTime = Math.abs((new Date()) - stage.startAt) / 1000
-                //this.matchHandler.onAnswer(player, answerIndex, answerTime)
+
+            this.legalAnswerPlayers = []
+            msgs.forEach((msg) => this.extractAnswer(msg))
+
+            this.legalAnswerPlayers.forEach((item, index) => {
+                this.matchHandler.onAnswer(item.player, item.answerIndex, item.answerTime)
             })
-        })
-        .catch((err) => {
-            console.log("Retrieve answer error:", err)
-        })
+            this.matchHandler.calculateEarnScores()
+            // Emit for MatchHandler for display answers?
+
+            let urls = this.legalAnswerPlayers.map((item) => item.player.avatar)
+            let differUrls = []
+            urls.forEach((url) => {
+                if (differUrls.indexOf(url) == -1) differUrls.push(url)
+            })
+
+            console.log("Differ urls: ", differUrls)
+            await this.canvasHandler.loadRemoteImages(differUrls)
+            setTimeout(() => this.redrawCanvas = true, 1000)
+        }        
+        catch (err) {
+            console.log("Retrieve answer error:", (err.response ? err.response.data : err))
+        }
+
     }
+
+
+    extractAnswer = (msg) => {
+        let match = this.match
+        let stage = match.progress[match.progress.length -1]
+        // Check answer is on time 
+        let answerPublishTime = new Date(msg.snippet.publishedAt)
+        var answerTime = Math.abs(answerPublishTime - stage.startAt) / 1000 - YOUTUBE_STREAM_LATENCY
+        answerTime = Math.round(answerTime * 10) / 10
+        if (answerTime < 0) {
+            console.log("Answer when time answers is over, emited", content, answerTime)
+            return
+        }
+        
+        // Check answer is correct format
+        // Correct format is : 'x' or 'x @alias_name'
+        // 
+        let content = msg.snippet.textMessageDetails.messageText
+       // console.log("\n \n Extract answer with content: ", content)
+        var answerIndex = ['1','2','3','4'].indexOf(content)
+        var aliasName = ''
+        if (answerIndex == -1) {
+            // Not in format 'x'
+            // Check format 'x @alias_name'
+            let format = /[1-4]{1} @.*/gm
+            if (format.test(content)) {
+                answerIndex = content[0] - 1
+                aliasName = content.substring(3)
+              //  console.log("Answer in format x alias :", answerIndex, aliasName)
+            }
+            else {
+              //  console.log("Answer not any in format, emited ")
+                return
+            }
+        }
+        else {
+            //console.log("Answer in format x:", answerIndex)
+        }
+
+        // 
+        var playerName = aliasName == '' ? msg.authorDetails.displayName : aliasName
+        var playerId = (msg.authorDetails.channelId + '_' + playerName)
+       
+        let player = {
+            _id: playerId,
+            platformId: msg.authorDetails.channelId,
+            name: playerName,
+            profile: msg.authorDetails.channelUrl,
+            avatar: msg.authorDetails.profileImageUrl,
+        }
+       // console.log("Player infor: ", player)
+
+        var isExist = false
+        this.legalAnswerPlayers.forEach((answerPlayer, index) => {
+            if (answerPlayer.player._id == playerId) {
+                // Update to latest answer
+                this.legalAnswerPlayers[index].answerTime = answerTime
+                this.legalAnswerPlayers[index].answerIndex = answerIndex
+                isExist = true
+              //  console.log("Update to latest answer :", playerName, answerIndex)
+            }
+        })
+        if (!isExist) {
+         //   console.log("Add to new answer :", playerName, answerIndex)
+            this.legalAnswerPlayers.push({player, answerIndex,answerTime})
+        }
+    }
+
     showCurrentScreen = () => {
         switch (this.screen) {
             case SCREENS.WAITING: 
@@ -268,9 +345,9 @@ class LiveStreamHandler {
         }
     }
 
-    onStreamFrame = (data) => {
+    onStreamFrame = async (data) => {
         if (this.redrawCanvas) {
-            this.canvasHandler.canvas = this.canvasHandler.drawCanvas(this.screen, data)
+            this.canvasHandler.canvas = await this.canvasHandler.drawCanvas(this.screen, data)
             this.redrawCanvas = false
         }
         //let canvas =  this.canvasHandler.drawCanvas(this.screen, data)
@@ -309,11 +386,17 @@ class LiveStreamHandler {
         const {question, answers} = stage 
         const data = {
             question,
+            isLoading: !this.isRetrievedAnswers,
             userAnswers: answers,
             round_index: `Result of round ${questionIndex}`,
             time: this.time
         }
-
+        if (this.redrawCanvas) {
+            data.userAnswers.forEach((item, index) => {
+                let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
+                data.userAnswers[index].avatarImg = avatarImg
+            })
+        }
         this.onStreamFrame(data)
     }
 
@@ -325,7 +408,13 @@ class LiveStreamHandler {
             time : this.time
         }
 
-        this.onStreamFrame(data)
+        if (this.redrawCanvas) {
+            data.players.forEach((player, index) => {
+                let avatarImg = this.canvasHandler.getRemoteImages(player.avatar)
+                data.players[index].avatarImg = avatarImg
+            })
+        }
+        this.onStreamFrame(data, !(this.isRetrievedAnswers))
     }
 
     onSummary = () => {

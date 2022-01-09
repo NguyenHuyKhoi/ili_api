@@ -15,6 +15,7 @@ const createLivestreamController = async (req, res, next) => {
 }
 
 const startLivestreamController = async (req, res, next) => {
+    console.log("start livestream controller: ", req.body.pinCode)
     const result = await startLivestream({
         pinCode: req.body.pinCode
     })

@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const drawQuestion = (canvas, data, bg, layer, genImg = false) => {
+const drawQuestion =  async (canvas, data, bg, layer, genImg = false) => {
     let ctx = canvas.getContext('2d')
     let w = canvas.width 
     let h = canvas.height

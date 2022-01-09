@@ -1,6 +1,7 @@
 const fs = require('fs')
+const { ImageHelper } = require('..')
 
-const drawPlayers = (ctx, players, avatar) => {
+const drawPlayers = async (ctx, players) => {
     const anchorTopX = [325, 7, 652]
     const anchorTopY = [108, 189, 190]
 
@@ -22,7 +23,8 @@ const drawPlayers = (ctx, players, avatar) => {
             w = 400
             h = 80
         }
-        ctx.drawImage(avatar, ax + 25, ay + 25, 50, 50)
+        let avatar = player.avatarImg
+        if (avatar) ctx.drawImage(avatar, ax + 30, ay + 26, 45, 45)
 
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
@@ -38,7 +40,7 @@ const drawPlayers = (ctx, players, avatar) => {
     })
 }
 
-const drawLeaderBoard = (canvas, data, bg, layer, avatar, genImg = false) => {
+const drawLeaderBoard = (canvas, data, bg, layer, genImg = false) => {
     let ctx = canvas.getContext('2d')
     let w = canvas.width 
     let h = canvas.height
@@ -66,7 +68,7 @@ const drawLeaderBoard = (canvas, data, bg, layer, avatar, genImg = false) => {
     ctx.font = "22px Arial"
 	ctx.fillText('Next round in ' + time , 1150, 30 )
 
-    drawPlayers(ctx, players, avatar)
+    drawPlayers(ctx, players)
     
     if (genImg) {
         const name = `/generated/leader_board_${time}.jpeg`

@@ -2,7 +2,7 @@ const fs = require('fs')
 const sw = 1280
 const sh = 720
 
-const drawPreStream = (canvas, bg, genImg = false) => {
+const drawPreStream = async (canvas, bg, genImg = false) => {
     let ctx = canvas.getContext('2d')
     let w = canvas.width 
     let h = canvas.height

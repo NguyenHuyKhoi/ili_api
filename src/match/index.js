@@ -13,7 +13,6 @@ class MatchCenter {
 
     static hostMatch = async (match) => {
         let {gameId} = match
-        console.log("host match", match)
 
         match.game = await Game.findOne({_id: gameId})
         if (match.game == undefined) {

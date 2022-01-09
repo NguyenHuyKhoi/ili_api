@@ -2,6 +2,9 @@ const mongoose = require('mongoose')
 const { QuestionSchema } = require('../game/model')
 const PlayerSchema = new mongoose.Schema({
     _id: {type: String, required: true},
+    platformId: {type: String},
+    profile: {type: String},
+    avatar: {type: String}, 
     name: {type: String, required: true},
     score: {type: Number, require: true},
     rank: {type: Number},
@@ -12,6 +15,9 @@ const PlayerSchema = new mongoose.Schema({
 
 const AnswerPlayerSchema = new mongoose.Schema({
     _id: {type: String, require: true},
+    platformId: {type: String},
+    profile: {type: String},
+    avatar: {type: String}, 
     name: {type: String, require: true},
     answerIndex: {type: Number, require: true}, 
     answerTime: {type: Number, require: true},

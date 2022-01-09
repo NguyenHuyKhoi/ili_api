@@ -22,6 +22,8 @@ const MATCH_EVENTS = {
 class MatchHandler {
     constructor(match) {
         this.match = match
+
+        this.isCalledStart = false
     }
 
     // For socket: subcribe is io object 
@@ -97,11 +99,10 @@ class MatchHandler {
         })
     }
 
-    handleEndQuestion = () => {
+    calculateEarnScores = () => {
         let match = this.match
         const {progress, players, host} = match
         let current = progress[progress.length - 1 ]
-        
         current.answers.find((answerPlayer, index) => {
             let earnScore = this.calculateScore(current.question, answerPlayer)
             current.answers[index].earnScore = earnScore
@@ -131,6 +132,16 @@ class MatchHandler {
             }  
         })
 
+        players.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
+
+        this.onSync()
+    }
+
+    handleEndQuestion = () => {
+        let match = this.match
+        const {progress, players, host} = match
+        this.calculateEarnScores()
+
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_QUESTION_END, {
             rid: host._id,
             match
@@ -139,6 +150,10 @@ class MatchHandler {
         // Must config on setting match
         let time = match.showQuestionEndTime || 10
         const waitingTimer = setInterval( () => {
+            if (this.match.state == 'finished'){
+                clearInterval(_interval)
+                return
+            }
             time --
             if (time <= 0) {
                 clearInterval(waitingTimer)
@@ -163,6 +178,10 @@ class MatchHandler {
         // Must config in setting match
         let time = match.showLeaderboardTime || 10
         const waitingTimer = setInterval( () => {
+            if (this.match.state == 'finished'){
+                clearInterval(_interval)
+                return
+            }
             time --
             if (time <= 0) {
                 clearInterval(waitingTimer)
@@ -250,6 +269,10 @@ class MatchHandler {
         let match = this.match
         let time = match.delayEndTime || 60
         let _interval = setInterval(() => {
+            if (this.match.state == 'finished'){
+                clearInterval(_interval)
+                return
+            }
             time-- 
             if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_COUNTDOWN, {
                 rid: match.pinCode,
@@ -306,6 +329,10 @@ class MatchHandler {
         let question = match.progress[match.progress.length -1].question
         let time = question.time_limit || 30
         const answerTimer = setInterval( () => {
+            if (this.match.state == 'finished'){
+                clearInterval(_interval)
+                return
+            }
             time = time - 1
             if (time <= 0 ) {
                 clearInterval(answerTimer)
@@ -324,6 +351,10 @@ class MatchHandler {
         let match = this.match
         let time = match.delayStartTime || 30
         let _interval = setInterval(() => {
+            if (this.match.state == 'finished'){
+                clearInterval(_interval)
+                return
+            }
             time-- 
             if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_COUNTDOWN, {
                 rid: match.pinCode,
@@ -338,10 +369,15 @@ class MatchHandler {
     
 
     onStart = (startNow = false) => {
+        if (this.isCalledStart) {
+            return
+        }
+        this.isCalledStart = true
+        console.log("Call start the match", startNow)
         let match = this.match
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_START, {
             rid: match.pinCode,
-            Match
+            match
         })
         if (match.delayStartTime > 0 && (startNow == false)) {
             if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_COUNTDOWN_TO_START, {
@@ -357,22 +393,21 @@ class MatchHandler {
     }
 
     calculateScore = (question, answerPlayer) => {
-
-    
         const {isCorrect, answerTime} = answerPlayer
         const {score, time_limit} = question
-
         if (!isCorrect) return 0 
         let correctScore = score != undefined ? score : 1000
-        let answerDuration = time_limit - answerTime
-        let bonusTimeScore = ( 1 - (answerDuration / time_limit / 2)) * correctScore
+        let bonusTimeScore = ( 1 - (answerTime / time_limit / 2)) * correctScore
 
         // Add bonusStreakScore...
-        return correctScore + bonusTimeScore
+        let iNum = Math.round(correctScore + bonusTimeScore)
+        let num = Math.round(iNum / 10) * 10
+        return num
     }
 
     // pass: only _id
     onAnswer = (player, answerIndex, answerTime) => {
+       
         let match = this.match
         let current = match.progress[match.progress.length - 1]
         const {question} = current 
@@ -392,6 +427,10 @@ class MatchHandler {
             answerTime: answerTime,
             isCorrect
         }
+        if (isCorrect) {
+            console.log("Get answer correct: ", answerTime, player.name)
+        }
+    
         current.answers.push({...answerPlayer})
         this.onSync()
     }
