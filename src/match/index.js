@@ -9,6 +9,9 @@ class MatchCenter {
     static findMatchHandler = (pinCode) => {
         return this.matchHandlers.find((handler) => handler.match.pinCode == pinCode)
     }
+    static callMe = () => {
+        return 'OK'
+    }
 
 
     static hostMatch = async (match) => {
@@ -28,7 +31,6 @@ class MatchCenter {
         let createdMatch = await new Match(match).save()
         let matchHandler = new MatchHandler(createdMatch)
         this.matchHandlers.push(matchHandler)
-        console.log("Create Match:", createdMatch)
 
         if (createdMatch.livestream != null) {
             var livestreamHandler = new LiveStreamHandler(matchHandler)
@@ -44,8 +46,6 @@ class MatchCenter {
         return matchHandler
     }
 }
-
-
 
 
 module.exports = {

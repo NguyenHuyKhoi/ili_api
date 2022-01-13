@@ -2,7 +2,6 @@ const { login, signup, requestResetPassword, resetPassword, changePassword, logo
 
 const loginController = async (req, res, next) => {
     const result = await login(req.body)
-    console.log("Result login:", result)
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 

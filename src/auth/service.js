@@ -57,6 +57,12 @@ const logout = async (data) => {
     }
 }
 
+const userGenerator = (email) => {
+    var offset = email.indexOf('@')
+    var username = offset == -1 ? 'User_' + Math.round(Math.random()*1000) : email.substring(0, offset)
+    return username
+}
+
 const signup = async (data) => {
     try {
         const {email, password} = data
@@ -66,7 +72,8 @@ const signup = async (data) => {
         const securePassword = encrypt(password)
         const newUser = new User({
             email,
-            password: securePassword
+            password: securePassword,
+            username: userGenerator(email)
         })
         const user = await newUser.save()
         return user
@@ -111,6 +118,7 @@ const requestResetPassword = async (data) => {
         return resetLink
     }
     catch (err) {
+        console.log("Err request reset :", err)
         return {
             error: err.message
         }

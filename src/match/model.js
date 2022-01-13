@@ -2,10 +2,11 @@ const mongoose = require('mongoose')
 const { QuestionSchema } = require('../game/model')
 const PlayerSchema = new mongoose.Schema({
     _id: {type: String, required: true},
+    userId: {type: String}, // UserId: id of user in ILI if exists
     platformId: {type: String},
     profile: {type: String},
-    avatar: {type: String}, 
-    name: {type: String, required: true},
+    avatar: {type: String},  // Avatar can be avatar on ILI or avatar on platform Fb/YT (for livestream...)
+    username: {type: String, required: true},
     score: {type: Number, require: true},
     rank: {type: Number},
     correctNum: {type: Number},
@@ -38,6 +39,7 @@ const ProgressSchema = new mongoose.Schema({
 const LivestreamSchema = new mongoose.Schema({
     account: {type: Object},
     broadcastId: {type: String},
+    livestreamId: {type: String},
     liveChatId: {type: String},
     platform: {type: String},
     streamId: {type: String},

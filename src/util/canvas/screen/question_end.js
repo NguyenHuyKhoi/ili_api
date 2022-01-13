@@ -32,7 +32,7 @@ const drawUserAnswers = async (ctx, answers, isLoading) => {
 				if (avatar) ctx.drawImage(avatar, ax + i * 90, ay + 0, 45, 45)
 				ctx.fillStyle = '#fff'
 				ctx.font = "18px Arial"
-				ctx.fillText(answer.name, ax + 22 + 90 * i, ay + 60)
+				ctx.fillText(answer.username, ax + 22 + 90 * i, ay + 60)
 			})
 		}
 		

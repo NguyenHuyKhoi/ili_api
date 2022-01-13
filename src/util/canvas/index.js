@@ -1,5 +1,4 @@
 const { createCanvas, loadImage } = require('canvas')
-const fs = require('fs')
 const { drawSummary } = require('./screen/summary')
 const { drawLeaderBoard } = require('./screen/leader_board')
 const { drawQuestion } = require('./screen/question')

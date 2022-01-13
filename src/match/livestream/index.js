@@ -1,13 +1,12 @@
 const { default: axios } = require("axios");
-const {CanvasHandler, SCREENS, test_screen, ImageHelper} = require("../../util/canvas");
+const {CanvasHandler, SCREENS, test_screen} = require("../../util/canvas");
 const StreamHandler = require("../../util/stream");
 const { MATCH_EVENTS } = require("../handler");
-const  Match  = require('../model');
-const { emitEventNames } = require("../socket");
 const FPS = 30
 const YOUTUBE_STREAM_LATENCY = 5
 const YOUTUBE_API_KEY = 'AIzaSyCpmqo8ByzMuPbZ8g97mSCRcs4Wi-bJTe0'
-const { loadImage } = require('canvas')
+
+
 class LiveStreamHandler {
     constructor(matchHandler) {
         this.match = matchHandler.match

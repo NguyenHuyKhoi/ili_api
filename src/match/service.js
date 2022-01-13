@@ -1,7 +1,7 @@
 const { MatchCenter } = require('.')
-const { Game } = require('../game/model')
+console.log("Check amtc outside:", (MatchCenter.callMe()))
 const Match = require('./model')
-const LivestreamHandlers = []
+
 const getLibrary = async (data) => {
     try {   
         const {userId} = data 

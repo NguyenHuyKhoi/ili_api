@@ -117,7 +117,7 @@ module.exports =  (io, socket) => {
             let player = findPlayer({socketId: socket.id}, match)
             if (player) {
                 // Because player is schema
-                player.name = updatedPlayer.name
+                player.username= updatedPlayer.username
                 console.log("Updated Player:", player)
                 await updatePlayer(player, match)
                 syncData(pinCode)
@@ -335,7 +335,7 @@ module.exports =  (io, socket) => {
 
         let answerPlayer = {
             socketId: socket.id,
-            name: player.name,
+            name: player.username,
             answerIndex: answerIndex,
             answerTime: answerTime,
             isCorrect

@@ -2,7 +2,7 @@
 const User = require('./model')
 const edit = async (data) => {
     try {
-        const {avatar, banner, username, name, userId} = data
+        const {avatar, banner, username, userId} = data
 
         const user = await User.findOne({_id: userId})
         if (!user) {
@@ -12,7 +12,7 @@ const edit = async (data) => {
         // handle uploaded files...
         await User.updateOne(
             { _id: userId },
-            { $set: { avatar, banner, username, name }},
+            { $set: { avatar, banner, username }},
             { new: true}
         )
 

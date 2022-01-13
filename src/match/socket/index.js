@@ -1,5 +1,6 @@
-const {MatchCenter} = require('../index')
 
+const { MatchCenter } = require('..')
+console.log("Print: ", (MatchCenter.callMe()))
 const emitEventNames = [
     'match:sync',
     'match:playerLeave',
@@ -30,15 +31,15 @@ module.exports =  (io, socket) => {
             if (roomId == undefined) return
             io.to(roomId).emit(eventName, data)
 
-            console.log("Receiver emit:", eventName, roomId)
-            io.sockets.adapter.rooms.get(roomId).forEach((client) => {
-                console.log(`Client ${client} in room ${roomId}`)
-            })
+            // console.log("Receiver emit:", eventName, roomId)
+            // io.sockets.adapter.rooms.get(roomId).forEach((client) => {
+            //     console.log(`Client ${client} in room ${roomId}`)
+            // })
 
         }
 
         static onHost = async (match, callback) => {
-            console.log("Requrie host match: ", match)
+            console.log("Requrie host match: ", (MatchCenter == null))
             match.host._id = socket.id
             let matchHandler = await MatchCenter.hostMatch(match)
             if (!matchHandler) {
@@ -52,8 +53,10 @@ module.exports =  (io, socket) => {
             callback(createdMatch)
         }
 
-        static onJoin =  (pinCode, callback) => {
-            let player = { _id: socket.id, score: 0, name: '???' }
+        static onJoin =  (pinCode, joinPlayer, callback) => {
+            console.log("Join player: ",pinCode,  joinPlayer)
+            // Join player has userId and avatar
+            let player = { _id: socket.id, score: 0, name: '???',...joinPlayer }
             let matchHandler =  MatchCenter.findMatchHandler(pinCode)
             if (!matchHandler) {
                 callback(null)
@@ -151,12 +154,6 @@ module.exports =  (io, socket) => {
             callback(true)
         }
     }
-    // if (ioHandler == null) {
-    //     ioHandler = new IOSocketHandler(this.socket) 
-    // }
-    // else {
-    //     ioHandler.socket = socket
-    // }
 
     socket.on('match:host', IOSocketHandler.onHost)
     socket.on('match:join', IOSocketHandler.onJoin)

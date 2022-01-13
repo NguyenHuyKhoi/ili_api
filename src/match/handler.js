@@ -66,7 +66,7 @@ class MatchHandler {
         let match = this.match
         match.players.forEach((item, index) => {
             if (item._id == player._id) {
-                match.players[index].name = player.name
+                match.players[index].username= player.username
 
             }
         });
@@ -99,7 +99,7 @@ class MatchHandler {
         })
     }
 
-    calculateEarnScores = () => {
+    calculateEarnScores = (time) => {
         let match = this.match
         const {progress, players, host} = match
         let current = progress[progress.length - 1 ]
@@ -113,21 +113,24 @@ class MatchHandler {
             let answerPlayer = current.answers.find((item) => item._id == player._id)
             if (!answerPlayer) {
                 if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.PLAYER_NOT_ANSWER, {
-                    rid: player._id
+                    rid: player._id,
+                    timeTotal: time
                 })
             }
             else if (answerPlayer.isCorrect) {
                 players[index].score = players[index].score + answerPlayer.earnScore
                 if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.PLAYER_ANSWER_CORRECT, {
                     rid: player._id,
-                    earnScore: answerPlayer.earnScore
+                    earnScore: answerPlayer.earnScore,
+                    timeTotal: time
                 })
             }
             else {
                 players[index].score = players[index].score + answerPlayer.earnScore
                 if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.PLAYER_ANSWER_WRONG, {
                     rid: player._id,
-                    earnScore: answerPlayer.earnScore
+                    earnScore: answerPlayer.earnScore,
+                    timeTotal: time
                 })
             }  
         })
@@ -140,18 +143,20 @@ class MatchHandler {
     handleEndQuestion = () => {
         let match = this.match
         const {progress, players, host} = match
-        this.calculateEarnScores()
-
-        if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_QUESTION_END, {
-            rid: host._id,
-            match
-        })
 
         // Must config on setting match
         let time = match.showQuestionEndTime || 10
+        this.calculateEarnScores(time)
+
+        if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_QUESTION_END, {
+            rid: host._id,
+            match,
+            timeTotal: time
+        })
         const waitingTimer = setInterval( () => {
+            
             if (this.match.state == 'finished'){
-                clearInterval(_interval)
+                clearInterval(waitingTimer)
                 return
             }
             time --
@@ -170,16 +175,17 @@ class MatchHandler {
 
     handleShowLeaderBoard = () => {
         let match = this.match
-        if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_LEADERBOARD, {
-            rid: match.pinCode,
-            match
-        })
 
         // Must config in setting match
         let time = match.showLeaderboardTime || 10
+        if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_LEADERBOARD, {
+            rid: match.pinCode,
+            match,
+            timeTotal: time
+        })
         const waitingTimer = setInterval( () => {
             if (this.match.state == 'finished'){
-                clearInterval(_interval)
+                clearInterval(waitingTimer)
                 return
             }
             time --
@@ -258,7 +264,7 @@ class MatchHandler {
     
     handleEndMatch = () => {
         let match = this.match
-        match.state = 'finished'
+        this.match.state = 'finished'
         this.handleUpdateToDB()
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_END_MATCH, {
             rid: match.pinCode
@@ -320,17 +326,18 @@ class MatchHandler {
 
     handleAskQuestion = () => {
         let match = this.match
+        let question = match.progress[match.progress.length -1].question
+        let time = question.time_limit || 30
 
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_QUESTION, {
             rid: match.pinCode,
-            match
+            match,
+            timeTotal: time
         })
-
-        let question = match.progress[match.progress.length -1].question
-        let time = question.time_limit || 30
         const answerTimer = setInterval( () => {
+            // console.log("This.state.match ", this.match.state)
             if (this.match.state == 'finished'){
-                clearInterval(_interval)
+                clearInterval(answerTimer)
                 return
             }
             time = time - 1
@@ -370,6 +377,7 @@ class MatchHandler {
 
     onStart = (startNow = false) => {
         if (this.isCalledStart) {
+            console.log("Match is started before...")
             return
         }
         this.isCalledStart = true
@@ -428,7 +436,7 @@ class MatchHandler {
             isCorrect
         }
         if (isCorrect) {
-            console.log("Get answer correct: ", answerTime, player.name)
+            console.log("Get answer correct: ", answerTime, player.username)
         }
     
         current.answers.push({...answerPlayer})
@@ -448,12 +456,14 @@ class MatchHandler {
     onLock = () => {
         let match = this.match
         match.state = 'locking'
+        console.log("Lock match")
         this.onSync()
     }
 
     onUnlock = () => {
         let match = this.match
         match.state = 'waiting'
+        console.log("UnLock match")
         this.onSync()
     }
 

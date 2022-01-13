@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { ImageHelper } = require('..')
+
 
 const drawPlayers = async (ctx, players) => {
     const anchorTopX = [325, 7, 652]
@@ -30,7 +30,7 @@ const drawPlayers = async (ctx, players) => {
         ctx.textBaseline = 'middle'
         ctx.fillStyle = '#696969'
         ctx.font = '20px Arial'
-        ctx.fillText(player.name, ax + w / 2, ay + (h + 16 ) / 2)
+        ctx.fillText(player.username, ax + w / 2, ay + (h + 16 ) / 2)
 
         ctx.textAlign = 'right'
         ctx.textBaseline = 'middle'
