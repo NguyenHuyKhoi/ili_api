@@ -1,14 +1,15 @@
 const express = require('express')
 const authMiddleware = require('../auth/middleware')
-const {createController, deleteController, editController, detailController, getLibraryController, searchController } = require('./controller')
+const {createController, deleteController, editController, detailController, getLibraryController, searchController, cloneController } = require('./controller')
 const router = express.Router()
 
+router.get('/search', searchController)
 router.use(authMiddleware.isAuth)
 
-router.post('/', createController)
+router.post('/create', createController)
+router.post('/edit/:id', editController)
+router.post('/clone/:id', cloneController)
+
 router.get('/library', getLibraryController)
 router.delete('/:id', deleteController)
-router.put('/:id', editController)
-router.get('/search', searchController)
-router.get('/:id', detailController)
 module.exports = router

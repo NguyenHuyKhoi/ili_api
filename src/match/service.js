@@ -1,5 +1,4 @@
 const { MatchCenter } = require('.')
-console.log("Check amtc outside:", (MatchCenter.callMe()))
 const Match = require('./model')
 
 const getLibrary = async (data) => {

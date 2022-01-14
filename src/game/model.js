@@ -12,10 +12,10 @@ const QuestionSchema = new mongoose.Schema({
 
 const GameSchema = new mongoose.Schema({
     userId: {type: String, required: true, ref: 'User'},
+    subject: {type: String, required: true},
     title: {type: String, required: true},
     description: {type: String},
     cover: {type: String},
-    language: {type: String, required: true},
     visibility: {type: String, required: true},
     questions: {type: [QuestionSchema], required: true}
 }, {

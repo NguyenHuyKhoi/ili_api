@@ -1,10 +1,19 @@
-const {create, detail, edit, deletee, getLibrary, search } = require("./service")
+
+const {create, detail, edit, deletee, getLibrary, search, clone } = require("./service")
 
 
 const createController = async (req, res, next) => {
     const result = await create({
         userId: req.user._id,
         item: req.body
+    })
+    return res.status(result.error != undefined ? 500 : 200).json(result)
+}
+
+const cloneController = async (req, res, next) => {
+    console.log("Game _id: ", req.params.id)
+    const result = await clone({
+        gameId: req.params.id
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
@@ -20,7 +29,6 @@ const editController = async (req, res, next) => {
 
 const detailController = async (req, res, next) => {
     const result = await detail({
-        userId: req.user._id,
         _id: req.params.id
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
@@ -35,10 +43,9 @@ const deleteController = async (req, res, next) => {
 }
 
 const getLibraryController = async (req, res, next) => {
-    console.log("status: ", req.query.status)
+    console.log("call library controller")
     const result = await getLibrary({
-        userId: req.user._id,
-        status: req.query.status
+        userId: req.user._id
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
@@ -53,5 +60,6 @@ module.exports = {
     detailController,
     deleteController,
     getLibraryController,
+    cloneController,
     searchController
 }

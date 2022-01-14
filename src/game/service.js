@@ -22,6 +22,42 @@ const create = async (data) => {
     }
 }
 
+const clone = async (data) => {
+    try {
+        const {gameId} = data
+        if (gameId == undefined) {
+            throw new Error('Missing fields')
+        }
+
+        let game = await Game.findOne({_id: gameId})
+        if (game == undefined) {
+            throw new Error('No game found')
+        }
+        else{
+            console.log("Find game:", game)
+        }
+        var cloneGame = new Game({
+            userId: game.userId,
+            subject: game.subject,
+            title: game.title,
+            description: game.description,
+            cover: game.cover,
+            visibility: game.visibility,
+            questions: game.questions
+        })
+        await cloneGame.save()
+
+        return 'Clone successfully'
+
+    }
+    catch (err) {
+        console.log("Clone game error : ", err.message)
+        return {
+            error: err.message
+        }
+    }
+}
+
 const edit = async (data) => {
     try {
         const {item, userId, _id} = data
@@ -89,6 +125,7 @@ const deletee = async (data) => {
         return "Delete success"
     }
     catch (err) {
+        console.log("Error:", err)
         return {
             error: err.message
         }
@@ -101,13 +138,14 @@ const getLibrary = async (data) => {
         if (userId == undefined) {
             throw new Error('Missing fields')
         }
+        console.log("Find games of userId:", userId)
         let games = await Game.find({userId})
 
         await Promise.all(games.map(async(game) => {
             game._doc.owner = await getBriefUser(game.userId)
         }))
 
-        return games
+        return games.reverse()
     }
     catch (err) {
         console.log("error: ",err)
@@ -126,7 +164,7 @@ const search = async (data) => {
             game._doc.owner = await getBriefUser(game.userId)
         }))
 
-        return games
+        return games.reverse()
     }
     catch (err) {
         return {
@@ -141,5 +179,6 @@ module.exports = {
     detail,
     deletee,
     getLibrary,
-    search
+    search,
+    clone
 }

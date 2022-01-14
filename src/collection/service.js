@@ -80,12 +80,11 @@ const getLibrary = async (data) => {
         const list = await Collection.find({userId})
         await Promise.all(list.map(async (collection) => {
             collection._doc.owner = await getBriefUser(collection.userId)
-            console.log("Owner :", collection._doc.owner)
             collection._doc.games = await getDetailGames(collection._id)
         }))
 
 
-        return list
+        return list.reverse()
     }
     catch (err) {
         console.log("err:", err)

@@ -110,7 +110,7 @@ const requestResetPassword = async (data) => {
         }).save()
 
         const clientUrl = process.env.CLIENT_URL
-        const resetLink = `${clientUrl}/auth/reset-password?token=${newToken}`
+        const resetLink = `${clientUrl}/reset-password?token=${newToken}`
 
         sendRequestResetPasswordEmail(user, resetLink)
 
