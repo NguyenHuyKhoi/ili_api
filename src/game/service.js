@@ -138,14 +138,13 @@ const getLibrary = async (data) => {
         if (userId == undefined) {
             throw new Error('Missing fields')
         }
-        console.log("Find games of userId:", userId)
-        let games = await Game.find({userId})
+        let list = await Game.find({userId})
 
-        await Promise.all(games.map(async(game) => {
-            game._doc.owner = await getBriefUser(game.userId)
+        await Promise.all(list.map(async(item) => {
+            item._doc.owner = await getBriefUser(item.userId)
         }))
 
-        return games.reverse()
+        return list.reverse()
     }
     catch (err) {
         console.log("error: ",err)
@@ -155,18 +154,85 @@ const getLibrary = async (data) => {
     }
 }
 
-const search = async (data) => {
+const getDetail = async (data) => {
     try {
-        const {} = data
-        let games = await Game.find({})
+        const {_id} = data
+        if (_id == undefined) {
+            throw new Error('Missing fields')
+        }
+        let item = await Game.findOne({_id})
+        if (item == undefined) {
+            throw new Error('No game found')
+        }
 
-        await Promise.all(games.map(async (game) => {
-            game._doc.owner = await getBriefUser(game.userId)
-        }))
-
-        return games.reverse()
+        item._doc.owner = await getBriefUser(item.userId)
+        return item
     }
     catch (err) {
+        console.log("error: ",err)
+        return {
+            error: err.message
+        }
+    }
+}
+const search = async (data) => {
+    try {
+        var {userId, keyword, subjects, question_ranges} = data
+
+        var list = []
+        if (userId == undefined){
+            list = await Game.find({visibility: 'public'})
+        }
+        else {
+            list = await Game.find({userId, visibility: 'public'})
+        }
+
+        if (keyword != undefined) {
+            keyword = keyword.toString().toLowerCase()
+
+            list = list.filter((item) => {
+                let ok = false 
+                let {title, description} = item
+                if (title && title.toString().toLowerCase().indexOf(keyword)!= -1) {
+                    ok = true
+                }
+                if (description && description.toString().toLowerCase().indexOf(keyword) != -1) {
+                    ok = true
+                }
+                return ok
+            })
+        }
+
+
+        if (subjects != undefined) {
+            var subjectList = subjects.split(',')
+            list = list.filter((item) => subjectList.indexOf(item.subject) != -1)
+        }
+        
+        if (question_ranges != undefined) {
+            var rangeList = question_ranges.split(',')
+            list = list.filter((item) => {
+                let ok = false 
+                let question_num = item.questions.length
+                rangeList.forEach((range) => {
+                    let arr = range.split('-')
+                    if (question_num >= arr[0] && question_num <= arr[1]){
+                        ok = true
+                    }
+                })
+                return ok
+            })
+        }
+        
+
+        await Promise.all(list.map(async (item) => {
+            item._doc.owner = await getBriefUser(item.userId)
+        }))
+
+        return list.reverse()
+    }
+    catch (err) {
+        console.log("Err: ", err)
         return {
             error: err.message
         }
@@ -180,5 +246,6 @@ module.exports = {
     deletee,
     getLibrary,
     search,
-    clone
+    clone,
+    getDetail
 }

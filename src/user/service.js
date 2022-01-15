@@ -73,7 +73,7 @@ const getBriefUser = async (_id) => {
         return {
             username: user.username,
             avatar: user.avatar,
-            id: user._id,
+            _id: user._id,
         }
     }
     else {

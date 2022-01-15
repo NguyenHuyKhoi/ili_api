@@ -78,9 +78,9 @@ const getLibrary = async (data) => {
             throw new Error('Missing fields')
         }
         const list = await Collection.find({userId})
-        await Promise.all(list.map(async (collection) => {
-            collection._doc.owner = await getBriefUser(collection.userId)
-            collection._doc.games = await getDetailGames(collection._id)
+        await Promise.all(list.map(async (item) => {
+            item._doc.owner = await getBriefUser(item.userId)
+            item._doc.games = await getDetailGames(item._id)
         }))
 
 
@@ -120,11 +120,11 @@ const deletee = async (data) => {
 }
 
 const getDetailGames = async (collectionId) => {
-    let collection = await Collection.findOne({_id: collectionId})
-    if (!collection) return []
+    let item = await Collection.findOne({_id: collectionId})
+    if (!item) return []
 
     let games = []
-    await Promise.all(collection.games.map(async (_id) => {
+    await Promise.all(item.games.map(async (_id) => {
         let game = await Game.findOne({_id})
         if (game) {
             game._doc.owner = await getBriefUser(game.userId)
@@ -134,10 +134,37 @@ const getDetailGames = async (collectionId) => {
     return games
 }
 
+const search = async (data) => {
+    try {
+        const {userId} = data
+        var list = []
+        if (userId == undefined){
+            list = await Collection.find({})
+        }
+        else {
+            list = await Collection.find({userId})
+        }
+
+        await Promise.all(list.map(async (item) => {
+            item._doc.owner = await getBriefUser(item.userId)
+            item._doc.games = await getDetailGames(item._id)
+        }))
+
+        return list.reverse()
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
+
+
 module.exports = {
     edit,
     create,
     detail,
     deletee,
+    search,
     getLibrary
 }

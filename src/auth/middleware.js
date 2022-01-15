@@ -13,7 +13,6 @@ let isAuth = async (req, res, next) => {
         })
     }
     else {
-        console.log("No token")
         return res.status(403).json({error: 'No token provided'})
     }
 }

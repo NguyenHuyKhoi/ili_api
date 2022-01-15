@@ -1,6 +1,5 @@
 
 const { MatchCenter } = require('..')
-console.log("Print: ", (MatchCenter.callMe()))
 const emitEventNames = [
     'match:sync',
     'match:playerLeave',

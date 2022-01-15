@@ -54,6 +54,7 @@ const MatchSchema = new mongoose.Schema({
     state: {type: String},
     questionIndex: {type: Number},
     livestream: {type: LivestreamSchema},
+    mode: {type: String},
     pinCode: {type: String,  require: true},
     host: { type: Object , require: true},
     players: {type: [PlayerSchema], required: true},

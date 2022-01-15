@@ -1,9 +1,10 @@
 const express = require('express')
 const authMiddleware = require('../auth/middleware')
-const {createController, deleteController, editController, detailController, getLibraryController, searchController, cloneController } = require('./controller')
+const {createController, deleteController, editController, detailController, getLibraryController, searchController, cloneController, getDetailController } = require('./controller')
 const router = express.Router()
 
 router.get('/search', searchController)
+router.get('/detail/:id', getDetailController)
 router.use(authMiddleware.isAuth)
 
 router.post('/create', createController)

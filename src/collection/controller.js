@@ -1,4 +1,4 @@
-const {create, detail, edit, deletee, getLibrary } = require("./service")
+const {create, detail, edit, deletee, getLibrary, search } = require("./service")
 
 
 const createController = async (req, res, next) => {
@@ -41,11 +41,18 @@ const deleteController = async (req, res, next) => {
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
+const searchController = async (req, res, next) => {
+    const result = await search({
+        userId: req.params.userId
+    })
+    return res.status(result.error != undefined ? 500 : 200).json(result)
+}
 
 module.exports = {
     createController,
     editController,
     detailController,
     deleteController,
+    searchController,
     getLibraryController
 }
