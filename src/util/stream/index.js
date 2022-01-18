@@ -3,26 +3,13 @@ const child_process = require('child_process');
 
 class StreamHandler {
     constructor(rtmpUrl) {
-        console.log("Init stream handler with URL: ", rtmpUrl)
+        this.imgBuffer = null
+        //console.log("Init stream handler with URL: ", rtmpUrl)
+        //rtmpUrl = 'rtmps://live-api-s.facebook.com:443/rtmp/FB-223798053285552-0-AbxrcVaUGXb3L158'
+        
         this.ffmpeg = child_process.spawn('ffmpeg', [
-            // '-framerate', '16',
-            '-f', 'image2pipe', 
-            '-f', 'lavfi', '-i', 'anullsrc',
-            '-thread_queue_size', '6144',
-            '-i', '-',
-            '-vf', 'framerate=fps=30',
-            '-vf', 'scale=640:360',
-            '-c:v', 'libx264',
-            // '-c:a', 'aac',
-            '-b:v', '600k',
-            '-b:a', '128k',
-            '-shortest',
-            // '-acodec', 'aac',
-            '-y',
-            '-f', 'flv',
+            '-re','-thread_queue_size', '6144','-f', 'lavfi', '-i', 'anullsrc',  '-f', 'image2pipe', '-i', "-", '-vcodec', 'libx264' ,'-acodec', 'aac','-r','30','-g','60', '-f', 'flv', 
             rtmpUrl
-            // 'rtmps://live-api-s.facebook.com:443/rtmp/214035877595103?s_bl=1&s_oil=0&s_psm=1&s_sw=0&s_tids=1&s_vt=api-s&a=Aby0O5DwTqn2VD89'
-            // 'pls.flv'
         ]);
 
         this.ffmpeg.on('close', (code, signal) => {
@@ -34,21 +21,31 @@ class StreamHandler {
         });
            
         this.ffmpeg.stderr.on('data', (data) => {
+             //console.log('FFmpeg STDERR:', data.toString());
             console.log("FFmpeg stderr", data.toString())
         });
-        console.log("End init stream handler")
+      //  console.log("End init stream handler")
     }
 
-    stream = (canvas) => {
+    stream = (canvas, reBuffer) => {
         if (this.ffmpeg == undefined) return
-        canvas.toBuffer((err, buf) => {
-            if (err) {
-                console.log("Error: ", err)
-            } // encoding failed
-            else {
-                this.ffmpeg.stdin.write(buf)
+        if (reBuffer) {
+            console.log("Rebuffer :")
+            canvas.toBuffer((err, buf) => {
+                if (err) {
+                    console.log("Error: ", err)
+                } // encoding failed
+                else {
+                    this.imgBuffer = buf
+                    this.ffmpeg.stdin.write(buf)
+                }
+            }, 'image/jpeg', { quality: 1 })
+        }
+        else {
+            if (this.imgBuffer != null) {
+                this.ffmpeg.stdin.write(this.imgBuffer)
             }
-        }, 'image/jpeg', { quality: 1 })
+        }
     }
 
     end = () => {

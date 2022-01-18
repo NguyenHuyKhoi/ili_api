@@ -3,6 +3,7 @@ const sw = 1280
 const sh = 720
 
 const drawSummary = async (canvas, data, bg, genImg = false) => {
+    console.log("Summary data: ", data)
     let ctx = canvas.getContext('2d')
     let w = canvas.width 
     let h = canvas.height

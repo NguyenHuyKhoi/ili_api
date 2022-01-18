@@ -43,6 +43,26 @@ const getLibrary = async (data) => {
     }
 }
 
+const getDetail = async (data) => {
+    try {   
+        const {_id} = data 
+        var  match = await Match.findOne({_id})
+
+        if (match == undefined) {
+            throw new Error('No match found')
+        }
+
+        return match
+    }
+    catch (err) {
+        console.log("Get detail match error:", err)
+        return {
+            error: err.message
+        }
+    }
+}
+
+
 const createLivestream = async (data) => {
     try {   
         const {match} = data 
@@ -103,5 +123,6 @@ module.exports = {
     getLibrary,
     createLivestream,
     completeLivestream,
-    startLivestream
+    startLivestream,
+    getDetail
 }

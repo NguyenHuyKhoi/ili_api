@@ -1,0 +1,52 @@
+Stream youtube : 
+ // '-framerate', '16',
+	'-f', 'image2pipe', 
+           	 '-f', 'lavfi', '-i', 'anullsrc',
+            '-thread_queue_size', '6144',
+            '-i', '-',
+            '-vf', 'framerate=fps=30',
+            '-vf', 'scale=640:360',
+            '-c:v', 'libx264',
+            // '-c:a', 'aac',
+            '-b:v', '600k',
+            '-b:a', '128k',
+            '-shortest',
+            // '-acodec', 'aac',
+            '-y',
+            '-f', 'flv',
+            rtmpUrl
+            // 'rtmps://live-api-s.facebook.com:443/rtmp/214035877595103?s_bl=1&s_oil=0&s_psm=1&s_sw=0&s_tids=1&s_vt=api-s&a=Aby0O5DwTqn2VD89'
+            // 'pls.flv'
+
+
+Stream FB: 
+   // '-thread_queue_size', '6144',
+            // '-f', 'lavfi', '-i', 'anullsrc',
+            // '-f', 'image2pipe', 
+            // '-i','-',
+            // // '-re',
+            // // '-i', 'audio.mp3',
+            // //'-i', 'demo.mp4',
+
+            // '-vf', 'scale=852x480',
+            // '-c:v', 'libx264',
+            // '-profile:v', 'main',
+            // '-preset','superfast',
+            // '-keyint_min', '60',
+            // // '-qp', '0',
+            // '-b:v', '500k',
+            // '-crf', '23',
+            // '-maxrate', '2048k',
+            // '-bufsize', '1500k',
+            // '-ar', '44100', 
+            // '-c:a', 'aac',
+            // '-ac', '2',
+            // '-b:a', '128k',
+            // '-r', '30',
+            // '-shortest',
+            // '-g','60',
+            // '-sc_threshold','0',
+            // '-bf', '3',
+            // '-y',
+            // '-f', 'flv',
+            // 'test.flv'

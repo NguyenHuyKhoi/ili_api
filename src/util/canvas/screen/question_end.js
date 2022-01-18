@@ -3,7 +3,7 @@ const sw = 1280
 const sh = 720
 
 const drawUserAnswers = async (ctx, answers, isLoading) => {
-	const anchorX = [666, 666, 666, 666]
+	const anchorX = [666, 666, 666, 666];
 	const anchorY = [378, 462, 550, 632];
 	[0,1,2,3].forEach((answer_index) => {
 		let ax = anchorX[answer_index]
@@ -28,6 +28,7 @@ const drawUserAnswers = async (ctx, answers, isLoading) => {
 				else if (i > 5) {
 					return
 				}
+				console.log("Draw answer on canvas: ", answer)
 				let avatar = answer.avatarImg
 				if (avatar) ctx.drawImage(avatar, ax + i * 90, ay + 0, 45, 45)
 				ctx.fillStyle = '#fff'
@@ -35,7 +36,6 @@ const drawUserAnswers = async (ctx, answers, isLoading) => {
 				ctx.fillText(answer.username, ax + 22 + 90 * i, ay + 60)
 			})
 		}
-		
 	})
 
 }

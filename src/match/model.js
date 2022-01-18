@@ -19,7 +19,7 @@ const AnswerPlayerSchema = new mongoose.Schema({
     platformId: {type: String},
     profile: {type: String},
     avatar: {type: String}, 
-    name: {type: String, require: true},
+    username: {type: String, require: true},
     answerIndex: {type: Number, require: true}, 
     answerTime: {type: Number, require: true},
     isCorrect: {type: Boolean, require: true},
@@ -37,8 +37,6 @@ const ProgressSchema = new mongoose.Schema({
 })
 
 const LivestreamSchema = new mongoose.Schema({
-    account: {type: Object},
-    broadcastId: {type: String},
     livestreamId: {type: String},
     liveChatId: {type: String},
     platform: {type: String},

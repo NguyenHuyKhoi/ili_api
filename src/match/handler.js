@@ -143,9 +143,9 @@ class MatchHandler {
     handleEndQuestion = () => {
         let match = this.match
         const {progress, players, host} = match
-
+        this.handleUpdateToDB()
         // Must config on setting match
-        let time = match.showQuestionEndTime || 10
+        let time = match.showQuestionEndTime != undefined ? match.showQuestionEndTime : 10
         this.calculateEarnScores(time)
 
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_QUESTION_END, {
@@ -177,7 +177,7 @@ class MatchHandler {
         let match = this.match
 
         // Must config in setting match
-        let time = match.showLeaderboardTime || 10
+        let time = match.showLeaderboardTime != undefined ? match.showQuestionEndTime : 10
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_LEADERBOARD, {
             rid: match.pinCode,
             match,
@@ -273,7 +273,7 @@ class MatchHandler {
 
     countdownOnEnd = () => {
         let match = this.match
-        let time = match.delayEndTime || 60
+        let time = match.delayEndTime != undefined ? match.delayEndTime : 60
         let _interval = setInterval(() => {
             if (this.match.state == 'finished'){
                 clearInterval(_interval)
@@ -327,7 +327,7 @@ class MatchHandler {
     handleAskQuestion = () => {
         let match = this.match
         let question = match.progress[match.progress.length -1].question
-        let time = question.time_limit || 30
+        let time = question.time_limit != undefined ? question.time_limit : 30
 
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_QUESTION, {
             rid: match.pinCode,
@@ -356,7 +356,7 @@ class MatchHandler {
 
     countdownOnStart = () => {
         let match = this.match
-        let time = match.delayStartTime || 30
+        let time = match.delayStartTime != undefined ? match.delayStartTime : 30
         let _interval = setInterval(() => {
             if (this.match.state == 'finished'){
                 clearInterval(_interval)
@@ -376,7 +376,7 @@ class MatchHandler {
     
 
     onStart = (startNow = false) => {
-        if (this.isCalledStart) {
+        if (startNow == false && this.isCalledStart) {
             console.log("Match is started before...")
             return
         }
@@ -415,7 +415,7 @@ class MatchHandler {
 
     // pass: only _id
     onAnswer = (player, answerIndex, answerTime) => {
-       
+        console.log("Get answer: ", player, answerIndex, answerTime)
         let match = this.match
         let current = match.progress[match.progress.length - 1]
         const {question} = current 
@@ -430,16 +430,14 @@ class MatchHandler {
         let isCorrect = question.correct_answers.indexOf(answerIndex) != -1
 
         let answerPlayer = {
-            ...player,
+            ...JSON.parse(JSON.stringify(player)),
             answerIndex: answerIndex,
             answerTime: answerTime,
             isCorrect
         }
-        if (isCorrect) {
-            console.log("Get answer correct: ", answerTime, player.username)
-        }
+        console.log("Get answerPlayer: ",  answerPlayer)
     
-        current.answers.push({...answerPlayer})
+        current.answers.push(JSON.parse(JSON.stringify(answerPlayer)))
         this.onSync()
     }
 

@@ -12,6 +12,8 @@ class LiveStreamHandler {
         this.match = matchHandler.match
         this.matchHandler = matchHandler
 
+        this.frames = 0
+
         // devired data
         this.question = {}
         this.answer_counts =  [0,0,0,0]
@@ -21,16 +23,6 @@ class LiveStreamHandler {
 
         this.isRetrievedAnswers = false
         this.legalAnswerPlayers = []
-    }
-
-    streamTillActive = () => {
-        let duration = 1000 / FPS
-        var _interval = setInterval(() => {
-            if (this.endMatch) {
-                clearInterval(_interval)
-            }
-            this.showCurrentScreen()
-        }, duration) 
     }
 
     updateData = () => {
@@ -72,19 +64,19 @@ class LiveStreamHandler {
                 this.updateData()
                 break
             case MATCH_EVENTS.PLAYER_LEAVE:
-                //console.log("Emitted event PLAYER_LEAVE:")
+                ////console.log("Emitted event PLAYER_LEAVE:")
                 break
             case MATCH_EVENTS.PLAYER_NOT_ANSWER:
-                //console.log("Emitted event PLAYER_NOT_ANSWER:")
+                ////console.log("Emitted event PLAYER_NOT_ANSWER:")
                 break
             case MATCH_EVENTS.PLAYER_ANSWER_CORRECT:
-                //console.log("Emitted event PLAYER_ANSWER_CORRECT:")
+                ////console.log("Emitted event PLAYER_ANSWER_CORRECT:")
                 break
             case MATCH_EVENTS.PLAYER_ANSWER_WRONG:
-                //console.log("Emitted event PLAYER_ANSWER_WRONG:")
+                ////console.log("Emitted event PLAYER_ANSWER_WRONG:")
                 break
             case MATCH_EVENTS.ON_QUESTION_END:
-                console.log("Emitted event ON_QUESTION_END:")
+                //console.log("Emitted event ON_QUESTION_END:")
                 this.redrawCanvas = true
                 this.match = match
                 this.screen = SCREENS.QUESTION_END
@@ -96,21 +88,21 @@ class LiveStreamHandler {
                 this.time = time
                 break
             case MATCH_EVENTS.ON_LEADERBOARD: 
-                console.log("Emitted event ON_LEADERBOARD:")
+                //console.log("Emitted event ON_LEADERBOARD:")
                 this.redrawCanvas = true
                 this.match = match
                 this.screen = SCREENS.LEADER_BOARD
                 this.updateData()
                 break
             case MATCH_EVENTS.ON_SUMMARY:
-                console.log("Emitted event ON_SUMMARY:")
+                //console.log("Emitted event ON_SUMMARY:")
                 this.redrawCanvas = true
                 this.match = match
                 this.screen = SCREENS.SUMMARY
                 this.updateData()
                 break
             case MATCH_EVENTS.ON_QUESTION:
-                console.log("Emitted event ON_QUESTION:")
+                //console.log("Emitted event ON_QUESTION:")
                 this.isRetrievedAnswers = false
                 this.redrawCanvas = true
                 this.match = match
@@ -118,21 +110,21 @@ class LiveStreamHandler {
                 this.updateData()
                 break
             case MATCH_EVENTS.ON_KICK_PLAYER:
-                //console.log("Emitted event ON_KICK_PLAYER:")
+                ////console.log("Emitted event ON_KICK_PLAYER:")
                 break
             case MATCH_EVENTS.ON_COUNTDOWN_TO_START: 
-                //console.log("Emitted event ON_COUNTDOWN_TO_START:")
+                ////console.log("Emitted event ON_COUNTDOWN_TO_START:")
                 break
             case MATCH_EVENTS.ON_COUNTDOWN_TO_END: 
-                //console.log("Emitted event ON_COUNTDOWN_TO_END:")
+                ////console.log("Emitted event ON_COUNTDOWN_TO_END:")
                 break
             case MATCH_EVENTS.ON_END_MATCH: 
-                console.log("Emitted event ON_END_MATCH:")
+                //console.log("Emitted event ON_END_MATCH:")
                 this.onEndStream()
                 break
             case MATCH_EVENTS.ON_START: 
-                console.log("Emitted event ON_START:")
-                //console.log("start stream")
+                //console.log("Emitted event ON_START:")
+                ////console.log("start stream")
                 this.redrawCanvas = true
                 this.screen = SCREENS.WAITING
                 this.match = match
@@ -183,10 +175,13 @@ class LiveStreamHandler {
 
         let duration = 1000 / FPS
         var _interval = setInterval(() => {
-            if (this.endMatch) {
+            if (this.endMatch == true) {
+                console.log('Clear interval')
                 clearInterval(_interval)
             }
-            this.showCurrentScreen()
+            else {
+                this.showCurrentScreen()
+            }
         }, duration) 
 
         this.listenAnswers()
@@ -194,11 +189,13 @@ class LiveStreamHandler {
 
     listenAnswers = () => {
         var _interval = setInterval(async () => {
-            if (this.endMatch) {
+            if (this.endMatch == true) {
                 clearInterval(_interval)
                 console.log("Stop listen to livechat ")
             }
-            this.retrieveAnswers()
+            else {
+                this.retrieveAnswers()
+            }
         }, 500)
     }
 
@@ -208,7 +205,7 @@ class LiveStreamHandler {
         if (this.screen == SCREENS.QUESTION_END){
             let duration = match.showQuestionEndTime - this.time
             if  (duration >= YOUTUBE_STREAM_LATENCY && duration <= YOUTUBE_STREAM_LATENCY + 2) {
-                console.log("Only Retrieve answer after at least " + YOUTUBE_STREAM_LATENCY +" seconds on Question End Screen")
+                //console.log("Only Retrieve answer after at least " + YOUTUBE_STREAM_LATENCY +" seconds on Question End Screen")
                 this.isRetrievedAnswers = true 
             }
           
@@ -218,13 +215,13 @@ class LiveStreamHandler {
         let liveChatId = match.livestream.liveChatId
         var url = `https://youtube.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${liveChatId}&part=id&part=snippet&part=authorDetails&key=${YOUTUBE_API_KEY}`
         
-        console.log("URL chat:", url)
+        //console.log("URL chat:", url)
         if (this.nextPageToken != null) {
             url += `&pageToken=${this.nextPageToken}`
         }
         try {
             let res = await axios.get(url)
-           // console.log("Data answers:", res.data)
+           // //console.log("Data answers:", res.data)
             const {data} = res
             this.nextPageToken = data.nextPageToken
             let msgs = data.items
@@ -244,12 +241,12 @@ class LiveStreamHandler {
                 if (differUrls.indexOf(url) == -1) differUrls.push(url)
             })
 
-            console.log("Differ urls: ", differUrls)
+            //console.log("Differ urls: ", differUrls)
             await this.canvasHandler.loadRemoteImages(differUrls)
             setTimeout(() => this.redrawCanvas = true, 1000)
         }        
         catch (err) {
-            console.log("Retrieve answer error:", (err.response ? err.response.data : err))
+            //console.log("Retrieve answer error:", (err.response ? err.response.data : err))
         }
 
     }
@@ -263,7 +260,7 @@ class LiveStreamHandler {
         var answerTime = Math.abs(answerPublishTime - stage.startAt) / 1000 - YOUTUBE_STREAM_LATENCY
         answerTime = Math.round(answerTime * 10) / 10
         if (answerTime < 0) {
-            console.log("Answer when time answers is over, emited", content, answerTime)
+            //console.log("Answer when time answers is over, emited", content, answerTime)
             return
         }
         
@@ -271,7 +268,7 @@ class LiveStreamHandler {
         // Correct format is : 'x' or 'x @alias_name'
         // 
         let content = msg.snippet.textMessageDetails.messageText
-       // console.log("\n \n Extract answer with content: ", content)
+       // //console.log("\n \n Extract answer with content: ", content)
         var answerIndex = ['1','2','3','4'].indexOf(content)
         var aliasName = ''
         if (answerIndex == -1) {
@@ -281,15 +278,15 @@ class LiveStreamHandler {
             if (format.test(content)) {
                 answerIndex = content[0] - 1
                 aliasName = content.substring(3)
-              //  console.log("Answer in format x alias :", answerIndex, aliasName)
+              //  //console.log("Answer in format x alias :", answerIndex, aliasName)
             }
             else {
-              //  console.log("Answer not any in format, emited ")
+              //  //console.log("Answer not any in format, emited ")
                 return
             }
         }
         else {
-            //console.log("Answer in format x:", answerIndex)
+            ////console.log("Answer in format x:", answerIndex)
         }
 
         // 
@@ -299,11 +296,11 @@ class LiveStreamHandler {
         let player = {
             _id: playerId,
             platformId: msg.authorDetails.channelId,
-            name: playerName,
+            username: playerName,
             profile: msg.authorDetails.channelUrl,
             avatar: msg.authorDetails.profileImageUrl,
         }
-       // console.log("Player infor: ", player)
+       // //console.log("Player infor: ", player)
 
         var isExist = false
         this.legalAnswerPlayers.forEach((answerPlayer, index) => {
@@ -312,11 +309,11 @@ class LiveStreamHandler {
                 this.legalAnswerPlayers[index].answerTime = answerTime
                 this.legalAnswerPlayers[index].answerIndex = answerIndex
                 isExist = true
-              //  console.log("Update to latest answer :", playerName, answerIndex)
+              //  //console.log("Update to latest answer :", playerName, answerIndex)
             }
         })
         if (!isExist) {
-         //   console.log("Add to new answer :", playerName, answerIndex)
+         //   //console.log("Add to new answer :", playerName, answerIndex)
             this.legalAnswerPlayers.push({player, answerIndex,answerTime})
         }
     }
@@ -337,6 +334,7 @@ class LiveStreamHandler {
                 break
             case SCREENS.SUMMARY: 
                 this.onSummary()
+                break
             case SCREENS.PRE_STREAM: 
                 this.onPreStream()
                 break
@@ -345,12 +343,19 @@ class LiveStreamHandler {
     }
 
     onStreamFrame = async (data) => {
-        if (this.redrawCanvas) {
+        let isNewImg = false
+        this.frames ++ 
+        if (this.redrawCanvas == true) {
+            //console.log("Stream frame : ")
             this.canvasHandler.canvas = await this.canvasHandler.drawCanvas(this.screen, data)
             this.redrawCanvas = false
+            isNewImg = true
         }
         //let canvas =  this.canvasHandler.drawCanvas(this.screen, data)
-        this.streamHandler.stream(this.canvasHandler.canvas)
+        if (this.frames % FPS == 0) {
+            // console.log("Frames on :", this.frames)
+        }
+        this.streamHandler.stream(this.canvasHandler.canvas, isNewImg)
     }
 
     onWaiting = () => {
@@ -371,7 +376,7 @@ class LiveStreamHandler {
         const question = this.question
         const data = {
             question,
-            round_index: `Round ${questionIndex} / ${game.questions.length}`,
+            round_index: `Round ${questionIndex + 1} / ${game.questions.length}`,
             time: this.time
         }
 
@@ -387,7 +392,7 @@ class LiveStreamHandler {
             question,
             isLoading: !this.isRetrievedAnswers,
             userAnswers: answers,
-            round_index: `Result of round ${questionIndex}`,
+            round_index: `Result of round ${questionIndex + 1}`,
             time: this.time
         }
         if (this.redrawCanvas) {
@@ -424,6 +429,7 @@ class LiveStreamHandler {
             description: 'Game end in',
             time: this.time
         }
+
         this.onStreamFrame(data)
     }
 
@@ -432,7 +438,7 @@ class LiveStreamHandler {
     }
 
     onEndStream =  () => {
-
+        console.log('Handle end stream')
         this.endMatch = true
         setTimeout(() => {
             this.streamHandler.end()
