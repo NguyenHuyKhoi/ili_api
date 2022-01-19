@@ -2,9 +2,11 @@ const { default: axios } = require("axios");
 const {CanvasHandler, SCREENS, test_screen} = require("../../util/canvas");
 const StreamHandler = require("../../util/stream");
 const { MATCH_EVENTS } = require("../handler");
+const { FacebookHandler } = require("./facebook");
+const { YoutubeHandler } = require("./youtube");
 const FPS = 30
-const YOUTUBE_STREAM_LATENCY = 5
-const YOUTUBE_API_KEY = 'AIzaSyCpmqo8ByzMuPbZ8g97mSCRcs4Wi-bJTe0'
+
+const FACEBOOK_STREAM_LATENCY = 8
 
 
 class LiveStreamHandler {
@@ -19,7 +21,6 @@ class LiveStreamHandler {
         this.answer_counts =  [0,0,0,0]
         this.endMatch = false
         this.redrawCanvas = true
-        this.nextPageToken = null
 
         this.isRetrievedAnswers = false
         this.legalAnswerPlayers = []
@@ -137,8 +138,14 @@ class LiveStreamHandler {
         this.canvasHandler = new CanvasHandler(1280, 720)
         await this.canvasHandler.loadImages()
 
-        let {streamUrl } = match.livestream
+        let {streamUrl, livestreamId, platform, liveChatId } = match.livestream
         this.streamHandler = new StreamHandler(streamUrl, FPS)
+        this.platformHander = 
+            platform == 'facebook' ?    
+               new  FacebookHandler(livestreamId)
+                :
+               new  YoutubeHandler(liveChatId)
+
 
         this.screen = SCREENS.PRE_STREAM
         this.time = 0
@@ -201,10 +208,13 @@ class LiveStreamHandler {
 
     retrieveAnswers =  async () => {
         if (this.isRetrievedAnswers) return 
-        let match = this.match
+        let {match, platformHander} = this
+        let stage = match.progress[match.progress.length -1]
+
+
         if (this.screen == SCREENS.QUESTION_END){
             let duration = match.showQuestionEndTime - this.time
-            if  (duration >= YOUTUBE_STREAM_LATENCY && duration <= YOUTUBE_STREAM_LATENCY + 2) {
+            if  (duration >= platformHander.STREAM_LATENCY && duration <=  platformHander.STREAM_LATENCY + 2) {
                 //console.log("Only Retrieve answer after at least " + YOUTUBE_STREAM_LATENCY +" seconds on Question End Screen")
                 this.isRetrievedAnswers = true 
             }
@@ -212,43 +222,26 @@ class LiveStreamHandler {
         }
         if (!this.isRetrievedAnswers )  return
 
-        let liveChatId = match.livestream.liveChatId
-        var url = `https://youtube.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${liveChatId}&part=id&part=snippet&part=authorDetails&key=${YOUTUBE_API_KEY}`
+        var answers = await platformHander.retrieveAnswers(stage.startAt)
         
-        //console.log("URL chat:", url)
-        if (this.nextPageToken != null) {
-            url += `&pageToken=${this.nextPageToken}`
-        }
-        try {
-            let res = await axios.get(url)
-           // //console.log("Data answers:", res.data)
-            const {data} = res
-            this.nextPageToken = data.nextPageToken
-            let msgs = data.items
-
-            this.legalAnswerPlayers = []
-            msgs.forEach((msg) => this.extractAnswer(msg))
-
-            this.legalAnswerPlayers.forEach((item, index) => {
+        answers.forEach((item, index) => {
+            console.log("Answer retrieves: ", item.player, item.answerIndex, item.answerTime);
                 this.matchHandler.onAnswer(item.player, item.answerIndex, item.answerTime)
             })
-            this.matchHandler.calculateEarnScores()
-            // Emit for MatchHandler for display answers?
+        this.matchHandler.calculateEarnScores()
 
-            let urls = this.legalAnswerPlayers.map((item) => item.player.avatar)
-            let differUrls = []
-            urls.forEach((url) => {
-                if (differUrls.indexOf(url) == -1) differUrls.push(url)
-            })
+        let urls = answers.map((item) => item.player.avatar)
 
-            //console.log("Differ urls: ", differUrls)
-            await this.canvasHandler.loadRemoteImages(differUrls)
-            setTimeout(() => this.redrawCanvas = true, 1000)
-        }        
-        catch (err) {
-            //console.log("Retrieve answer error:", (err.response ? err.response.data : err))
-        }
+        await this.loadRemoteImages(urls)
+        setTimeout(() => this.redrawCanvas = true, 1000)
+    }
 
+    loadRemoteImages = async (urls) => {
+        let differUrls = []
+        urls.forEach((url) => {
+            if (differUrls.indexOf(url) == -1) differUrls.push(url)
+        })
+        await this.canvasHandler.loadRemoteImages(differUrls)
     }
 
 
@@ -260,7 +253,7 @@ class LiveStreamHandler {
         var answerTime = Math.abs(answerPublishTime - stage.startAt) / 1000 - YOUTUBE_STREAM_LATENCY
         answerTime = Math.round(answerTime * 10) / 10
         if (answerTime < 0) {
-            //console.log("Answer when time answers is over, emited", content, answerTime)
+            //console.log("Answer when time answers is not occurs, emited", content, answerTime)
             return
         }
         
