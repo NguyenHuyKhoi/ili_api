@@ -1,13 +1,10 @@
-const { default: axios } = require("axios");
+
 const {CanvasHandler, SCREENS, test_screen} = require("../../util/canvas");
 const StreamHandler = require("../../util/stream");
 const { MATCH_EVENTS } = require("../handler");
 const { FacebookHandler } = require("./facebook");
 const { YoutubeHandler } = require("./youtube");
-const FPS = 30
-
-const FACEBOOK_STREAM_LATENCY = 8
-
+const FPS = 22
 
 class LiveStreamHandler {
     constructor(matchHandler) {
@@ -84,7 +81,10 @@ class LiveStreamHandler {
                 this.updateData()
                 break 
             case MATCH_EVENTS.ON_COUNTDOWN:
-                console.log("Emitted event ON_COUNTDOWN:", time)
+                if (time % 5 == 0) {
+                    console.log("Emitted event ON_COUNTDOWN:", time, this.convertScreenName())
+                }
+               
                 this.redrawCanvas = true
                 this.time = time
                 break
@@ -104,6 +104,7 @@ class LiveStreamHandler {
                 break
             case MATCH_EVENTS.ON_QUESTION:
                 //console.log("Emitted event ON_QUESTION:")
+                console.log("Set isRetrieveAnswer is False");
                 this.isRetrievedAnswers = false
                 this.redrawCanvas = true
                 this.match = match
@@ -138,13 +139,13 @@ class LiveStreamHandler {
         this.canvasHandler = new CanvasHandler(1280, 720)
         await this.canvasHandler.loadImages()
 
-        let {streamUrl, livestreamId, platform, liveChatId } = match.livestream
+        let {streamUrl, livestreamId, platform, liveChatId, accessToken } = match.livestream
         this.streamHandler = new StreamHandler(streamUrl, FPS)
         this.platformHander = 
             platform == 'facebook' ?    
-               new  FacebookHandler(livestreamId)
+               new  FacebookHandler(livestreamId, accessToken)
                 :
-               new  YoutubeHandler(liveChatId)
+               new  YoutubeHandler(liveChatId,)
 
 
         this.screen = SCREENS.PRE_STREAM
@@ -215,25 +216,26 @@ class LiveStreamHandler {
         if (this.screen == SCREENS.QUESTION_END){
             let duration = match.showQuestionEndTime - this.time
             if  (duration >= platformHander.STREAM_LATENCY && duration <=  platformHander.STREAM_LATENCY + 2) {
-                //console.log("Only Retrieve answer after at least " + YOUTUBE_STREAM_LATENCY +" seconds on Question End Screen")
                 this.isRetrievedAnswers = true 
             }
           
         }
         if (!this.isRetrievedAnswers )  return
 
+        console.log("Retreianswer answer for question");
         var answers = await platformHander.retrieveAnswers(stage.startAt)
         
         answers.forEach((item, index) => {
             console.log("Answer retrieves: ", item.player, item.answerIndex, item.answerTime);
-                this.matchHandler.onAnswer(item.player, item.answerIndex, item.answerTime)
+            this.matchHandler.onAnswer(item.player, item.answerIndex, item.answerTime)
             })
         this.matchHandler.calculateEarnScores()
 
         let urls = answers.map((item) => item.player.avatar)
-
+        
         await this.loadRemoteImages(urls)
-        setTimeout(() => this.redrawCanvas = true, 1000)
+        //setTimeout(() => this.redrawCanvas = true, 1000)
+        this.redrawCanvas = true
     }
 
     loadRemoteImages = async (urls) => {
@@ -312,6 +314,9 @@ class LiveStreamHandler {
     }
 
     showCurrentScreen = () => {
+        if (this.endMatch == true) {
+            return
+        }
         switch (this.screen) {
             case SCREENS.WAITING: 
                 this.onWaiting()
@@ -393,6 +398,7 @@ class LiveStreamHandler {
                 let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
                 data.userAnswers[index].avatarImg = avatarImg
             })
+            console.log("User answers on redraws: ", answers);
         }
         this.onStreamFrame(data)
     }

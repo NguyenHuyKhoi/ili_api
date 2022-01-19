@@ -435,7 +435,6 @@ class MatchHandler {
             answerTime: answerTime,
             isCorrect
         }
-        console.log("Get answerPlayer: ",  answerPlayer)
     
         current.answers.push(JSON.parse(JSON.stringify(answerPlayer)))
         this.onSync()

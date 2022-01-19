@@ -8,10 +8,10 @@ class StreamHandler {
         //rtmpUrl = 'rtmps://live-api-s.facebook.com:443/rtmp/FB-223798053285552-0-AbxrcVaUGXb3L158'
         
         this.ffmpeg = child_process.spawn('ffmpeg', [
-            '-re','-thread_queue_size', '6144','-f', 'lavfi', '-i', 'anullsrc',  '-f', 'image2pipe', '-i', "-", '-vcodec', 'libx264' ,'-acodec', 'aac','-r','30','-g','60', '-f', 'flv', 
+            '-thread_queue_size', '6144','-f', 'lavfi', '-i', 'anullsrc',  '-f', 'image2pipe', '-i', "-", '-vcodec', 'libx264' ,'-acodec', 'aac','-g','60', '-f', 'flv', 
             rtmpUrl
         ]);
-
+        
         this.ffmpeg.on('close', (code, signal) => {
             console.log('FFmpeg child process closed, code ' + code + ', signal ' + signal);
         });
@@ -51,7 +51,8 @@ class StreamHandler {
     end = () => {
         console.log("Close stdin of ffmpeg")
         if (this.ffmpeg == undefined) return
-        this.ffmpeg.stdin.end()
+        this.ffmpeg.stdin.setEncoding('utf8');
+        this.ffmpeg.stdin.write('q')
     }
 }
 

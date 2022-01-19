@@ -28,7 +28,6 @@ const drawUserAnswers = async (ctx, answers, isLoading) => {
 				else if (i > 5) {
 					return
 				}
-				console.log("Draw answer on canvas: ", answer)
 				let avatar = answer.avatarImg
 				if (avatar) ctx.drawImage(avatar, ax + i * 90, ay + 0, 45, 45)
 				ctx.fillStyle = '#fff'
