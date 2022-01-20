@@ -1,7 +1,12 @@
 
 const {Match} = require('./model')
 const {Game} = require('../game/model')
-
+const QUESTION_TYPES_ID = {
+    MULTIPLE_CHOICE: 0,
+    TF_CHOICE: 1,
+    PIC_WORD: 2,
+    WORD_TABLE: 3
+}
 const MATCH_EVENTS = {
     ON_SYNC: 0,
     PLAYER_LEAVE: 1,
@@ -98,6 +103,57 @@ class MatchHandler {
             player
         })
     }
+    notifQuestionResultPlayer = (player, duration) => {
+        let match = this.match 
+        let {players, progress} = match
+        let stage = progress[progress.length - 1]
+
+        switch (stage.question.typeId) {
+            case QUESTION_TYPES_ID.MULTIPLE_CHOICE:
+            case QUESTION_TYPES_ID.TF_CHOICE:
+            case QUESTION_TYPES_ID.PIC_WORD: 
+              // If not answer: 
+                let answerPlayer = stage.answers.find((item) => item._id == player._id)
+                if (!answerPlayer) {
+                    if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.PLAYER_NOT_ANSWER, {
+                        rid: player._id,
+                        timeTotal: duration
+                    })
+                }
+                else if (answerPlayer.isCorrect) {
+                    players[index].score = players[index].score + answerPlayer.earnScore
+                    if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.PLAYER_ANSWER_CORRECT, {
+                        rid: player._id,
+                        earnScore: answerPlayer.earnScore,
+                        timeTotal: duration
+                    })
+                }
+                else {
+                    players[index].score = players[index].score + answerPlayer.earnScore
+                    if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.PLAYER_ANSWER_WRONG, {
+                        rid: player._id,
+                        earnScore: answerPlayer.earnScore,
+                        timeTotal: duration
+                    })
+                }  
+                break
+            case QUESTION_TYPES_ID.PIC_WORD:
+                let totalEarnScore = stage.answers.filter((item) => item._id == player._id && item.keywordIndex != undefined)
+                .reduce((res, answer) => res += answer.earnScore, 0)
+                players[index].score = players[index].score + totalEarnScore
+
+                console.log("Emit question end on player: ", totalEarnScore );
+                if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_QUESTION_END, {
+                    rid: player._id,
+                    match,
+                    timeTotal: duration
+                })
+                break
+            default: 
+                break
+        }
+
+    }
 
     calculateEarnScores = (time) => {
         let match = this.match
@@ -109,30 +165,8 @@ class MatchHandler {
         })
 
         players.forEach((player, index) => {
-            // If not answer: 
-            let answerPlayer = current.answers.find((item) => item._id == player._id)
-            if (!answerPlayer) {
-                if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.PLAYER_NOT_ANSWER, {
-                    rid: player._id,
-                    timeTotal: time
-                })
-            }
-            else if (answerPlayer.isCorrect) {
-                players[index].score = players[index].score + answerPlayer.earnScore
-                if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.PLAYER_ANSWER_CORRECT, {
-                    rid: player._id,
-                    earnScore: answerPlayer.earnScore,
-                    timeTotal: time
-                })
-            }
-            else {
-                players[index].score = players[index].score + answerPlayer.earnScore
-                if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.PLAYER_ANSWER_WRONG, {
-                    rid: player._id,
-                    earnScore: answerPlayer.earnScore,
-                    timeTotal: time
-                })
-            }  
+            this.notifQuestionResultPlayer(player, time)
+        
         })
 
         players.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
@@ -314,10 +348,15 @@ class MatchHandler {
             return 
         }
 
+        var question = match.game.questions[match.questionIndex]
         let item = {
-            question: match.game.questions[match.questionIndex],
+            question,
             answers: [],
             startAt: new Date()
+        }
+
+        if (question.typeId == QUESTION_TYPES_ID.WORD_TABLE) {
+            item.open_word_states = Array(question.correct_answers.length).fill(0)
         }
         match.progress.push({...item})
 
@@ -413,27 +452,72 @@ class MatchHandler {
         return num
     }
 
+    checkAnswer = (stage, content) => {
+        const {question} = stage 
+        console.log("Check answer : ", content);
+        switch (question.typeId) {
+            case QUESTION_TYPES_ID.MULTIPLE_CHOICE:
+            case QUESTION_TYPES_ID.TF_CHOICE:
+            case QUESTION_TYPES_ID.PIC_WORD:
+                return {
+                    isCorrect: question.correct_answer = content
+                }
+            case QUESTION_TYPES_ID.WORD_TABLE: 
+                var idx = question.correct_answers.findIndex((item) => item == content)
+                if (idx == -1) {
+                    return {
+                        isCorrect: false
+                    }
+                }
+                else {
+                    console.log("State qestion:", stage.open_word_states[idx], idx);
+                    if (stage.open_word_states[idx] == 1) { // Open before
+                        console.log("Some one answer keyword before");
+                        return {
+                            isCorrect: false
+                        }
+                    }
+                    console.log("You are the first answer keyword");
+                    stage.open_word_states[idx] = 1
+                    return {
+                        isCorrect: true,
+                        keywordIndex: idx
+                    }
+                }
+            default: 
+                return {}
+        }
+    }
+
     // pass: only _id
-    onAnswer = (player, answerIndex, answerTime) => {
-        console.log("Get answer: ", player, answerIndex, answerTime)
+    onAnswer = (player, answerContent, answerTime) => {
+        console.log("Get answer: ", player, answerContent, answerTime)
         let match = this.match
         let current = match.progress[match.progress.length - 1]
         const {question} = current 
         if (answerTime >= question.time_limit) {
-            console.log("Answer over time, emited")
+            console.log("Answer over time, answerTime")
             return
         }
 
         let existPlayer = this.findPlayer(player._id)
         if (!existPlayer) this.addPlayer(player) 
 
-        let isCorrect = question.correct_answers.indexOf(answerIndex) != -1
+        // For Multiple/TF/PicWord -> check directly as this 
+        let resData = this.checkAnswer(current, answerContent)
+
+        console.log("res data after check:", resData);
+        // For Quiz Word: check if answer is correct : in [correct_answers] and open_word_states[index] = 0
+        // Update open_word_states[index] = 1 and keywordIndex of answer : index
+
+        // For display in client: show all open keyword = 1 in table
+        // Show all answer has keyword is != undefined
 
         let answerPlayer = {
             ...JSON.parse(JSON.stringify(player)),
-            answerIndex: answerIndex,
+            answerContent: answerContent,
             answerTime: answerTime,
-            isCorrect
+            ...resData
         }
     
         current.answers.push(JSON.parse(JSON.stringify(answerPlayer)))

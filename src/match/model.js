@@ -20,7 +20,8 @@ const AnswerPlayerSchema = new mongoose.Schema({
     profile: {type: String},
     avatar: {type: String}, 
     username: {type: String, require: true},
-    answerIndex: {type: Number, require: true}, 
+    answerContent: {type: String, require: true}, 
+    keywordIndex: {type: Number},
     answerTime: {type: Number, require: true},
     isCorrect: {type: Boolean, require: true},
     earnScore: {type: Number, required: true}
@@ -29,6 +30,7 @@ const AnswerPlayerSchema = new mongoose.Schema({
 const ProgressSchema = new mongoose.Schema({
     question: {type: QuestionSchema, required: true},
     answers: {type: [AnswerPlayerSchema], required: true},
+    open_word_states: {type: [Number], required: true},
     startAt: {type: Date},
     correctNum: {type: Number},
     incorrectNum: {type: Number},

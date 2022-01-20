@@ -114,12 +114,13 @@ module.exports =  (io, socket) => {
             matchHandler.onStart()
         }
 
-        static onAnswer =  (pinCode, player, answerIndex, answerTime) => {
+        static onAnswer =  (pinCode, player, answerContent, answerTime) => {
+            console.log("Socket receive answer: ", answerContent, answerTime);
             let matchHandler =  MatchCenter.findMatchHandler(pinCode)
             if (!matchHandler) {
                 return
             }
-            matchHandler.onAnswer(player, answerIndex, answerTime)
+            matchHandler.onAnswer(player, answerContent, answerTime)
         }
 
         static onKickPlayer =  (pinCode, player, callback) =>  {
