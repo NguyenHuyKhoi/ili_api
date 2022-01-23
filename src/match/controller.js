@@ -1,4 +1,4 @@
-const { getLibrary, createLivestream ,completeLivestream, startLivestream, getDetail} = require("./service")
+const { getLibrary, createLivestream ,completeLivestream, startLivestream, getDetail, test} = require("./service")
 
 const getLibraryController = async (req, res, next) => {
     const result = await getLibrary({
@@ -32,9 +32,17 @@ const startLivestreamController = async (req, res, next) => {
 }
 
 
+
 const completeLivestreamController = async (req, res, next) => {
     const result = await completeLivestream({
         pinCode: req.body.pinCode
+    })
+    return res.status(result.error != undefined ? 500 : 200).json(result)
+}
+
+const testController = async (req, res, next) => {
+    const result = await test({
+        screenId: req.query.id
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
@@ -44,5 +52,7 @@ module.exports = {
     createLivestreamController,
     completeLivestreamController,
     getDetailController,
-    startLivestreamController
+    startLivestreamController,
+
+    testController
 }

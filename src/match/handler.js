@@ -1,12 +1,5 @@
 
-const {Match} = require('./model')
-const {Game} = require('../game/model')
-const QUESTION_TYPES_ID = {
-    MULTIPLE_CHOICE: 0,
-    TF_CHOICE: 1,
-    PIC_WORD: 2,
-    WORD_TABLE: 3
-}
+const {Match, QUESTION_TYPES_ID} = require('./model')
 const MATCH_EVENTS = {
     ON_SYNC: 0,
     PLAYER_LEAVE: 1,
@@ -103,7 +96,7 @@ class MatchHandler {
             player
         })
     }
-    notifQuestionResultPlayer = (player, duration) => {
+    notifQuestionResultPlayer = (player, index, duration) => {
         let match = this.match 
         let {players, progress} = match
         let stage = progress[progress.length - 1]
@@ -165,7 +158,7 @@ class MatchHandler {
         })
 
         players.forEach((player, index) => {
-            this.notifQuestionResultPlayer(player, time)
+            this.notifQuestionResultPlayer(player, index, time)
         
         })
 

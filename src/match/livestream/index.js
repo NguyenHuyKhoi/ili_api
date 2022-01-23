@@ -1,9 +1,11 @@
 
-const {CanvasHandler, SCREENS, test_screen} = require("../../util/canvas");
+const {CanvasHandler, SCREENS, test_screen, SCREEN_IDS} = require("../../util/canvas");
 const StreamHandler = require("../../util/stream");
 const { MATCH_EVENTS } = require("../handler");
 const { FacebookHandler } = require("./facebook");
 const { YoutubeHandler } = require("./youtube");
+const {CANVAS_WIDTH, CANVAS_HEIGHT} = require('../../util/canvas/dimension')
+const {QUESTION_TYPES_ID} = require('../model')
 const FPS = 22
 
 class LiveStreamHandler {
@@ -21,36 +23,128 @@ class LiveStreamHandler {
 
         this.isRetrievedAnswers = false
         this.legalAnswerPlayers = []
+
+        // For test
+        this.updateData()
+    }
+    
+    extractAnswerCount = (stage) => {
+        try {
+            var {question, answers} = stage
+            var {correct_answer, typeId} = question 
+            var arr = []
+            switch (typeId) {
+                case QUESTION_TYPES_ID.MULTIPLE_CHOICE: 
+                    arr = [{ value: 'A', count: 0}, { value: 'B', count: 0},{ value: 'C', count: 0},{ value: 'D', count: 0}]
+                    answers.forEach((answer) => {
+                        var idx = parseInt(answer.answerContent)
+                        arr[idx].count = arr[idx].count + 1
+                    })
+                    return arr
+    
+                case QUESTION_TYPES_ID.TF_CHOICE: 
+                    arr = [{ value: 'True', count: 0}, { value: 'False', count: 0}]
+                    answers.forEach((answer) => {
+                        var idx = parseInt(answer.answerContent)
+                        arr[idx].count = arr[idx].count + 1
+                    })
+                    return arr
+                default: 
+                    return []
+            }
+    
+    
+        }
+    
+        catch (err) {
+            console.log("Err extract count:", err);
+            return []
+        }
     }
 
     updateData = () => {
-        const {progress} = this.match
+        const {progress, questionIndex} = this.match
         this.answer_counts =  [0,0,0,0]
         if (progress != undefined && progress.length >=1 ) {
             // update current question: 
-            let current = progress[progress.length - 1]
+            let current = progress[questionIndex]
             this.question = current.question
             
-            current.answers.forEach((answer, index) => {
-                this.answer_counts[answer.answerIndex] ++ 
-            })
+            this.answer_counts = this.extractAnswerCount(current)
         }
     }
     convertScreenName = () => {
-        switch (this.screen) {
-            case SCREENS.WAITING: 
+        switch (this.screen.id) {
+            case SCREEN_IDS.WAITING_LIVE_ID: 
+                return 'Waiting live screen'
+            case SCREEN_IDS.WAITING_ID: 
                 return 'Waiting screen'
-            case SCREENS.QUESTION: 
-                return 'Question screen'
-            case SCREENS.QUESTION_END: 
-                return 'Question end screen'
-            case SCREENS.LEADER_BOARD: 
+
+            case SCREEN_IDS.QUESTION_MULTIPLE_ID: 
+                return 'Question multiple screen'
+            case SCREEN_IDS.QUESTION_MULTIPLE_END_ID: 
+                return 'Question multiple end screen'
+            case SCREEN_IDS.QUESTION_TF_ID: 
+                return 'Question TF screen'
+            case SCREEN_IDS.QUESTION_TF_END_ID: 
+                return 'Question tf end screen'
+            case SCREEN_IDS.QUESTION_PICWORD_ID: 
+                return 'Question picword screen'
+
+            case SCREEN_IDS.QUESTION_PICWORD_END_ID: 
+                return 'Question picword end screen'
+            case SCREEN_IDS.QUESTION_WORD_TABLE_ID: 
+                return 'Question word table screen'
+            case SCREEN_IDS.QUESTION_WORD_TABLE_END_ID: 
+                return 'Question word table end screen'
+            case SCREEN_IDS.LEADER_BOARD_ID: 
                 return 'Leader board screen'
-            case SCREENS.SUMMARY: 
-                return 'Summary screen'
+            case SCREEN_IDS.END_ID: 
+                return 'End screen'
             default: 
                 return ''
         }
+    }
+    selectQuestionEndScreen = () => {
+        var question = this.question
+        switch (question.typeId) {
+            case QUESTION_TYPES_ID.MULTIPLE_CHOICE :
+                this.screen = SCREENS.QUESTION_MULTIPLE_END
+                break
+            case QUESTION_TYPES_ID.TF_CHOICE :
+                this.screen = SCREENS.QUESTION_TF_END
+                break
+            case QUESTION_TYPES_ID.PIC_WORD :
+                this.screen = SCREENS.QUESTION_PICWORD_END
+                break
+            case QUESTION_TYPES_ID.WORD_TABLE :
+                this.screen = SCREENS.QUESTION_WORD_TABLE_END
+                break
+            default:
+                return  
+        }
+
+    }
+
+    selectQuestionScreen = () => {
+        var question = this.question
+        switch (question.typeId) {
+            case QUESTION_TYPES_ID.MULTIPLE_CHOICE :
+                this.screen = SCREENS.QUESTION_MULTIPLE
+                break
+            case QUESTION_TYPES_ID.TF_CHOICE :
+                this.screen = SCREENS.QUESTION_TF
+                break
+            case QUESTION_TYPES_ID.PIC_WORD :
+                this.screen = SCREENS.QUESTION_PICWORD
+                break
+            case QUESTION_TYPES_ID.WORD_TABLE :
+                this.screen = SCREENS.QUESTION_WORD_TABLE
+                break
+            default:
+                return  
+        }
+
     }
 
     emit = (eventCode, data) => {
@@ -62,23 +156,23 @@ class LiveStreamHandler {
                 this.updateData()
                 break
             case MATCH_EVENTS.PLAYER_LEAVE:
-                ////console.log("Emitted event PLAYER_LEAVE:")
+                //console.log("Emitted event PLAYER_LEAVE:")
                 break
             case MATCH_EVENTS.PLAYER_NOT_ANSWER:
-                ////console.log("Emitted event PLAYER_NOT_ANSWER:")
+                //console.log("Emitted event PLAYER_NOT_ANSWER:")
                 break
             case MATCH_EVENTS.PLAYER_ANSWER_CORRECT:
-                ////console.log("Emitted event PLAYER_ANSWER_CORRECT:")
+                //console.log("Emitted event PLAYER_ANSWER_CORRECT:")
                 break
             case MATCH_EVENTS.PLAYER_ANSWER_WRONG:
-                ////console.log("Emitted event PLAYER_ANSWER_WRONG:")
+                //console.log("Emitted event PLAYER_ANSWER_WRONG:")
                 break
             case MATCH_EVENTS.ON_QUESTION_END:
                 //console.log("Emitted event ON_QUESTION_END:")
                 this.redrawCanvas = true
                 this.match = match
-                this.screen = SCREENS.QUESTION_END
                 this.updateData()
+                this.selectQuestionEndScreen()
                 break 
             case MATCH_EVENTS.ON_COUNTDOWN:
                 if (time % 5 == 0) {
@@ -99,7 +193,7 @@ class LiveStreamHandler {
                 //console.log("Emitted event ON_SUMMARY:")
                 this.redrawCanvas = true
                 this.match = match
-                this.screen = SCREENS.SUMMARY
+                this.screen = SCREENS.END
                 this.updateData()
                 break
             case MATCH_EVENTS.ON_QUESTION:
@@ -108,17 +202,17 @@ class LiveStreamHandler {
                 this.isRetrievedAnswers = false
                 this.redrawCanvas = true
                 this.match = match
-                this.screen = SCREENS.QUESTION
                 this.updateData()
+                this.selectQuestionScreen()
                 break
             case MATCH_EVENTS.ON_KICK_PLAYER:
-                ////console.log("Emitted event ON_KICK_PLAYER:")
+                //console.log("Emitted event ON_KICK_PLAYER:")
                 break
             case MATCH_EVENTS.ON_COUNTDOWN_TO_START: 
-                ////console.log("Emitted event ON_COUNTDOWN_TO_START:")
+                //console.log("Emitted event ON_COUNTDOWN_TO_START:")
                 break
             case MATCH_EVENTS.ON_COUNTDOWN_TO_END: 
-                ////console.log("Emitted event ON_COUNTDOWN_TO_END:")
+                //console.log("Emitted event ON_COUNTDOWN_TO_END:")
                 break
             case MATCH_EVENTS.ON_END_MATCH: 
                 //console.log("Emitted event ON_END_MATCH:")
@@ -126,7 +220,7 @@ class LiveStreamHandler {
                 break
             case MATCH_EVENTS.ON_START: 
                 //console.log("Emitted event ON_START:")
-                ////console.log("start stream")
+                //console.log("start stream")
                 this.redrawCanvas = true
                 this.screen = SCREENS.WAITING
                 this.match = match
@@ -134,52 +228,49 @@ class LiveStreamHandler {
         }
     }
 
-    prepare = async () => {
-        let match = this.match
-        this.canvasHandler = new CanvasHandler(1280, 720)
-        await this.canvasHandler.loadImages()
+    prepareCanvas = async () => {
+        console.log("Init canvas ");
+        this.canvasHandler = new CanvasHandler(CANVAS_WIDTH, CANVAS_HEIGHT)
+        await this.canvasHandler.prepare()
+    }
 
+    prepareStream = async () => {
+        let match = this.match
         let {streamUrl, livestreamId, platform, liveChatId, accessToken } = match.livestream
         this.streamHandler = new StreamHandler(streamUrl, FPS)
         this.platformHander = 
             platform == 'facebook' ?    
                new  FacebookHandler(livestreamId, accessToken)
                 :
-               new  YoutubeHandler(liveChatId,)
+               new  YoutubeHandler(liveChatId)
+    }
+    prepare = async () => {
 
 
-        this.screen = SCREENS.PRE_STREAM
+        await this.prepareCanvas()
+        await this.prepareStream()
+
+        this.screen = SCREENS.WATING_LIVE
         this.time = 0
     }
 
 
-    testScreen = () => {
-        switch (test_screen) {
-            case SCREENS.WAITING: 
-                this.onWaiting()
-                break
-            case SCREENS.QUESTION: 
-                this.onQuestion()
-                break
-            case SCREENS.QUESTION_END: 
-                this.onQuestionEnd()
-                break
-            case SCREENS.LEADER_BOARD: 
-                this.onLeaderboard()
-                break
-            case SCREENS.SUMMARY: 
-                this.onSummary()
-                break
+    testScreen = (screenId) => {
+        this.time = 0
+        this.isRetrievedAnswers = true
+        console.log("Draw test screen Id:", screenId, (screenId == SCREEN_IDS.WAITING_LIVE_ID));
+        var screen = Object.values(SCREENS).find((item) => item.id == parseInt(screenId))
+        console.log("Found screen:", screen);
+        if (screen == undefined) {
+            console.log("Screen not found");
+            return
         }
+        this.screen = screen
+        this.showCurrentScreen()
     }
 
     start = async () => {
         // await this.prepare()
-
-        if (test_screen != null) {
-            this.testScreen()
-            return
-        }
 
         let duration = 1000 / FPS
         var _interval = setInterval(() => {
@@ -213,13 +304,14 @@ class LiveStreamHandler {
         let stage = match.progress[match.progress.length -1]
 
 
-        if (this.screen == SCREENS.QUESTION_END){
-            let duration = match.showQuestionEndTime - this.time
-            if  (duration >= platformHander.STREAM_LATENCY && duration <=  platformHander.STREAM_LATENCY + 2) {
-                this.isRetrievedAnswers = true 
-            }
+        this.isRetrievedAnswers = true 
+        // if (this.screen.id == SCREENS.QUESTION_END){
+        //     let duration = match.showQuestionEndTime - this.time
+        //     if  (duration >= platformHander.STREAM_LATENCY && duration <=  platformHander.STREAM_LATENCY + 2) {
+        //         this.isRetrievedAnswers = true 
+        //     }
           
-        }
+        // }
         if (!this.isRetrievedAnswers )  return
 
         console.log("Retreianswer answer for question");
@@ -246,97 +338,52 @@ class LiveStreamHandler {
         await this.canvasHandler.loadRemoteImages(differUrls)
     }
 
-
-    extractAnswer = (msg) => {
-        let match = this.match
-        let stage = match.progress[match.progress.length -1]
-        // Check answer is on time 
-        let answerPublishTime = new Date(msg.snippet.publishedAt)
-        var answerTime = Math.abs(answerPublishTime - stage.startAt) / 1000 - YOUTUBE_STREAM_LATENCY
-        answerTime = Math.round(answerTime * 10) / 10
-        if (answerTime < 0) {
-            //console.log("Answer when time answers is not occurs, emited", content, answerTime)
-            return
-        }
-        
-        // Check answer is correct format
-        // Correct format is : 'x' or 'x @alias_name'
-        // 
-        let content = msg.snippet.textMessageDetails.messageText
-       // //console.log("\n \n Extract answer with content: ", content)
-        var answerIndex = ['1','2','3','4'].indexOf(content)
-        var aliasName = ''
-        if (answerIndex == -1) {
-            // Not in format 'x'
-            // Check format 'x @alias_name'
-            let format = /[1-4]{1} @.*/gm
-            if (format.test(content)) {
-                answerIndex = content[0] - 1
-                aliasName = content.substring(3)
-              //  //console.log("Answer in format x alias :", answerIndex, aliasName)
-            }
-            else {
-              //  //console.log("Answer not any in format, emited ")
-                return
-            }
-        }
-        else {
-            ////console.log("Answer in format x:", answerIndex)
-        }
-
-        // 
-        var playerName = aliasName == '' ? msg.authorDetails.displayName : aliasName
-        var playerId = (msg.authorDetails.channelId + '_' + playerName)
-       
-        let player = {
-            _id: playerId,
-            platformId: msg.authorDetails.channelId,
-            username: playerName,
-            profile: msg.authorDetails.channelUrl,
-            avatar: msg.authorDetails.profileImageUrl,
-        }
-       // //console.log("Player infor: ", player)
-
-        var isExist = false
-        this.legalAnswerPlayers.forEach((answerPlayer, index) => {
-            if (answerPlayer.player._id == playerId) {
-                // Update to latest answer
-                this.legalAnswerPlayers[index].answerTime = answerTime
-                this.legalAnswerPlayers[index].answerIndex = answerIndex
-                isExist = true
-              //  //console.log("Update to latest answer :", playerName, answerIndex)
-            }
-        })
-        if (!isExist) {
-         //   //console.log("Add to new answer :", playerName, answerIndex)
-            this.legalAnswerPlayers.push({player, answerIndex,answerTime})
-        }
-    }
-
     showCurrentScreen = () => {
         if (this.endMatch == true) {
+            console.log("match is end, exit");
             return
         }
-        switch (this.screen) {
-            case SCREENS.WAITING: 
+
+        console.log("Show current screen");
+        switch (this.screen.id) {
+            case SCREEN_IDS.WAITING_LIVE_ID: 
+                this.onWaitingLive()
+                break
+            case SCREEN_IDS.WAITING_ID: 
                 this.onWaiting()
                 break
-            case SCREENS.QUESTION:
-                this.onQuestion()
+            case SCREEN_IDS.QUESTION_MULTIPLE_ID: 
+                this.onQuestionMultiple()
+                break;
+            case SCREEN_IDS.QUESTION_MULTIPLE_END_ID: 
+                this.onQuestionMultipleEnd()
                 break
-            case SCREENS.QUESTION_END:
-                this.onQuestionEnd()
+            case SCREEN_IDS.QUESTION_TF_ID: 
+                this.onQuestionTF()
                 break
-            case SCREENS.LEADER_BOARD:
-                this.onLeaderboard()
+            case SCREEN_IDS.QUESTION_TF_END_ID: 
+                this.onQuestionTFEnd()
                 break
-            case SCREENS.SUMMARY: 
-                this.onSummary()
+            case SCREEN_IDS.QUESTION_PICWORD_ID: 
+                this.onQuestionPicword()
                 break
-            case SCREENS.PRE_STREAM: 
-                this.onPreStream()
+            case SCREEN_IDS.QUESTION_PICWORD_END_ID: 
+                this.onQuestionPicwordEnd()
                 break
-
+            case SCREEN_IDS.QUESTION_WORD_TABLE_ID: 
+                this.onQuestionWordTable()
+                break
+            case SCREEN_IDS.QUESTION_WORD_TABLE_END_ID:
+                this.onQuestionWordTableEnd()
+                break
+            case SCREEN_IDS.LEADER_BOARD_ID: 
+                this.onLeaderBoard()
+                break
+            case SCREEN_IDS.END_ID: 
+                this.onEnd()
+                break
+            default: 
+                return 
         }
     }
 
@@ -353,87 +400,7 @@ class LiveStreamHandler {
         if (this.frames % FPS == 0) {
             // console.log("Frames on :", this.frames)
         }
-        this.streamHandler.stream(this.canvasHandler.canvas, isNewImg)
-    }
-
-    onWaiting = () => {
-        let match = this.match
-        const {game} = match
-        const data = {
-            title: game.title,
-            description: 'Stay tuned! Starting in',
-            time: this.time
-        }
-
-        this.onStreamFrame(data)
-    }
-
-    onQuestion = () => {
-        const match = this.match
-        const {game, questionIndex} = match
-        const question = this.question
-        const data = {
-            question,
-            round_index: `Round ${questionIndex + 1} / ${game.questions.length}`,
-            time: this.time
-        }
-
-        this.onStreamFrame(data)
-    }
-
-    onQuestionEnd = () => {
-        let match = this.match
-        const {progress, questionIndex} = match
-        const stage = progress[progress.length - 1]
-        const {question, answers} = stage 
-        const data = {
-            question,
-            isLoading: !this.isRetrievedAnswers,
-            userAnswers: answers,
-            round_index: `Result of round ${questionIndex + 1}`,
-            time: this.time
-        }
-        if (this.redrawCanvas) {
-            data.userAnswers.forEach((item, index) => {
-                let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
-                data.userAnswers[index].avatarImg = avatarImg
-            })
-            console.log("User answers on redraws: ", answers);
-        }
-        this.onStreamFrame(data)
-    }
-
-    onLeaderboard = () => {
-        let match = this.match
-        const {players} = match 
-        const data = {
-            players,
-            time : this.time
-        }
-
-        if (this.redrawCanvas) {
-            data.players.forEach((player, index) => {
-                let avatarImg = this.canvasHandler.getRemoteImages(player.avatar)
-                data.players[index].avatarImg = avatarImg
-            })
-        }
-        this.onStreamFrame(data, !(this.isRetrievedAnswers))
-    }
-
-    onSummary = () => {
-        let match = this.match
-        const {game} = match
-        const data = {
-            title: game.title,
-            description: 'Game end in',
-            time: this.time
-        }
-
-        this.onStreamFrame(data)
-    }
-
-    onPreStream = () => {
-        this.onStreamFrame({})
+        //this.streamHandler.stream(this.canvasHandler.canvas, isNewImg)
     }
 
     onEndStream =  () => {
@@ -444,6 +411,260 @@ class LiveStreamHandler {
         }, 1000)
         
     }
+    onWaitingLive = () => {
+        let match = this.match
+        const {game} = match
+        const data = {
+        }
+
+        this.onStreamFrame(data)
+    }
+    onWaiting = () => {
+        let match = this.match
+        const {game} = match
+        const data = {
+            title: game.title,
+            time: this.time
+        }
+
+        this.onStreamFrame(data)
+    }
+
+    onQuestionMultiple = () => {
+        const match = this.match
+        const {game, questionIndex} = match
+        const question = this.question
+        const data = {
+            question,
+            round_index: `${questionIndex + 1} / ${game.questions.length}`,
+            time: this.time
+        }
+
+        console.log("Data on question multiple ", data.question, data.round_index, data.time);
+        this.onStreamFrame(data)
+    }
+
+    onQuestionMultipleEnd = () => {
+        console.log("Show question multiple end");
+        let match = this.match
+        const {game, questionIndex, progress} = match
+        const stage = progress[questionIndex]
+
+        const {question, answers} = stage
+
+        const correctAnswers = answers.filter((item) => item.isCorrect == true)
+        const data = {
+            question,
+            answer_counts: this.answer_counts,
+            isLoading: !this.isRetrievedAnswers,
+            userAnswers: correctAnswers.slice(0, Math.min(10, correctAnswers.length)),
+            round_index:  `${questionIndex + 1} / ${game.questions.length}`,
+            time: this.time
+        }
+        if (this.redrawCanvas) {
+            data.userAnswers.forEach((item, index) => {
+                let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
+                data.userAnswers[index].avatarImg = this.canvasHandler.sample_avatar
+                //avatarImg
+            })
+        }
+        console.log("Data on question multiple  end", data.question, data.round_index, data.time, data.userAnswers);
+        this.onStreamFrame(data)
+    }
+
+    onQuestionTF = () => {
+        let match = this.match
+        const {game, questionIndex} = match
+        const question = this.question
+        const data = {
+            question,
+            round_index: `${questionIndex + 1} / ${game.questions.length}`,
+            time: this.time
+        }
+
+        console.log("Data on question TF ", data.question, data.round_index, data.time);
+        this.onStreamFrame(data)
+    }
+
+    onQuestionTFEnd = () => {
+        console.log("Show question multiple end");
+        let match = this.match
+        const {game, questionIndex, progress} = match
+        const stage = progress[questionIndex]
+
+        const {question, answers} = stage
+
+        const correctAnswers = answers.filter((item) => item.isCorrect == true)
+        const data = {
+            question,
+            answer_counts: this.answer_counts,
+            isLoading: !this.isRetrievedAnswers,
+            userAnswers: correctAnswers.slice(0, Math.min(10, correctAnswers.length)),
+            round_index:  `${questionIndex + 1} / ${game.questions.length}`,
+            time: this.time
+        }
+        if (this.redrawCanvas) {
+            data.userAnswers.forEach((item, index) => {
+                let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
+                data.userAnswers[index].avatarImg = this.canvasHandler.sample_avatar
+                //avatarImg
+            })
+        }
+        console.log("Data on question multiple  end", data.question, data.round_index, data.time, data.userAnswers);
+        this.onStreamFrame(data)
+    }
+
+    onQuestionPicword = () => {
+        let match = this.match
+        const {game, questionIndex} = match
+        const question = this.question
+        const data = {
+            question,
+            round_index: `${questionIndex + 1} / ${game.questions.length}`,
+            time: this.time
+        }
+
+        console.log("Data on question TF ", data.question, data.round_index, data.time);
+        this.onStreamFrame(data)
+    }
+
+    onQuestionPicwordEnd = () => {
+        console.log("Show question multiple end");
+        let match = this.match
+        const {game, questionIndex, progress} = match
+        const stage = progress[questionIndex]
+
+        const {question, answers} = stage
+
+        const correctAnswers = answers.filter((item) => item.isCorrect == true)
+        const data = {
+            question,
+            isLoading: !this.isRetrievedAnswers,
+            userAnswers: correctAnswers.slice(0, Math.min(10, correctAnswers.length)),
+            round_index:  `${questionIndex + 1} / ${game.questions.length}`,
+            time: this.time
+        }
+        if (this.redrawCanvas) {
+            data.userAnswers.forEach((item, index) => {
+                let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
+                data.userAnswers[index].avatarImg = this.canvasHandler.sample_avatar
+                //avatarImg
+            })
+        }
+        console.log("Data on question picword  end", data.question, data.round_index, data.time, data.userAnswers);
+        this.onStreamFrame(data)
+    }
+
+    onQuestionWordTable = () => {
+        const match = this.match
+        const {game, questionIndex, progress} = match
+        const current = progress[questionIndex]
+        const {open_word_states, answers} = current
+        console.log("Current stage: ", current);
+        const question = this.question
+        const data = {
+            question,
+            userAnswers: answers.filter((item) => item.keywordIndex != undefined) ,
+            open_word_states: open_word_states,
+            round_index: `${questionIndex + 1} / ${game.questions.length}`,
+            time: this.time
+        }
+
+        if (this.redrawCanvas) {
+            data.userAnswers.forEach((item, index) => {
+                let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
+                data.userAnswers[index].avatarImg = this.canvasHandler.sample_avatar
+                //avatarImg
+            })
+        }
+
+        console.log("Data on question word table     ", data.question, data.round_index, data.time);
+        this.onStreamFrame(data)
+    }
+
+    onQuestionWordTableEnd = () => {
+        const match = this.match
+        const {game, questionIndex, progress} = match
+        const current = progress[questionIndex]
+        const {open_word_states, answers} = current
+        const question = this.question
+
+        console.log("Answres:", answers);
+        const players = []
+        answers.forEach((item, index) => {
+            if (item.keywordIndex != undefined) {
+                var idx = players.findIndex((player) => player._id == item._id)
+                if (idx != -1) {
+                    players[idx].score = players[idx].score + item.earnScore
+                }
+                else {
+                    players.push({
+                        _id: item._id,
+                        username: item.username,
+                        avatar: item.avatar, 
+                        score: item.earnScore
+                    })
+                }
+            }
+        })
+        players.sort((a,b) => {
+            if (a.score >= b.score) return -1
+            return 1
+        })
+        const data = {
+            question,
+            players,
+            open_word_states: open_word_states,
+            round_index: `${questionIndex + 1} / ${game.questions.length}`,
+            time: this.time
+        }
+
+        console.log("Data: ", data.players);
+        if (this.redrawCanvas) {
+            data.players.forEach((item, index) => {
+                let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
+                data.players[index].avatarImg = this.canvasHandler.sample_avatar
+                //avatarImg
+            })
+        }
+        console.log("On call draw question word table end", players);
+        this.onStreamFrame(data)
+    }
+
+    onLeaderBoard = () => {
+        const match = this.match
+        const {players} = match
+        players.sort((a,b) => {
+            if (a.score >= b.score) return -1
+            return 1
+        })
+        const data = {
+            players: players.slice(0, Math.min(9, players.length)),
+            time: this.time
+        }
+        if (this.redrawCanvas) {
+            data.players.forEach((item, index) => {
+                let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
+                data.players[index].avatarImg = this.canvasHandler.sample_avatar
+                //avatarImg
+            })
+        }
+        console.log("Players:", data.players);
+        this.onStreamFrame(data)
+    }
+
+    onEnd = () => {
+        let match = this.match
+        const {game} = match
+        const data = {
+            title: game.title,
+            time: this.time
+        }
+
+        this.onStreamFrame(data)
+    }
+
+
 }
 
 module.exports = LiveStreamHandler

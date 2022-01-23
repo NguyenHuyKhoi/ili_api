@@ -1,6 +1,8 @@
 const { MatchCenter } = require('.')
+const LiveStreamHandler = require('./livestream')
 const {Match} = require('./model')
-
+const fake_match = require('./livestream/fake_match.json')
+const { SCREEN_IDS } = require('../util/canvas')
 const getLibrary = async (data) => {
     try {   
         const {userId, role, mode} = data 
@@ -63,6 +65,7 @@ const getDetail = async (data) => {
 }
 
 
+
 const createLivestream = async (data) => {
     try {   
         const {match} = data 
@@ -119,10 +122,30 @@ const startLivestream = async (data) => {
         }
     }
 }
+
+const test = async (data) => {
+    try {   
+        const {screenId} = data 
+        var livestreamHandler = new LiveStreamHandler({match: fake_match})
+        console.log("Init live stream handler", screenId);
+        await livestreamHandler.prepareCanvas()
+        livestreamHandler.testScreen(screenId)
+
+        return true
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
+
 module.exports = {
     getLibrary,
     createLivestream,
     completeLivestream,
     startLivestream,
-    getDetail
+    getDetail,
+
+    test
 }

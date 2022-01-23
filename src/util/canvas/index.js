@@ -1,39 +1,109 @@
-const { createCanvas, loadImage } = require('canvas')
-const { drawSummary } = require('./screen/summary')
+const { createCanvas, registerFont, loadImage } = require('canvas')
 const { drawLeaderBoard } = require('./screen/leader_board')
-const { drawQuestion } = require('./screen/question')
-const { drawQuestionEnd } = require('./screen/question_end')
+const { drawQuestionMultiple } = require('./screen/question_multiple')
+const { drawQuestionMultipleEnd } = require('./screen/question_multiple_end')
+const { drawQuestionPicWord } = require('./screen/question_pic_word')
+const { drawQuestionPicWordEnd } = require('./screen/question_pic_word_end')
+const { drawQuestionTF } = require('./screen/question_tf')
+const { drawQuestionTFEnd } = require('./screen/question_tf_end')
+const { drawQuestionWordTable } = require('./screen/question_word_table')
+const { drawQuestionWordTableEnd } = require('./screen/question_word_table_end')
 const { drawWaiting } = require('./screen/waiting')
-const { drawPreStream } = require('./screen/pre_stream')
+const { drawWaitingLive } = require('./screen/waiting_live')
+const { drawEnd } = require('./screen/end')
 
-const SCREENS = {
-    WAITING: 0,
-    QUESTION: 1,
-    QUESTION_END:2,
-    LEADER_BOARD: 3,
-    SUMMARY: 4,
-    PRE_STREAM: 5
+const EXTENSION_TEMPLATE = 'jpg'
+const SCREEN_IDS = {
+    WAITING_LIVE_ID: 0,
+    WAITING_ID: 1,
+    QUESTION_MULTIPLE_ID: 2,
+    QUESTION_MULTIPLE_END_ID: 3,
+    QUESTION_TF_ID: 4,
+    QUESTION_TF_END_ID: 5,
+    QUESTION_PICWORD_ID: 6,
+    QUESTION_PICWORD_END_ID: 7,
+    QUESTION_WORD_TABLE_ID: 8,
+    QUESTION_WORD_TABLE_END_ID: 9,
+    LEADER_BOARD_ID: 10,
+    END_ID: 11
+}
+var SCREENS = {
+    WATING_LIVE: {
+        id: SCREEN_IDS.WAITING_LIVE_ID,
+        drawFunc: drawWaitingLive,
+        templateName: 'waiting_live'
+        //'waiting_live'
+    },
+    WAITING: {
+        id: SCREEN_IDS.WAITING_ID,
+        drawFunc: drawWaiting,
+        templateName: 'waiting'
+    },
+    QUESTION_MULTIPLE: {
+        id: SCREEN_IDS.QUESTION_MULTIPLE_ID,
+        drawFunc: drawQuestionMultiple,
+        templateName: 'question_multiple'
+    },
+    QUESTION_MULTIPLE_END: {
+        id: SCREEN_IDS.QUESTION_MULTIPLE_END_ID,
+        drawFunc: drawQuestionMultipleEnd,
+        templateName: 'question_multiple_end'
+    },
+    QUESTION_TF: {
+        id: SCREEN_IDS.QUESTION_TF_ID,
+        drawFunc: drawQuestionTF,
+        templateName: 'question_tf'
+    },
+    QUESTION_TF_END: {
+        id: SCREEN_IDS.QUESTION_TF_END_ID,
+        drawFunc: drawQuestionTFEnd,
+        templateName: 'question_tf_end'
+    },
+    QUESTION_PICWORD: {
+        id: SCREEN_IDS.QUESTION_PICWORD_ID,
+        drawFunc: drawQuestionPicWord,
+        templateName: 'question_pic_word'
+    },
+    QUESTION_PICWORD_END: {
+        id: SCREEN_IDS.QUESTION_PICWORD_END_ID,
+        drawFunc: drawQuestionPicWordEnd,
+        templateName: 'question_pic_word_end'
+    },
+    QUESTION_WORD_TABLE: {
+        id: SCREEN_IDS.QUESTION_WORD_TABLE_ID,
+        drawFunc: drawQuestionWordTable,
+        templateName: 'question_word_table'
+    },
+    QUESTION_WORD_TABLE_END: {
+        id: SCREEN_IDS.QUESTION_WORD_TABLE_END_ID,
+        drawFunc: drawQuestionWordTableEnd,
+        templateName: 'question_word_table_end'
+    },
+    LEADER_BOARD: {
+        id: SCREEN_IDS.LEADER_BOARD_ID,
+        drawFunc: drawLeaderBoard,
+        templateName: 'leader_board'
+    },
+    END: {
+        id: SCREEN_IDS.END_ID,
+        drawFunc: drawEnd,
+        templateName: 'end'
+    }
 }
 
-const test_screen = null
+const test_screen = SCREEN_IDS.WAITING_LIVE_ID
 
 class CanvasHandler {
 
     constructor(w, h) {
         this.canvas = createCanvas(w, h)
-        this.bg = null 
-        this.layer_question = null 
-        this.layer_question_end_0 = null
-        this.layer_question_end_1 = null
-        this.layer_question_end_2 = null
-        this.layer_question_end_3 = null
-        this.layer_leader_board = null
 
-        this.sample_avatar = null 
+        this.bgs = new Array(20)
         this.requiredFrames = 0
         this.skipFrames = 0
         this.remoteImageObjs = []
 
+        this.sample_avatar = null
         // Array of objects : {url, image}
     }
     
@@ -67,50 +137,38 @@ class CanvasHandler {
     }
 
 
-    loadImages = async () => {
-        this.bg = await loadImage(__dirname + '/layer/background.jpg')
-        this.layer_question = await loadImage( __dirname + '/layer/question.svg')
-        this.layer_question_ends = [
-            await loadImage( __dirname + '/layer/question_end_0.svg'),
-            await loadImage( __dirname + '/layer/question_end_1.svg'),
-            await loadImage( __dirname + '/layer/question_end_2.svg'),
-            await loadImage( __dirname + '/layer/question_end_3.svg')
-        ]
-        this.layer_leader_board = await loadImage( __dirname + '/layer/leader_board.svg')
+    prepare = async () => {
+        try {
+            this.sample_avatar = await loadImage(__dirname + '/layer/avatar.jpg')
+            registerFont('./src/util/canvas/setofont.woff', { family: 'SetoFont-SP', weight: '100', style: 'Not-Rotated' })
+            await Promise.all(Object.values(SCREENS).map(async (screen) => {
+                var path =`${__dirname}/layer/${EXTENSION_TEMPLATE}/high/${screen.templateName}.${EXTENSION_TEMPLATE}` ;
+                this.bgs[screen.id] = await loadImage(path) 
+            }))
+        }
+        catch (err) {
+            console.log("Err on load image: ", err);
+        }
 
-        this.sample_avatar = await loadImage(__dirname + '/layer/avatar.jpg')
     }
 
     drawCanvas = async (screen, data) => {
         this.requiredFrames ++ 
         var newCanvas = this.canvas
-        let genImg = false
         //(test_screen != null)
-        switch (screen) {
-            case SCREENS.WAITING: 
-                newCanvas = await drawWaiting(this.canvas, data, this.bg, genImg)
-                break
-            case SCREENS.QUESTION: 
-                newCanvas = await drawQuestion(this.canvas, data, this.bg, this.layer_question, genImg)
-                break
-            case SCREENS.QUESTION_END: 
-                let correct_answer = data.question.correct_answers[0]
-                newCanvas = await drawQuestionEnd(this.canvas, data, this.bg, this.layer_question_ends[correct_answer], genImg)
-                break
-            case SCREENS.LEADER_BOARD: 
-                newCanvas = await drawLeaderBoard(this.canvas, data, this.bg, this.layer_leader_board, genImg)
-                break
-            case SCREENS.SUMMARY: 
-                newCanvas = await drawSummary(this.canvas, data, this.bg, genImg)
-                break
-            case SCREENS.PRE_STREAM: 
-                newCanvas = await drawPreStream(this.canvas, this.bg, genImg)
-                break
-            default: 
-                break
-                
+        
+        try {
+            var bg = this.bgs[screen.id]
+            console.log("Background not null:", (bg != null));
+            var drawFunc = screen.drawFunc
+            if (drawFunc != undefined) {
+                newCanvas = drawFunc(this.canvas, bg, data, true)
+            }
         }
-        return newCanvas
+        catch (err) {
+            console.log("Err: ", err);
+            return newCanvas
+        }
     }
     
 }
@@ -118,5 +176,6 @@ class CanvasHandler {
 module.exports = {
     CanvasHandler, 
     SCREENS,
+    SCREEN_IDS,
     test_screen
 }

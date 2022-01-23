@@ -1,5 +1,11 @@
 const mongoose = require('mongoose')
 const { QuestionSchema } = require('../game/model')
+const QUESTION_TYPES_ID = {
+    MULTIPLE_CHOICE: 0,
+    TF_CHOICE: 1,
+    PIC_WORD: 2,
+    WORD_TABLE: 3
+}
 const PlayerSchema = new mongoose.Schema({
     _id: {type: String, required: true},
     userId: {type: String}, // UserId: id of user in ILI if exists
@@ -71,5 +77,6 @@ const MatchSchema = new mongoose.Schema({
 
 const Match =  mongoose.model('Match', MatchSchema)
 module.exports = {
-    Match
+    Match,
+    QUESTION_TYPES_ID
 }

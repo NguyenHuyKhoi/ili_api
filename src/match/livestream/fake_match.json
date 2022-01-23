@@ -1,0 +1,2907 @@
+{
+    "_id": "61eaaabeebdb2f2bb4befaa3",
+    "game": {
+        "_id": "61eaa9a44d56486dfae30a6f",
+        "userId": "61b99542078c4c760070cce1",
+        "subject": "cinema",
+        "title": "Game title",
+        "description": null,
+        "cover": null,
+        "visibility": "private",
+        "questions": [
+            {
+                "index": 1,
+                "typeId": 0,
+                "typeName": "Multiple Choice",
+                "title": "1 + 1 = ",
+                "images": [],
+                "image": null,
+                "answers": [
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                ],
+                "correct_answer": "0",
+                "correct_answers": [],
+                "char_table": [],
+                "time_limit": 20,
+                "score": 1000,
+                "_id": "61eaa9a44d56486dfae30a70"
+            },
+            {
+                "index": 2,
+                "typeId": 1,
+                "typeName": "True/False",
+                "title": "1 + 1 = 2",
+                "images": [],
+                "image": null,
+                "answers": [
+                    "True",
+                    "False"
+                ],
+                "correct_answer": "0",
+                "correct_answers": [],
+                "char_table": [],
+                "time_limit": 20,
+                "score": 1000,
+                "_id": "61eaa9a44d56486dfae30a71"
+            },
+            {
+                "index": 3,
+                "typeId": 2,
+                "typeName": "4 Pic 1 Word",
+                "title": "What is the animal?",
+                "images": [
+                    "https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/05/19/maxresdefault.jpg",
+                    "https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/05/19/maxresdefault.jpg",
+                    "https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/05/19/maxresdefault.jpg",
+                    "https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/05/19/maxresdefault.jpg"
+                ],
+                "answers": [],
+                "correct_answer": "LION",
+                "correct_answers": [],
+                "char_table": [],
+                "time_limit": 20,
+                "score": 1000,
+                "_id": "61eaa9a44d56486dfae30a72"
+            },
+            {
+                "index": 4,
+                "typeId": 3,
+                "typeName": "Word table",
+                "title": "Subject animal",
+                "images": [],
+                "answers": [],
+                "correct_answers": [
+                    "RABBIT",
+                    "TIGER",
+                    "CHICKEN",
+                    "DRAGON",
+                    "SNAKE",
+                    "DOG",
+                    "CAT",
+                    "BUFFALO",
+                    "BIRD",
+                    "MICE",
+                    "DUCK",
+                    "PIG",
+                    "PENGUIN",
+                    "SHARK",
+                    "DOLPHIN"
+                ],
+                "char_table": [
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "C",
+                        "wordParent": "CAT",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "D",
+                        "wordParent": "DUCK",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Z",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "B",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "T",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "CAT",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "U",
+                        "wordParent": "DUCK",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "N",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "V",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "B",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "B",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "T",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "G",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "T",
+                        "wordParent": "CAT",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "C",
+                        "wordParent": "DUCK",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "W",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "V",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "V",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "M",
+                        "wordParent": "MICE",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "T",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "W",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "G",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "G",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "wordParent": "DUCK",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "M",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "MICE",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "K",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "M",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "M",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "E",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "W",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "C",
+                        "wordParent": "MICE",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "C",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "G",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "N",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "N",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Z",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "E",
+                        "wordParent": "MICE",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "B",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "O",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "V",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "S",
+                        "wordParent": "SHARK",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "G",
+                        "wordParent": "DOG",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "E",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "U",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "wordParent": "SHARK",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "V",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "wordParent": "BIRD",
+                        "color": "#EBDCC3"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "wordParent": "DOG",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "M",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "F",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "SHARK",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "R",
+                        "wordParent": "BIRD",
+                        "color": "#EBDCC3"
+                    },
+                    {
+                        "char": "T",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "wordParent": "DOG",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "Z",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "E",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "S",
+                        "wordParent": "SNAKE",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "F",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "C",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "BIRD",
+                        "color": "#EBDCC3"
+                    },
+                    {
+                        "char": "R",
+                        "wordParent": "SHARK",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "E",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "C",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "SNAKE",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "M",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "B",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "B",
+                        "wordParent": "BIRD",
+                        "color": "#EBDCC3"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "wordParent": "SHARK",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "C",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "U",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "W",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "SNAKE",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "T",
+                        "wordParent": "TIGER",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "TIGER",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "G",
+                        "wordParent": "TIGER",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "E",
+                        "wordParent": "TIGER",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "R",
+                        "wordParent": "TIGER",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "G",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "wordParent": "PIG",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "B",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "wordParent": "SNAKE",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "W",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Y",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "C",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "N",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "PIG",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "T",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "E",
+                        "wordParent": "SNAKE",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "B",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "C",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "E",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "G",
+                        "wordParent": "PIG",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "T",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Z",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Z",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    }
+                ],
+                "time_limit": 20,
+                "score": 1000,
+                "_id": "61eaa9a44d56486dfae30a73"
+            }
+        ],
+        "createdAt": "2022-01-21T12:40:04.075Z",
+        "updatedAt": "2022-01-21T12:40:04.075Z",
+        "__v": 0
+    },
+    "state": "finished",
+    "livestream": null,
+    "mode": "classic",
+    "pinCode": "410",
+    "host": {
+        "userId": "61b99542078c4c760070cce1",
+        "name": "user001",
+        "_id": "x94-1JWjtILiBlXAAAAT"
+    },
+    "players": [
+        {
+            "_id": "QCMuGdOT6s5Rh-gGAAAb",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user002",
+            "score": 19,
+            "rank": 1,
+            "correctNum": 1,
+            "incorrectNum": 1,
+            "unanswerNum": 2
+        },
+        {
+            "_id": "NxXEPKdnLzRfYRYAAAAX",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user001",
+            "score": 19030,
+            "rank": 2,
+            "correctNum": 2,
+            "incorrectNum": 2,
+            "unanswerNum": 0
+        },
+        {
+            "_id": "-AoWRwJtcfWwkGHsAAAf",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user003",
+            "score": 180,
+            "rank": 3,
+            "correctNum": 1,
+            "incorrectNum": 0,
+            "unanswerNum": 3
+        },
+        {
+            "_id": "QCMuGdOT6s5Rh-gGAAAb",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user002",
+            "score": 950,
+            "rank": 1,
+            "correctNum": 1,
+            "incorrectNum": 1,
+            "unanswerNum": 2
+        },
+        {
+            "_id": "NxXEPKdnLzRfYRYAAAAX",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user001",
+            "score": 130,
+            "rank": 2,
+            "correctNum": 2,
+            "incorrectNum": 2,
+            "unanswerNum": 0
+        },
+        {
+            "_id": "-AoWRwJtcfWwkGHsAAAf",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user003",
+            "score": 980,
+            "rank": 3,
+            "correctNum": 1,
+            "incorrectNum": 0,
+            "unanswerNum": 3
+        },
+        {
+            "_id": "QCMuGdOT6s5Rh-gGAAAb",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user002",
+            "score": 10,
+            "rank": 1,
+            "correctNum": 1,
+            "incorrectNum": 1,
+            "unanswerNum": 2
+        },
+        {
+            "_id": "NxXEPKdnLzRfYRYAAAAX",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user001",
+            "score": 30,
+            "rank": 2,
+            "correctNum": 2,
+            "incorrectNum": 2,
+            "unanswerNum": 0
+        },
+        {
+            "_id": "-AoWRwJtcfWwkGHsAAAf",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user003",
+            "score": 880,
+            "rank": 3,
+            "correctNum": 1,
+            "incorrectNum": 0,
+            "unanswerNum": 3
+        }, {
+            "_id": "QCMuGdOT6s5Rh-gGAAAb",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user002",
+            "score": 195,
+            "rank": 1,
+            "correctNum": 1,
+            "incorrectNum": 1,
+            "unanswerNum": 2
+        },
+        {
+            "_id": "NxXEPKdnLzRfYRYAAAAX",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user001",
+            "score": 19030,
+            "rank": 2,
+            "correctNum": 2,
+            "incorrectNum": 2,
+            "unanswerNum": 0
+        },
+        {
+            "_id": "-AoWRwJtcfWwkGHsAAAf",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user003",
+            "score": 180,
+            "rank": 3,
+            "correctNum": 1,
+            "incorrectNum": 0,
+            "unanswerNum": 3
+        },
+        {
+            "_id": "QCMuGdOT6s5Rh-gGAAAb",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user002",
+            "score": 150,
+            "rank": 1,
+            "correctNum": 1,
+            "incorrectNum": 1,
+            "unanswerNum": 2
+        },
+        {
+            "_id": "NxXEPKdnLzRfYRYAAAAX",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user001",
+            "score": 130,
+            "rank": 2,
+            "correctNum": 2,
+            "incorrectNum": 2,
+            "unanswerNum": 0
+        },
+        {
+            "_id": "-AoWRwJtcfWwkGHsAAAf",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user003",
+            "score": 18800,
+            "rank": 3,
+            "correctNum": 1,
+            "incorrectNum": 0,
+            "unanswerNum": 3
+        },
+        {
+            "_id": "QCMuGdOT6s5Rh-gGAAAb",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user002",
+            "score": 19500,
+            "rank": 1,
+            "correctNum": 1,
+            "incorrectNum": 1,
+            "unanswerNum": 2
+        },
+        {
+            "_id": "NxXEPKdnLzRfYRYAAAAX",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user001",
+            "score": 193000,
+            "rank": 2,
+            "correctNum": 2,
+            "incorrectNum": 2,
+            "unanswerNum": 0
+        },
+        {
+            "_id": "-AoWRwJtcfWwkGHsAAAf",
+            "userId": "61b99542078c4c760070cce1",
+            "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+            "username": "user003",
+            "score": 18800,
+            "rank": 3,
+            "correctNum": 1,
+            "incorrectNum": 0,
+            "unanswerNum": 3
+        }
+    ],
+    "progress": [
+        {
+            "question": {
+                "index": 1,
+                "typeId": 0,
+                "typeName": "Multiple Choice",
+                "title": "1 + 1 = ",
+                "images": [],
+                "image": null,
+                "answers": [
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                ],
+                "correct_answer": "1",
+                "correct_answers": [],
+                "char_table": [],
+                "time_limit": 20,
+                "score": 1000,
+                "_id": "61eaa9a44d56486dfae30a70"
+            },
+            "answers": [
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user002",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user003",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user004",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user005",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user006",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user007",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user008",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user009",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user010",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "0",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "0",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "0",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "0",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "0",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                },                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "2",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "3",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                }
+            ],
+            "open_word_states": [],
+            "startAt": "2022-01-21T12:45:02.725Z",
+            "correctNum": 1,
+            "incorrectNum": 1,
+            "unanswerNum": 1,
+            "answerTimeAvg": 18.5,
+            "_id": "61eaaaceebdb2f2bb4befaa5"
+        },
+        {
+            "question": {
+                "index": 2,
+                "typeId": 1,
+                "typeName": "True/False",
+                "title": "1 + 1 = 2",
+                "images": [],
+                "image": null,
+                "answers": [
+                    "True",
+                    "False"
+                ],
+                "correct_answer": "1",
+                "correct_answers": [],
+                "char_table": [],
+                "time_limit": 20,
+                "score": 1000,
+                "_id": "61eaa9a44d56486dfae30a71"
+            },
+            "answers": [
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user002",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user003",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user004",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user005",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user006",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user007",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user008",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user009",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user010",
+                    "answerContent": "1",
+                    "answerTime": 1,
+                    "isCorrect": true,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "0",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "0",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "0",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "0",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "0",
+                    "answerTime": 1,
+                    "isCorrect": false,
+                    "earnScore": 1280
+                }           
+            ],
+            "open_word_states": [],
+            "startAt": "2022-01-21T12:46:03.224Z",
+            "correctNum": 2,
+            "incorrectNum": 1,
+            "unanswerNum": 0,
+            "answerTimeAvg": 16.666666666666668,
+            "_id": "61eaab0bebdb2f2bb4befaaa"
+        },
+        {
+            "question": {
+                "index": 3,
+                "typeId": 2,
+                "typeName": "4 Pic 1 Word",
+                "title": "What is the animal ?",
+                "images": [
+                    "https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/05/19/maxresdefault.jpg",
+                    "https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/05/19/maxresdefault.jpg",
+                    "https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/05/19/maxresdefault.jpg",
+                    "https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/05/19/maxresdefault.jpg"
+                ],
+                "answers": [],
+                "correct_answer": "LION",
+                "correct_answers": [],
+                "char_table": [],
+                "time_limit": 20,
+                "score": 1000,
+                "_id": "61eaa9a44d56486dfae30a72"
+            },
+            "answers": [
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "LION",
+                    "answerTime": 8,
+                    "isCorrect": true,
+                    "earnScore": 0
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "LION",
+                    "isCorrect": true,
+                    "answerTime": 9,
+                    "earnScore": 0
+                },
+                {
+                    "_id": "QCMuGdOT6s5Rh-gGAAAb",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user002",
+                    "answerContent": "LION",
+                    "answerTime": 12,
+                    "isCorrect": true,
+                    "earnScore": 0
+                },
+                {
+                    "_id": "-AoWRwJtcfWwkGHsAAAf",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user003",
+                    "answerContent": "LION",
+                    "answerTime": 16,
+                    "isCorrect": true,
+                    "earnScore": 0
+                },
+                {
+                    "_id": "-AoWRwJtcfWwkGHsAAAf",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user003",
+                    "answerContent": "LION",
+                    "isCorrect": true,
+                    "answerTime": 17,
+                    "earnScore": 0
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "LION",
+                    "answerTime": 8,
+                    "isCorrect": true,
+                    "earnScore": 0
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "LION",
+                    "isCorrect": true,
+                    "answerTime": 9,
+                    "earnScore": 0
+                },
+                {
+                    "_id": "QCMuGdOT6s5Rh-gGAAAb",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user002",
+                    "answerContent": "LION",
+                    "answerTime": 12,
+                    "isCorrect": true,
+                    "earnScore": 0
+                },
+                {
+                    "_id": "-AoWRwJtcfWwkGHsAAAf",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user003",
+                    "answerContent": "LION",
+                    "answerTime": 16,
+                    "isCorrect": true,
+                    "earnScore": 0
+                },
+                {
+                    "_id": "-AoWRwJtcfWwkGHsAAAf",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user003",
+                    "answerContent": "LION",
+                    "isCorrect": true,
+                    "answerTime": 17,
+                    "earnScore": 0
+                }
+            ],
+            "open_word_states": [],
+            "startAt": "2022-01-21T12:47:03.765Z",
+            "correctNum": 0,
+            "incorrectNum": 0,
+            "unanswerNum": -2,
+            "answerTimeAvg": 7.6,
+            "_id": "61eaab47ebdb2f2bb4befab1"
+        },
+        {
+            "question": {
+                "index": 4,
+                "typeId": 3,
+                "typeName": "Word table",
+                "title": "Subject animal",
+                "images": [],
+                "answers": [],
+                "correct_answers": [
+                    "RABBIT",
+                    "TIGER",
+                    "CHICKEN",
+                    "DRAGON",
+                    "SNAKE",
+                    "DOG",
+                    "CAT",
+                    "BUFFALO",
+                    "BIRD",
+                    "MICE",
+                    "DUCK",
+                    "PIG",
+                    "PENGUIN",
+                    "SHARK",
+                    "DOLPHIN"
+                ],
+                "char_table": [
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "C",
+                        "wordParent": "CAT",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "D",
+                        "wordParent": "DUCK",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Z",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "B",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "T",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "CAT",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "U",
+                        "wordParent": "DUCK",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "N",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "V",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "B",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "B",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "T",
+                        "wordParent": "RABBIT",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "G",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "T",
+                        "wordParent": "CAT",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "C",
+                        "wordParent": "DUCK",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "W",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "V",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "V",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "M",
+                        "wordParent": "MICE",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "T",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "W",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "G",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "G",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "wordParent": "DUCK",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "M",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "MICE",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "K",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "M",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "M",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "E",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "W",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "C",
+                        "wordParent": "MICE",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "C",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "G",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "N",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "N",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Z",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "E",
+                        "wordParent": "MICE",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "B",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "O",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "V",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "S",
+                        "wordParent": "SHARK",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "G",
+                        "wordParent": "DOG",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "E",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "U",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "DRAGON",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "wordParent": "SHARK",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "V",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "wordParent": "BIRD",
+                        "color": "#EBDCC3"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "wordParent": "DOG",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "M",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "F",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "SHARK",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "R",
+                        "wordParent": "BIRD",
+                        "color": "#EBDCC3"
+                    },
+                    {
+                        "char": "T",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "wordParent": "DOG",
+                        "color": "#FAC846"
+                    },
+                    {
+                        "char": "Z",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "E",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "S",
+                        "wordParent": "SNAKE",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "F",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "C",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "BIRD",
+                        "color": "#EBDCC3"
+                    },
+                    {
+                        "char": "R",
+                        "wordParent": "SHARK",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "E",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "C",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "SNAKE",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "DOLPHIN",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "M",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "B",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "B",
+                        "wordParent": "BIRD",
+                        "color": "#EBDCC3"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "wordParent": "SHARK",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "C",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "U",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "W",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "wordParent": "SNAKE",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "T",
+                        "wordParent": "TIGER",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "TIGER",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "G",
+                        "wordParent": "TIGER",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "E",
+                        "wordParent": "TIGER",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "R",
+                        "wordParent": "TIGER",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "G",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "wordParent": "PIG",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "B",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "wordParent": "SNAKE",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "wordParent": "BUFFALO",
+                        "color": "#506E00"
+                    },
+                    {
+                        "char": "W",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "R",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Y",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "N",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "C",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "N",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "wordParent": "PIG",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "T",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "E",
+                        "wordParent": "SNAKE",
+                        "color": "#82DCE1"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "B",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "K",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "C",
+                        "wordParent": "CHICKEN",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "E",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "A",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "G",
+                        "wordParent": "PIG",
+                        "color": "#557882"
+                    },
+                    {
+                        "char": "J",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "O",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "I",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "X",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "T",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Z",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "F",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "wordParent": "PENGUIN",
+                        "color": "#BE6E82"
+                    },
+                    {
+                        "char": "S",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "P",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "U",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Z",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "D",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "L",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "H",
+                        "color": "#cddcdc"
+                    },
+                    {
+                        "char": "Q",
+                        "color": "#cddcdc"
+                    }
+                ],
+                "time_limit": 20,
+                "score": 1000,
+                "_id": "61eaa9a44d56486dfae30a73"
+            },
+            "answers": [
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "CHICKEN",
+                    "keywordIndex": 2,
+                    "answerTime": 6,
+                    "isCorrect": true,
+                    "earnScore": 1850
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "CHICKEN",
+                    "keywordIndex": 8,
+                    "answerTime": 6,
+                    "isCorrect": true,
+                    "earnScore": 1850
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "CHICKEN",
+                    "keywordIndex": 9,
+                    "answerTime": 6,
+                    "isCorrect": true,
+                    "earnScore": 1850
+                },
+                {
+                    "_id": "NxXEPKdnLzRYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "COW",
+                    "keywordIndex": 5,
+                    "answerTime": 12,
+                    "isCorrect": false,
+                    "earnScore": 10000
+                },
+                {
+                    "_id": "NxXEPdnLzRfRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "COW",
+                    "answerTime": 15,
+                    "keywordIndex": 7,
+                    "isCorrect": false,
+                    "earnScore": 1000
+                },
+                {
+                    "_id": "NxXEPKdnLzfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "COW",
+                    "answerTime": 15,
+                    "keywordIndex": 1,
+                    "isCorrect": false,
+                    "earnScore": 1240
+                },
+                {
+                    "_id": "NxXEPKLzRfYYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "COW",
+                    "answerTime": 15,
+                    "keywordIndex": 0,
+                    "isCorrect": false,
+                    "earnScore": 4120
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRYAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "COW",
+                    "answerTime": 15,
+                    "keywordIndex": 3,
+                    "isCorrect": false,
+                    "earnScore": 250
+                },
+                {
+                    "_id": "NxXEPKdnLzRfYRAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "TURTLE",
+                    "answerTime": 19,
+                    "keywordIndex": 9,
+                    "isCorrect": false,
+                    "earnScore": 2140
+                },
+                {
+                    "_id": "NxXEPKdnLzYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "",
+                    "answerTime": 19,
+                    "keywordIndex": 11,
+                    "isCorrect": false,
+                    "earnScore": 1240
+                },
+                {
+                    "_id": "NxXEPKdnRfYRYAAAAX",
+                    "avatar": "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQyg88kimEj5cTPQwl81-F6lHFaDhcBl6beaRZ4Erpl_fyd9G6JrqU7qsPgb-WRAKzIHTWs-mDPjvss0rFkpaI",
+                    "username": "user001",
+                    "answerContent": "LION",
+                    "answerTime": 13,
+                    "earnScore": 1240,
+                    "isCorrect": false
+                }
+            ],
+            "open_word_states": [
+                0,
+                0,
+                1,
+                0,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0
+            ],
+            "startAt": "2022-01-21T12:48:04.283Z",
+            "correctNum": 1,
+            "incorrectNum": 5,
+            "unanswerNum": -3,
+            "answerTimeAvg": 6,
+            "_id": "61eaab84ebdb2f2bb4befaba"
+        }
+    ],
+    "startAt": "2022-01-21T12:44:46.410Z",
+    "delayStartTime": 0,
+    "showQuestionEndTime": 20,
+    "showLeaderboardTime": 10,
+    "delayEndTime": 60,
+    "__v": 0,
+    "questionIndex": 3,
+    "finishAt": "2022-01-21T12:49:04.825Z"
+}
