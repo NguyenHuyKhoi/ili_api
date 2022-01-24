@@ -156,19 +156,19 @@ class LiveStreamHandler {
                 this.updateData()
                 break
             case MATCH_EVENTS.PLAYER_LEAVE:
-                //console.log("Emitted event PLAYER_LEAVE:")
+
                 break
             case MATCH_EVENTS.PLAYER_NOT_ANSWER:
-                //console.log("Emitted event PLAYER_NOT_ANSWER:")
+   
                 break
             case MATCH_EVENTS.PLAYER_ANSWER_CORRECT:
-                //console.log("Emitted event PLAYER_ANSWER_CORRECT:")
+              
                 break
             case MATCH_EVENTS.PLAYER_ANSWER_WRONG:
-                //console.log("Emitted event PLAYER_ANSWER_WRONG:")
+                
                 break
             case MATCH_EVENTS.ON_QUESTION_END:
-                //console.log("Emitted event ON_QUESTION_END:")
+ 
                 this.redrawCanvas = true
                 this.match = match
                 this.updateData()
@@ -183,22 +183,22 @@ class LiveStreamHandler {
                 this.time = time
                 break
             case MATCH_EVENTS.ON_LEADERBOARD: 
-                //console.log("Emitted event ON_LEADERBOARD:")
+       
                 this.redrawCanvas = true
                 this.match = match
                 this.screen = SCREENS.LEADER_BOARD
                 this.updateData()
                 break
             case MATCH_EVENTS.ON_SUMMARY:
-                //console.log("Emitted event ON_SUMMARY:")
+              
                 this.redrawCanvas = true
                 this.match = match
                 this.screen = SCREENS.END
                 this.updateData()
                 break
             case MATCH_EVENTS.ON_QUESTION:
-                //console.log("Emitted event ON_QUESTION:")
-                console.log("Set isRetrieveAnswer is False");
+          
+             
                 this.isRetrievedAnswers = false
                 this.redrawCanvas = true
                 this.match = match
@@ -206,21 +206,20 @@ class LiveStreamHandler {
                 this.selectQuestionScreen()
                 break
             case MATCH_EVENTS.ON_KICK_PLAYER:
-                //console.log("Emitted event ON_KICK_PLAYER:")
+  
                 break
             case MATCH_EVENTS.ON_COUNTDOWN_TO_START: 
-                //console.log("Emitted event ON_COUNTDOWN_TO_START:")
+
                 break
             case MATCH_EVENTS.ON_COUNTDOWN_TO_END: 
-                //console.log("Emitted event ON_COUNTDOWN_TO_END:")
+       
                 break
             case MATCH_EVENTS.ON_END_MATCH: 
-                //console.log("Emitted event ON_END_MATCH:")
+               
                 this.onEndStream()
                 break
             case MATCH_EVENTS.ON_START: 
-                //console.log("Emitted event ON_START:")
-                //console.log("start stream")
+
                 this.redrawCanvas = true
                 this.screen = SCREENS.WAITING
                 this.match = match
@@ -229,7 +228,6 @@ class LiveStreamHandler {
     }
 
     prepareCanvas = async () => {
-        console.log("Init canvas ");
         this.canvasHandler = new CanvasHandler(CANVAS_WIDTH, CANVAS_HEIGHT)
         await this.canvasHandler.prepare()
     }
@@ -258,11 +256,9 @@ class LiveStreamHandler {
     testScreen = (screenId) => {
         this.time = 0
         this.isRetrievedAnswers = true
-        console.log("Draw test screen Id:", screenId, (screenId == SCREEN_IDS.WAITING_LIVE_ID));
         var screen = Object.values(SCREENS).find((item) => item.id == parseInt(screenId))
-        console.log("Found screen:", screen);
         if (screen == undefined) {
-            console.log("Screen not found");
+        
             return
         }
         this.screen = screen
@@ -275,7 +271,6 @@ class LiveStreamHandler {
         let duration = 1000 / FPS
         var _interval = setInterval(() => {
             if (this.endMatch == true) {
-                console.log('Clear interval')
                 clearInterval(_interval)
             }
             else {
@@ -290,7 +285,6 @@ class LiveStreamHandler {
         var _interval = setInterval(async () => {
             if (this.endMatch == true) {
                 clearInterval(_interval)
-                console.log("Stop listen to livechat ")
             }
             else {
                 this.retrieveAnswers()
@@ -305,20 +299,18 @@ class LiveStreamHandler {
 
 
         this.isRetrievedAnswers = true 
-        // if (this.screen.id == SCREENS.QUESTION_END){
-        //     let duration = match.showQuestionEndTime - this.time
-        //     if  (duration >= platformHander.STREAM_LATENCY && duration <=  platformHander.STREAM_LATENCY + 2) {
-        //         this.isRetrievedAnswers = true 
-        //     }
+        if (this.screen.id == SCREENS.QUESTION_END){
+            let duration = match.showQuestionEndTime - this.time
+            if  (duration >= platformHander.STREAM_LATENCY && duration <=  platformHander.STREAM_LATENCY + 2) {
+                this.isRetrievedAnswers = true 
+            }
           
-        // }
+        }
         if (!this.isRetrievedAnswers )  return
 
-        console.log("Retreianswer answer for question");
         var answers = await platformHander.retrieveAnswers(stage.startAt)
         
         answers.forEach((item, index) => {
-            console.log("Answer retrieves: ", item.player, item.answerIndex, item.answerTime);
             this.matchHandler.onAnswer(item.player, item.answerIndex, item.answerTime)
             })
         this.matchHandler.calculateEarnScores()
@@ -340,11 +332,8 @@ class LiveStreamHandler {
 
     showCurrentScreen = () => {
         if (this.endMatch == true) {
-            console.log("match is end, exit");
             return
         }
-
-        console.log("Show current screen");
         switch (this.screen.id) {
             case SCREEN_IDS.WAITING_LIVE_ID: 
                 this.onWaitingLive()
@@ -391,20 +380,16 @@ class LiveStreamHandler {
         let isNewImg = false
         this.frames ++ 
         if (this.redrawCanvas == true) {
-            //console.log("Stream frame : ")
             this.canvasHandler.canvas = await this.canvasHandler.drawCanvas(this.screen, data)
             this.redrawCanvas = false
             isNewImg = true
         }
-        //let canvas =  this.canvasHandler.drawCanvas(this.screen, data)
         if (this.frames % FPS == 0) {
-            // console.log("Frames on :", this.frames)
         }
-        //this.streamHandler.stream(this.canvasHandler.canvas, isNewImg)
+        this.streamHandler.stream(this.canvasHandler.canvas, isNewImg)
     }
 
     onEndStream =  () => {
-        console.log('Handle end stream')
         this.endMatch = true
         setTimeout(() => {
             this.streamHandler.end()
@@ -439,13 +424,10 @@ class LiveStreamHandler {
             round_index: `${questionIndex + 1} / ${game.questions.length}`,
             time: this.time
         }
-
-        console.log("Data on question multiple ", data.question, data.round_index, data.time);
         this.onStreamFrame(data)
     }
 
     onQuestionMultipleEnd = () => {
-        console.log("Show question multiple end");
         let match = this.match
         const {game, questionIndex, progress} = match
         const stage = progress[questionIndex]
@@ -468,7 +450,6 @@ class LiveStreamHandler {
                 //avatarImg
             })
         }
-        console.log("Data on question multiple  end", data.question, data.round_index, data.time, data.userAnswers);
         this.onStreamFrame(data)
     }
 
@@ -481,13 +462,10 @@ class LiveStreamHandler {
             round_index: `${questionIndex + 1} / ${game.questions.length}`,
             time: this.time
         }
-
-        console.log("Data on question TF ", data.question, data.round_index, data.time);
         this.onStreamFrame(data)
     }
 
     onQuestionTFEnd = () => {
-        console.log("Show question multiple end");
         let match = this.match
         const {game, questionIndex, progress} = match
         const stage = progress[questionIndex]
@@ -510,7 +488,6 @@ class LiveStreamHandler {
                 //avatarImg
             })
         }
-        console.log("Data on question multiple  end", data.question, data.round_index, data.time, data.userAnswers);
         this.onStreamFrame(data)
     }
 
@@ -523,13 +500,10 @@ class LiveStreamHandler {
             round_index: `${questionIndex + 1} / ${game.questions.length}`,
             time: this.time
         }
-
-        console.log("Data on question TF ", data.question, data.round_index, data.time);
         this.onStreamFrame(data)
     }
 
     onQuestionPicwordEnd = () => {
-        console.log("Show question multiple end");
         let match = this.match
         const {game, questionIndex, progress} = match
         const stage = progress[questionIndex]
@@ -551,7 +525,6 @@ class LiveStreamHandler {
                 //avatarImg
             })
         }
-        console.log("Data on question picword  end", data.question, data.round_index, data.time, data.userAnswers);
         this.onStreamFrame(data)
     }
 
@@ -560,7 +533,6 @@ class LiveStreamHandler {
         const {game, questionIndex, progress} = match
         const current = progress[questionIndex]
         const {open_word_states, answers} = current
-        console.log("Current stage: ", current);
         const question = this.question
         const data = {
             question,
@@ -577,8 +549,6 @@ class LiveStreamHandler {
                 //avatarImg
             })
         }
-
-        console.log("Data on question word table     ", data.question, data.round_index, data.time);
         this.onStreamFrame(data)
     }
 
@@ -588,8 +558,6 @@ class LiveStreamHandler {
         const current = progress[questionIndex]
         const {open_word_states, answers} = current
         const question = this.question
-
-        console.log("Answres:", answers);
         const players = []
         answers.forEach((item, index) => {
             if (item.keywordIndex != undefined) {
@@ -619,7 +587,6 @@ class LiveStreamHandler {
             time: this.time
         }
 
-        console.log("Data: ", data.players);
         if (this.redrawCanvas) {
             data.players.forEach((item, index) => {
                 let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
@@ -627,7 +594,6 @@ class LiveStreamHandler {
                 //avatarImg
             })
         }
-        console.log("On call draw question word table end", players);
         this.onStreamFrame(data)
     }
 
@@ -649,7 +615,6 @@ class LiveStreamHandler {
                 //avatarImg
             })
         }
-        console.log("Players:", data.players);
         this.onStreamFrame(data)
     }
 

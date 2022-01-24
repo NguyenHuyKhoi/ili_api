@@ -100,7 +100,7 @@ const drawQuestionWordTable =  async (canvas, bg, data, genImg = false) => {
 
     let {round_index, time, question, open_word_states, userAnswers} = data
     let {title, char_table, correct_answers} = question
-
+    time = time + 's'
     ctx.clearRect(0, 0, w, h)
 
     //Draw initial

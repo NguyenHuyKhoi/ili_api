@@ -162,11 +162,13 @@ class CanvasHandler {
             console.log("Background not null:", (bg != null));
             var drawFunc = screen.drawFunc
             if (drawFunc != undefined) {
-                newCanvas = drawFunc(this.canvas, bg, data, true)
+                newCanvas = drawFunc(this.canvas, bg, data, false) 
             }
         }
         catch (err) {
             console.log("Err: ", err);
+        }
+        finally {
             return newCanvas
         }
     }

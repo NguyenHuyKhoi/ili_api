@@ -53,6 +53,7 @@ class StreamHandler {
         if (this.ffmpeg == undefined) return
         this.ffmpeg.stdin.setEncoding('utf8');
         this.ffmpeg.stdin.write('q')
+        this.ffmpeg.kill('SIGINT');
     }
 }
 

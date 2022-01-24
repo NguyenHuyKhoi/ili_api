@@ -53,14 +53,7 @@ const drawCharTable = async (ctx, table,correct_answers, open_word_states) => {
         var y = py + (col ) * (cellSize + marginSize)
 
         if (item.wordParent != undefined) {
-			var idx = correct_answers.findIndex((keyword) => keyword == item.wordParent)
-			if (idx != 1 && open_word_states[idx] == 1) {
-				ctx.fillStyle = `${color}`
-			}
-			else {
-				ctx.fillStyle = `#ecaaaa`
-			}
-          
+			ctx.fillStyle = `${color}`
             ctx.fillRect(cv(x), cv(y), cv(cellSize), cv(cellSize))
         }
 
@@ -80,7 +73,7 @@ const drawQuestionWordTableEnd =  async (canvas, bg, data, genImg = false) => {
 
     let {round_index, time, question, players, open_word_states} = data
     let {title, char_table, correct_answers} = question
-
+    time = time + 's'
     ctx.clearRect(0, 0, w, h)
 
     //Draw initial

@@ -130,7 +130,7 @@ class MatchHandler {
                     })
                 }  
                 break
-            case QUESTION_TYPES_ID.PIC_WORD:
+            case QUESTION_TYPES_ID.WORD_TABLE:
                 let totalEarnScore = stage.answers.filter((item) => item._id == player._id && item.keywordIndex != undefined)
                 .reduce((res, answer) => res += answer.earnScore, 0)
                 players[index].score = players[index].score + totalEarnScore
@@ -453,7 +453,7 @@ class MatchHandler {
             case QUESTION_TYPES_ID.TF_CHOICE:
             case QUESTION_TYPES_ID.PIC_WORD:
                 return {
-                    isCorrect: question.correct_answer = content
+                    isCorrect: question.correct_answer == content
                 }
             case QUESTION_TYPES_ID.WORD_TABLE: 
                 var idx = question.correct_answers.findIndex((item) => item == content)
