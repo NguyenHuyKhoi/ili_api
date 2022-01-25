@@ -17,7 +17,7 @@ const httpServer = createServer(app)
 
 dotenv.config()
 
-const whitelist = ["http://localhost:3000", "https://ili-client.herokuapp.com"]
+const whitelist = ["https://localhost:3000", "https://ili-client.herokuapp.com"]
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || whitelist.indexOf(origin) !== -1) {
@@ -58,7 +58,7 @@ mongoose
 app.use(express.json())
 
 // Allow CORS
-app.use(cors());
+// app.use(cors());
 app.use('/api/auth', authRoute)
 app.use('/api/user', userRoute)
 app.use('/api/game', gameRoute)
