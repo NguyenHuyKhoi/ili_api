@@ -17,6 +17,20 @@ const httpServer = createServer(app)
 
 dotenv.config()
 
+const whitelist = ["http://localhost:3000", "https://ili-client.herokuapp.com"]
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error("Not allowed by CORS"))
+    }
+  },
+  credentials: true,
+}
+app.use(cors(corsOptions))
+
+
 // Socket 
 const io = new Server(httpServer, {
     cors: {
