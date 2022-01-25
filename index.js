@@ -51,6 +51,6 @@ app.use('/api/game', gameRoute)
 app.use('/api/collection', collectionRoute)
 app.use('/api/match', matchRoute)
 
-httpServer.listen( 8800, () => {
+httpServer.listen(process.env.PORT || 8800, () => {
     console.log('Backend server is running in port 8800')
 })
