@@ -22,10 +22,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.2",
     "nodemailer": "^6.7.2",
-    "nodemailer-sendgrid-transport": "^0.2.0",
     "nodemon": "^2.0.15",
     "path": "^0.12.7",
-    "socket.io": "^4.4.0",
-    "uWebSockets.js": "uNetworking/uWebSockets.js#v20.4.0"
+    "socket.io": "^4.4.0"
   }
 }
