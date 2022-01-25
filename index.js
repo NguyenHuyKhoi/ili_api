@@ -16,19 +16,25 @@ const app = express()
 const httpServer = createServer(app)
 
 dotenv.config()
-
-const whitelist = ["https://localhost:3000", "https://ili-client.herokuapp.com"]
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error("Not allowed by CORS"))
-    }
-  },
-  credentials: true,
-}
-app.use(cors(corsOptions))
+app.use(cors())
+// app.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+//   });
+// const whitelist = ["https://localhost:3000", "https://ili-client.herokuapp.com"]
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (!origin || whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error("Not allowed by CORS"))
+//     }
+//   },
+//   credentials: true,
+// }
+// app.use(cors(corsOptions))
 
 
 // Socket 
@@ -58,7 +64,6 @@ mongoose
 app.use(express.json())
 
 // Allow CORS
-// app.use(cors());
 app.use('/api/auth', authRoute)
 app.use('/api/user', userRoute)
 app.use('/api/game', gameRoute)
