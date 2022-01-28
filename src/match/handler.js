@@ -114,7 +114,6 @@ class MatchHandler {
                     })
                 }
                 else if (answerPlayer.isCorrect) {
-                    players[index].score = players[index].score + answerPlayer.earnScore
                     if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.PLAYER_ANSWER_CORRECT, {
                         rid: player._id,
                         earnScore: answerPlayer.earnScore,
@@ -122,7 +121,6 @@ class MatchHandler {
                     })
                 }
                 else {
-                    players[index].score = players[index].score + answerPlayer.earnScore
                     if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.PLAYER_ANSWER_WRONG, {
                         rid: player._id,
                         earnScore: answerPlayer.earnScore,
@@ -131,11 +129,6 @@ class MatchHandler {
                 }  
                 break
             case QUESTION_TYPES_ID.WORD_TABLE:
-                let totalEarnScore = stage.answers.filter((item) => item._id == player._id && item.keywordIndex != undefined)
-                .reduce((res, answer) => res += answer.earnScore, 0)
-                players[index].score = players[index].score + totalEarnScore
-
-                console.log("Emit question end on player: ", totalEarnScore );
                 if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_QUESTION_END, {
                     rid: player._id,
                     match,
@@ -152,17 +145,28 @@ class MatchHandler {
         let match = this.match
         const {progress, players, host} = match
         let current = progress[progress.length - 1 ]
-        current.answers.find((answerPlayer, index) => {
+        current.answers.forEach((answerPlayer, index) => {
+            if (current.answers[index].isCalculated == true) {
+                return
+            }
             let earnScore = this.calculateScore(current.question, answerPlayer)
             current.answers[index].earnScore = earnScore
+            let idx = players.findIndex((player) => player._id == answerPlayer._id)
+            if (idx != -1) {
+                players[idx].score += answerPlayer.earnScore
+            }
+            current.answers[index].isCalculated = true
         })
 
-        players.forEach((player, index) => {
-            this.notifQuestionResultPlayer(player, index, time)
-        
+        players.sort((a,b) => {
+            if (a.score > b.score) return -1
+            if (a.score == b.score) {
+                if (a.username < b.username) {
+                    return -1
+                }
+            }
+            return 1
         })
-
-        players.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
 
         this.onSync()
     }
@@ -174,6 +178,10 @@ class MatchHandler {
         // Must config on setting match
         let time = match.showQuestionEndTime != undefined ? match.showQuestionEndTime : 10
         this.calculateEarnScores(time)
+
+        players.forEach((player, index) => {
+            this.notifQuestionResultPlayer(player, index, time)
+        })
 
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_QUESTION_END, {
             rid: host._id,
@@ -268,7 +276,15 @@ class MatchHandler {
     handleSummary =  () => {
         let match = this.match
         match.finishAt = new Date()
-        match.players.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
+        match.players.sort((a,b) => {
+            if (a.score > b.score) return -1
+            if (a.score == b.score) {
+                if (a.username < b.username) {
+                    return -1
+                }
+            }
+            return 1
+        })
         // Calculate 
         this.analysic()
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_SUMMARY, {

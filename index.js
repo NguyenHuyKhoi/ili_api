@@ -16,7 +16,6 @@ const app = express()
 const httpServer = createServer(app)
 
 dotenv.config()
-app.use(cors())
 // app.use(function(req, res, next) {
 //     res.header("Access-Control-Allow-Origin", "*");
 //     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -64,6 +63,7 @@ mongoose
 app.use(express.json())
 
 // Allow CORS
+app.use(cors())
 app.use('/api/auth', authRoute)
 app.use('/api/user', userRoute)
 app.use('/api/game', gameRoute)

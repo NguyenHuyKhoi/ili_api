@@ -40,7 +40,7 @@ const drawQuestionMultipleEnd = async (canvas, bg, data, genImg = false) => {
 	let h = canvas.height
 
 	var {round_index, time, question, userAnswers, isLoading, answer_counts} = data
-	let {title, answers, correct_answer} = question
+	let {title, answers, correct_answer, imageImg} = question
 	time = time + 's'
 
 	ctx.clearRect(0, 0, w, h)
@@ -68,11 +68,13 @@ const drawQuestionMultipleEnd = async (canvas, bg, data, genImg = false) => {
     ctx.font = `${cv(45)}px SetoFont-SP`;
     ctx.fillText(title , cv(960), cv(120));
 
+	if (imageImg != null && imageImg != undefined) {
+        ctx.drawImage(imageImg, 790, 260, 350, 190)
+    }
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     ctx.font = `${cv(42)}px SetoFont-SP`;
     answers.forEach((answer, index) => {
-        console.log("draw answer: ", correct_answer, index);
         ctx.fillStyle = correct_answer == index ? '#ECAAAA' : '#707070'
         ctx.fillText(answer, cv(565), cv(540 + 100 * index));
     })

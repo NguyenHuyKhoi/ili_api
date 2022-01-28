@@ -66,7 +66,7 @@ const drawCharTable = async (ctx, table,correct_answers, open_word_states) => {
 }
 
 const drawQuestionWordTableEnd =  async (canvas, bg, data, genImg = false) => {
-	console.log("Draw question word table end");
+	//console.log("Draw question word table end");
 	let ctx = canvas.getContext('2d')
     let w = canvas.width 
     let h = canvas.height
@@ -99,7 +99,7 @@ const drawQuestionWordTableEnd =  async (canvas, bg, data, genImg = false) => {
     ctx.fillText(title , cv(960), cv(140));
 
     await drawCharTable(ctx, char_table, correct_answers,open_word_states )
-    console.log("Top players:", players);
+   // console.log("Top players:", players);
     await drawTopPlayers(ctx, players)
     if (genImg) {
         const name = `/generated/question_word_table_screen_end_${time}.jpeg`

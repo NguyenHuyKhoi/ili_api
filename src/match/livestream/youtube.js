@@ -1,4 +1,6 @@
 const { default: axios } = require("axios")
+const { QUESTION_TYPES_ID } = require("../model")
+const { PlatformUtils } = require("./util")
 
 // Get a list answer
 const API_KEY = 'AIzaSyCpmqo8ByzMuPbZ8g97mSCRcs4Wi-bJTe0'
@@ -10,14 +12,16 @@ class YoutubeHandler {
         this.startAt = null
 
         this.STREAM_LATENCY = 5
+        this.questionTypeId = null 
     }
 
     // answerTime: publishAt - LATENCY
     // content: 
     // player: id, name, profile, avatar
-    retrieveAnswers = async (startAt) => {
+    retrieveAnswers = async (startAt, questionTypeId) => {
         var url = `https://youtube.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${this.liveChatId}&part=id&part=snippet&part=authorDetails&key=${API_KEY}`
         this.startAt = startAt
+        this.questionTypeId = questionTypeId
         console.log("URL chat:", url)
         if (this.nextPageToken != null) {
             url += `&pageToken=${this.nextPageToken}`
@@ -39,6 +43,56 @@ class YoutubeHandler {
         }
     }
 
+    extractAnswerContent = (content) => {
+        var arr = content.split(" ").filter((item) => !(item == " " || item == ""))
+        if (arr.length == 0) {
+          return null
+        }
+        console.log("Arr from comment:", arr);
+        var answerContent 
+        switch (this.questionTypeId) {
+          case QUESTION_TYPES_ID.MULTIPLE_CHOICE:
+            answerContent = ["1","2","3","4"].indexOf(arr[0])
+            if (answerContent == -1) {
+               answerContent = ["A","B","C","D"].indexOf(arr[0].toUpperCase())
+            }
+            if (answerContent == -1) {
+              return null 
+            }
+            return {
+              answerContent,
+              aliasName: arr.length >= 2 ? arr[1] : ""
+            }
+          case QUESTION_TYPES_ID.TF_CHOICE:
+            answerContent = ["1","2"].indexOf(arr[0])
+            if (answerContent == -1) {
+               answerContent = ["A","B"].indexOf(arr[0].toUpperCase())
+            }
+            if (answerContent == -1) {
+               answerContent = ["T","F"].indexOf(arr[0].toUpperCase())
+            }
+            if (answerContent == -1) {
+              return null 
+            }
+            return {
+              answerContent,
+              aliasName: arr.length >= 2 ? arr[1] : ""
+            }
+          case QUESTION_TYPES_ID.PIC_WORD:
+            return {
+              answerContent: arr[0].toUpperCase(),
+              aliasName: arr.length >= 2 ? arr[1] : ""
+            }
+          case QUESTION_TYPES_ID.WORD_TABLE:
+            return {
+              answerContent: arr[0].toUpperCase(),
+              aliasName: arr.length >= 2 ? arr[1] : ""
+            }
+          default: 
+            return null
+        }
+    }
+
     extractAnswer = (msg) => {
         try {
             // Check answer is on time 
@@ -46,33 +100,19 @@ class YoutubeHandler {
             var answerTime = Math.abs(answerPublishTime - this.startAt) / 1000 - this.STREAM_LATENCY
             answerTime = Math.round(answerTime * 10) / 10
             if (answerTime < 0) {
-                //console.log("Answer when time answers is not occurs, emited", content, answerTime)
+                console.log("Answer when time answers is not occurs, emited", content, answerTime)
                 return
             }
 
-            // Check answer is correct format
-            // Correct format is : 'x' or 'x @alias_name'
             let content = msg.snippet.textMessageDetails.messageText
-            // //console.log("\n \n Extract answer with content: ", content)
-            var answerIndex = ['1','2','3','4'].indexOf(content)
-            var aliasName = ''
-            if (answerIndex == -1) {
-                // Not in format 'x'
-                // Check format 'x @alias_name'
-                let format = /[1-4]{1} @.*/gm
-                if (format.test(content)) {
-                    answerIndex = content[0] - 1
-                    aliasName = content.substring(3)
-                //  //console.log("Answer in format x alias :", answerIndex, aliasName)
-                }
-                else {
-                //  //console.log("Answer not any in format, emited ")
-                    return
-                }
+            console.log("\n \n Extract answer with content: ", content)
+
+            var temp = PlatformUtils.analysisCommentContent(content, this.questionTypeId)
+            console.log("Extract answer Content:", temp);
+            if (temp == null) {
+                return
             }
-            else {
-                ////console.log("Answer in format x:", answerIndex)
-            }
+            var {answerContent, aliasName} = temp
 
             // 
             var playerName = aliasName == '' ? msg.authorDetails.displayName : aliasName
@@ -92,14 +132,14 @@ class YoutubeHandler {
                 if (answerPlayer.player._id == playerId) {
                     // Update to latest answer
                     this.legalAnswerPlayers[index].answerTime = answerTime
-                    this.legalAnswerPlayers[index].answerIndex = answerIndex
+                    this.legalAnswerPlayers[index].answerContent = answerContent
                     isExist = true
-                    console.log("Update to latest answer :", playerName, answerIndex)
+                    console.log("Update to latest answer :", playerName, answerContent)
                 }
             })
             if (!isExist) {
-                console.log("Add to new answer :", playerName, answerIndex)
-                this.legalAnswerPlayers.push({player, answerIndex,answerTime})
+                console.log("Add to new answer :", playerName, answerContent)
+                this.legalAnswerPlayers.push({player, answerContent,answerTime})
             }
         }
         catch (err){

@@ -4,7 +4,6 @@ const QuestionSchema = new mongoose.Schema({
     index: {type: Number, required: true},
     typeId: {type: Number, required: true},
     typeName: {type: String, required: true},
-
     title: {type: String, required: true},
     images: {type: [String]},
     image: {type: String},

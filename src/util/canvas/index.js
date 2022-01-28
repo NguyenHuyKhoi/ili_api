@@ -108,6 +108,7 @@ class CanvasHandler {
     }
     
     getRemoteImages = (url) => {
+        if (url == null) return null
         let obj = this.remoteImageObjs.find((item) => item.url == url)
         if (!obj) {
             return null
@@ -117,7 +118,6 @@ class CanvasHandler {
 
     // All urls are difference each others
     loadRemoteImages = async (urls) => {
-        console.log("Require to load remote image urls: ", urls)
         await Promise.all(urls.map(async (url) => {
             // Check if load remote image before
             var obj = this.remoteImageObjs.find((item) => item.url == url)
@@ -159,7 +159,6 @@ class CanvasHandler {
         
         try {
             var bg = this.bgs[screen.id]
-            console.log("Background not null:", (bg != null));
             var drawFunc = screen.drawFunc
             if (drawFunc != undefined) {
                 newCanvas = drawFunc(this.canvas, bg, data, false) 

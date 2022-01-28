@@ -147,6 +147,19 @@ class LiveStreamHandler {
 
     }
 
+    loadQuestionImages = () => {
+        let question = this.question
+        if (question == null) return;
+        var {image, images} = question
+        if (image != null && image != undefined) {
+            this.canvasHandler.loadRemoteImages([image])
+        }
+        if (images != null && images != undefined) {
+            var arr = images.filter((item) => item != null && item != undefined) ;
+            this.canvasHandler.loadRemoteImages(arr)
+        }
+    }
+
     emit = (eventCode, data) => {
         const {match, time} = data
         switch (eventCode) {
@@ -196,14 +209,13 @@ class LiveStreamHandler {
                 this.screen = SCREENS.END
                 this.updateData()
                 break
-            case MATCH_EVENTS.ON_QUESTION:
-          
-             
+            case MATCH_EVENTS.ON_QUESTION:       
                 this.isRetrievedAnswers = false
                 this.redrawCanvas = true
                 this.match = match
                 this.updateData()
                 this.selectQuestionScreen()
+                this.loadQuestionImages()
                 break
             case MATCH_EVENTS.ON_KICK_PLAYER:
   
@@ -289,7 +301,47 @@ class LiveStreamHandler {
             else {
                 this.retrieveAnswers()
             }
-        }, 500)
+        }, 1000)
+    }
+    canRetrieveAnswers = () => {
+        let match = this.match
+        let question = this.question
+        let platformHandler = this.platformHander
+        let duration = 0
+        switch (this.screen.id) {
+            case SCREEN_IDS.QUESTION_MULTIPLE_END_ID:
+            case SCREEN_IDS.QUESTION_TF_END_ID:
+            case SCREEN_IDS.QUESTION_PICWORD_END_ID:
+                duration = match.showQuestionEndTime - this.time
+                if  (duration >= platformHandler.STREAM_LATENCY && duration <=  platformHandler.STREAM_LATENCY + 2) {
+                    return true
+                }
+                else {
+                    return false
+                }
+            case SCREEN_IDS.QUESTION_WORD_TABLE_ID:
+                duration = question.time_limit - this.time
+                // To reducer requests to servers
+                // Only retrive when duration is odd event
+
+                if  (duration >= platformHandler.STREAM_LATENCY && duration % 2 == 0) {
+                    return true
+                }
+                else {
+                    return false
+                }
+            case SCREEN_IDS.QUESTION_WORD_TABLE_END_ID:
+                duration = match.showQuestionEndTime - this.time 
+                if (duration <= this.platformHander.STREAM_LATENCY && duration % 2 == 0) {
+                    return true
+                }
+                else {
+                    return false
+                }
+            default:
+                return false
+        }
+       
     }
 
     retrieveAnswers =  async () => {
@@ -297,21 +349,16 @@ class LiveStreamHandler {
         let {match, platformHander} = this
         let stage = match.progress[match.progress.length -1]
 
+        let {typeId} = stage.question
 
-        this.isRetrievedAnswers = true 
-        if (this.screen.id == SCREENS.QUESTION_END){
-            let duration = match.showQuestionEndTime - this.time
-            if  (duration >= platformHander.STREAM_LATENCY && duration <=  platformHander.STREAM_LATENCY + 2) {
-                this.isRetrievedAnswers = true 
-            }
-          
-        }
+        this.isRetrievedAnswers = this.canRetrieveAnswers()
         if (!this.isRetrievedAnswers )  return
 
-        var answers = await platformHander.retrieveAnswers(stage.startAt)
+        var answers = await platformHander.retrieveAnswers(stage.startAt, typeId)
         
+        //console.log("Answers extracted:", answers);
         answers.forEach((item, index) => {
-            this.matchHandler.onAnswer(item.player, item.answerIndex, item.answerTime)
+            this.matchHandler.onAnswer(item.player, item.answerContent, item.answerTime)
             })
         this.matchHandler.calculateEarnScores()
 
@@ -320,6 +367,13 @@ class LiveStreamHandler {
         await this.loadRemoteImages(urls)
         //setTimeout(() => this.redrawCanvas = true, 1000)
         this.redrawCanvas = true
+
+
+        // Turn off retrieve answers flag if question.typeId == word_table 
+        if (this.screen.id == SCREEN_IDS.QUESTION_WORD_TABLE_ID 
+        || this.screen.id == SCREEN_IDS.QUESTION_WORD_TABLE_END_ID) {
+            this.isRetrievedAnswers = false
+        } 
     }
 
     loadRemoteImages = async (urls) => {
@@ -418,7 +472,8 @@ class LiveStreamHandler {
     onQuestionMultiple = () => {
         const match = this.match
         const {game, questionIndex} = match
-        const question = this.question
+        var question = this.question
+        question.imageImg = this.canvasHandler.getRemoteImages(question.image)
         const data = {
             question,
             round_index: `${questionIndex + 1} / ${game.questions.length}`,
@@ -432,9 +487,11 @@ class LiveStreamHandler {
         const {game, questionIndex, progress} = match
         const stage = progress[questionIndex]
 
-        const {question, answers} = stage
+        var {question, answers} = stage
 
         const correctAnswers = answers.filter((item) => item.isCorrect == true)
+
+        question.imageImg = this.canvasHandler.getRemoteImages(question.image)
         const data = {
             question,
             answer_counts: this.answer_counts,
@@ -446,8 +503,7 @@ class LiveStreamHandler {
         if (this.redrawCanvas) {
             data.userAnswers.forEach((item, index) => {
                 let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
-                data.userAnswers[index].avatarImg = this.canvasHandler.sample_avatar
-                //avatarImg
+                data.userAnswers[index].avatarImg = avatarImg
             })
         }
         this.onStreamFrame(data)
@@ -457,6 +513,8 @@ class LiveStreamHandler {
         let match = this.match
         const {game, questionIndex} = match
         const question = this.question
+
+        question.imageImg = this.canvasHandler.getRemoteImages(question.image)
         const data = {
             question,
             round_index: `${questionIndex + 1} / ${game.questions.length}`,
@@ -473,6 +531,9 @@ class LiveStreamHandler {
         const {question, answers} = stage
 
         const correctAnswers = answers.filter((item) => item.isCorrect == true)
+        
+        question.imageImg = this.canvasHandler.getRemoteImages(question.image)
+
         const data = {
             question,
             answer_counts: this.answer_counts,
@@ -484,8 +545,7 @@ class LiveStreamHandler {
         if (this.redrawCanvas) {
             data.userAnswers.forEach((item, index) => {
                 let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
-                data.userAnswers[index].avatarImg = this.canvasHandler.sample_avatar
-                //avatarImg
+                data.userAnswers[index].avatarImg = avatarImg
             })
         }
         this.onStreamFrame(data)
@@ -495,6 +555,10 @@ class LiveStreamHandler {
         let match = this.match
         const {game, questionIndex} = match
         const question = this.question
+
+        if (question.images != null && question.images != undefined) {
+            question.imageImgs = question.images.map((image) => this.canvasHandler.getRemoteImages(image))
+        }
         const data = {
             question,
             round_index: `${questionIndex + 1} / ${game.questions.length}`,
@@ -511,6 +575,9 @@ class LiveStreamHandler {
         const {question, answers} = stage
 
         const correctAnswers = answers.filter((item) => item.isCorrect == true)
+        if (question.images != null && question.images != undefined) {
+            question.imageImgs = question.images.map((image) => this.canvasHandler.getRemoteImages(image))
+        }
         const data = {
             question,
             isLoading: !this.isRetrievedAnswers,
@@ -521,8 +588,7 @@ class LiveStreamHandler {
         if (this.redrawCanvas) {
             data.userAnswers.forEach((item, index) => {
                 let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
-                data.userAnswers[index].avatarImg = this.canvasHandler.sample_avatar
-                //avatarImg
+                data.userAnswers[index].avatarImg = avatarImg
             })
         }
         this.onStreamFrame(data)
@@ -545,8 +611,7 @@ class LiveStreamHandler {
         if (this.redrawCanvas) {
             data.userAnswers.forEach((item, index) => {
                 let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
-                data.userAnswers[index].avatarImg = this.canvasHandler.sample_avatar
-                //avatarImg
+                data.userAnswers[index].avatarImg = avatarImg
             })
         }
         this.onStreamFrame(data)
@@ -576,7 +641,12 @@ class LiveStreamHandler {
             }
         })
         players.sort((a,b) => {
-            if (a.score >= b.score) return -1
+            if (a.score > b.score) return -1
+            if (a.score == b.score) {
+                if (a.username < b.username) {
+                    return -1
+                }
+            }
             return 1
         })
         const data = {
@@ -590,8 +660,7 @@ class LiveStreamHandler {
         if (this.redrawCanvas) {
             data.players.forEach((item, index) => {
                 let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
-                data.players[index].avatarImg = this.canvasHandler.sample_avatar
-                //avatarImg
+                data.players[index].avatarImg = avatarImg
             })
         }
         this.onStreamFrame(data)
@@ -601,7 +670,12 @@ class LiveStreamHandler {
         const match = this.match
         const {players} = match
         players.sort((a,b) => {
-            if (a.score >= b.score) return -1
+            if (a.score > b.score) return -1
+            if (a.score == b.score) {
+                if (a.username < b.username) {
+                    return -1
+                }
+            }
             return 1
         })
         const data = {
@@ -611,8 +685,7 @@ class LiveStreamHandler {
         if (this.redrawCanvas) {
             data.players.forEach((item, index) => {
                 let avatarImg = this.canvasHandler.getRemoteImages(item.avatar)
-                data.players[index].avatarImg = this.canvasHandler.sample_avatar
-                //avatarImg
+                data.players[index].avatarImg = avatarImg
             })
         }
         this.onStreamFrame(data)

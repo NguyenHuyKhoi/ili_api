@@ -40,7 +40,7 @@ const drawQuestionTFEnd = async (canvas, bg, data, genImg = false) => {
 	let h = canvas.height
 
 	let {round_index, time, question, userAnswers, isLoading} = data
-	let {title, answers, correct_answer} = question
+	let {title, answers, correct_answer, imageImg} = question
 	time = time + 's'
 	ctx.clearRect(0, 0, w, h)
 
@@ -67,6 +67,9 @@ const drawQuestionTFEnd = async (canvas, bg, data, genImg = false) => {
     ctx.font = `${cv(45)}px SetoFont-SP`;
     ctx.fillText(title , cv(960), cv(120));
 
+	if (imageImg != null && imageImg != undefined) {
+        ctx.drawImage(imageImg, 740, 270, 450, 250)
+    }
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     ctx.font = `${cv(56)}px SetoFont-SP`;

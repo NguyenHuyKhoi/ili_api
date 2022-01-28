@@ -6,7 +6,7 @@ const drawQuestionMultiple =  async (canvas, bg, data, genImg = false) => {
     let h = canvas.height
 
     var {round_index, time, question} = data
-    let {title, answers} = question
+    let {title, answers, imageImg} = question
     time = time + 's'
 
     ctx.clearRect(0, 0, w, h)
@@ -29,16 +29,17 @@ const drawQuestionMultiple =  async (canvas, bg, data, genImg = false) => {
     ctx.font = `${cv(50)}px SetoFont-SP`;
     ctx.fillText(time , cv(1826), cv(77));
 
-
     ctx.fillStyle = '#707070';
     ctx.font = `${cv(45)}px SetoFont-SP`;
     ctx.fillText(title , cv(960), cv(120));
 
+    if (imageImg != null && imageImg != undefined) {
+        ctx.drawImage(imageImg, 790, 260, 350, 190)
+    }
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     ctx.font = `${cv(42)}px SetoFont-SP`;
     answers.forEach((answer, index) => {
-        console.log("Draw answer:", answer);
         ctx.fillStyle = '#707070'
         ctx.fillText(answer, cv(565), cv(540 + 100 * index));
     })

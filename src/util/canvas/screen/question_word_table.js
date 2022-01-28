@@ -52,7 +52,6 @@ const drawUserAnswers = async (ctx, answers, correct_answers, open_word_states) 
                 var hideStr = ''
                 Array.from(Array(keyword.length)).forEach(() => hideStr += '?')
                 ctx.fillText(hideStr, cv(ax + 460 - 20), cv(ay + 35));
-                console.log("Index is not solved", i);
             }
 		})
 

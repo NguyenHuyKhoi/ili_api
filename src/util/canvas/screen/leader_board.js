@@ -40,13 +40,13 @@ const drawPlayers = async (ctx, players) => {
             ctx.textAlign = 'left'
             ctx.textBaseline = 'middle'
             ctx.fillStyle = '#5F5F5F'
-            ctx.font = `${cv(40)}px SetoFont-SP`;
+            ctx.font = `${cv(36)}px SetoFont-SP`;
             ctx.fillText(username, cv(ax + 135), cv(ay + h / 2))
     
             ctx.textAlign = 'right'
             ctx.textBaseline = 'middle'
             ctx.fillStyle = '#5F5F5F'
-            ctx.font = `${cv(50)}px SetoFont-SP`;
+            ctx.font = `${cv(45)}px SetoFont-SP`;
             ctx.fillText(score, cv(ax + w - 15), cv(ay + h / 2))
         }
         

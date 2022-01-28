@@ -39,7 +39,7 @@ const drawQuestionPicWordEnd = async (canvas, bg, data, genImg = false) => {
 	let h = canvas.height
 
 	let {round_index, time, question, userAnswers, isLoading} = data
-	let {title, correct_answer} = question
+	let {title, correct_answer, imageImgs} = question
 	time = time + 's'
 	ctx.clearRect(0, 0, w, h)
 
@@ -67,7 +67,16 @@ const drawQuestionPicWordEnd = async (canvas, bg, data, genImg = false) => {
     ctx.fillStyle = '#707070';
     ctx.font = `${cv(45)}px SetoFont-SP`;
     ctx.fillText(title , cv(960), cv(120));
-
+    if (imageImgs != null && imageImgs != undefined) {
+        var px = [545, 1000, 545, 1000]
+        var py = [245, 245, 522, 522]
+        imageImgs.forEach((image, index) => {
+            if (image != null) {
+                ctx.drawImage(image, px[index], py[index], 385, 210)
+            }
+        })
+    }
+	
     var chars = correct_answer.split('')
     var len = chars.length
 

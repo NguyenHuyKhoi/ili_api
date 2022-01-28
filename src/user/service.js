@@ -28,6 +28,25 @@ const edit = async (data) => {
     }
 }
 
+const getAll = async (data) => {
+    try {
+        const {isAdmin} = data
+
+        if (isAdmin) {
+            return []
+        }
+
+        const users = await User.find({})
+        return users
+
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
+
 const deletee = async (data) => {
     try {
         const {userId} = data
@@ -88,5 +107,6 @@ module.exports = {
     edit,
     deletee,
     detail,
-    getBriefUser
+    getBriefUser,
+    getAll
 }

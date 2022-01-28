@@ -30,7 +30,8 @@ const AnswerPlayerSchema = new mongoose.Schema({
     keywordIndex: {type: Number},
     answerTime: {type: Number, require: true},
     isCorrect: {type: Boolean, require: true},
-    earnScore: {type: Number, required: true}
+    earnScore: {type: Number, required: true},
+    isCalculated: {type: Boolean}
 })
 
 const ProgressSchema = new mongoose.Schema({
@@ -48,7 +49,7 @@ const LivestreamSchema = new mongoose.Schema({
     livestreamId: {type: String},
     liveChatId: {type: String},
     accessToken: {type: String},
-    platform: {type: String},
+    platform: { type: String},
     type: {type: String}, // With platform is FB -> type = profile/group/page
     streamId: {type: String},
     streamUrl: {type: String},
