@@ -71,6 +71,26 @@ const edit= async (data) => {
     }
 }
 
+const getAll = async (data) => {
+    try {
+        const {isAdmin} = data
+        if (isAdmin) {
+            return []
+        }
+        const list = await Collection.find({})
+        await Promise.all(list.map(async (item) => {
+            item._doc.owner = await getBriefUser(item.userId)
+            item._doc.games = await getDetailGames(item._id)
+        }))
+        return list.reverse()
+    }
+    catch (err) {
+        console.log("err:", err)
+        return {
+            error: err.message
+        }
+    }
+}
 const getLibrary = async (data) => {
     try {
         const {userId} = data
@@ -117,6 +137,12 @@ const deletee = async (data) => {
             error: err.message
         }
     }
+}
+const getAllController = async (req, res, next) => {
+    const result = await getAll({
+        idAdmin: req.user.idAdmin
+    })
+    return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
 const getDetailGames = async (collectionId) => {
@@ -166,5 +192,6 @@ module.exports = {
     detail,
     deletee,
     search,
-    getLibrary
+    getLibrary,
+    getAll
 }

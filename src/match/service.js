@@ -3,6 +3,11 @@ const LiveStreamHandler = require('./livestream')
 const {Match} = require('./model')
 const fake_match = require('./livestream/fake_match.json')
 const { SCREEN_IDS } = require('../util/canvas')
+
+const MODE_MATCH = {
+    CLASSIC: 'classic',
+    LIVESTREAM: 'livestream'
+}
 const getLibrary = async (data) => {
     try {   
         const {userId, role, mode} = data 
@@ -146,6 +151,5 @@ module.exports = {
     completeLivestream,
     startLivestream,
     getDetail,
-
     test
 }

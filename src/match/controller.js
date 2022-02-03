@@ -53,6 +53,5 @@ module.exports = {
     completeLivestreamController,
     getDetailController,
     startLivestreamController,
-
     testController
 }

@@ -1,10 +1,16 @@
-const {create, detail, edit, deletee, getLibrary, search } = require("./service")
+const {create, detail, edit, deletee, getLibrary, search, getAll } = require("./service")
 
 
 const createController = async (req, res, next) => {
     const result = await create({
         userId: req.user._id,
         item: req.body
+    })
+    return res.status(result.error != undefined ? 500 : 200).json(result)
+}
+const getAllController = async (req, res, next) => {
+    const result = await getAll({
+        idAdmin: req.user.idAdmin
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
@@ -54,5 +60,6 @@ module.exports = {
     detailController,
     deleteController,
     searchController,
-    getLibraryController
+    getLibraryController,
+    getAllController
 }

@@ -21,7 +21,27 @@ const create = async (data) => {
         }
     }
 }
+const getAll = async (data) => {
+    try {
+        const {isAdmin} = data
 
+        if (isAdmin) {
+            return []
+        }
+
+        const games = await Game.find({})
+        await Promise.all(games.map(async(item) => {
+            item._doc.owner = await getBriefUser(item.userId)
+        }))
+        return games
+
+    }
+    catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}
 const clone = async (data) => {
     try {
         const {gameId} = data
@@ -247,5 +267,6 @@ module.exports = {
     getLibrary,
     search,
     clone,
-    getDetail
+    getDetail,
+    getAll
 }

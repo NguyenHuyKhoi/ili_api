@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { QuestionSchema } = require('../game/model')
+const { QuestionSchema } = require('../question/model')
 const QUESTION_TYPES_ID = {
     MULTIPLE_CHOICE: 0,
     TF_CHOICE: 1,
