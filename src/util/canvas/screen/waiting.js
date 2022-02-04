@@ -28,7 +28,7 @@ const drawWaiting = async (canvas, bg, data, genImg = false) => {
 
     ctx.fillStyle = '#707070';
     ctx.font = `${cv(80)}px SetoFont-SP`;
-    ctx.fillText(title , cv(1000), cv(180));
+    ctx.fillText(title , cv(1000), cv(350));
     
     ctx.fillStyle = '#ECAAAA';
     ctx.font = `${cv(160)}px SetoFont-SP`;

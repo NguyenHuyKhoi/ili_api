@@ -142,7 +142,7 @@ class CanvasHandler {
             this.sample_avatar = await loadImage(__dirname + '/layer/avatar.jpg')
             registerFont('./src/util/canvas/setofont.woff', { family: 'SetoFont-SP', weight: '100', style: 'Not-Rotated' })
             await Promise.all(Object.values(SCREENS).map(async (screen) => {
-                var path =`${__dirname}/layer/${EXTENSION_TEMPLATE}/${screen.templateName}.${EXTENSION_TEMPLATE}` ;
+                var path =`${__dirname}/layer/${EXTENSION_TEMPLATE}/high/${screen.templateName}.${EXTENSION_TEMPLATE}` ;
                 this.bgs[screen.id] = await loadImage(path) 
             }))
         }

@@ -39,7 +39,7 @@ const drawQuestionTFEnd = async (canvas, bg, data, genImg = false) => {
 	let w = canvas.width 
 	let h = canvas.height
 
-	let {round_index, time, question, userAnswers, isLoading} = data
+	let {round_index, time, question, userAnswers, isLoading, answer_counts} = data
 	let {title, answers, correct_answer, imageImg} = question
 	time = time + 's'
 	ctx.clearRect(0, 0, w, h)
@@ -76,6 +76,13 @@ const drawQuestionTFEnd = async (canvas, bg, data, genImg = false) => {
     answers.forEach((answer, index) => {
         ctx.fillStyle =  correct_answer == index ? '#ECAAAA' : '#707070'
         ctx.fillText(answer, cv(610), cv(620 + 170 * index));
+    })
+
+	ctx.font = `${cv(42)}px SetoFont-SP`;
+    answer_counts.forEach((item, index) => {
+		var label = item.count + ' players'
+        ctx.fillStyle = correct_answer == index ? '#ECAAAA' : '#707070'
+        ctx.fillText(label , cv(1240), cv(620 + 170 * index));
     })
 
 
