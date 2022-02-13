@@ -28,6 +28,38 @@ const edit = async (data) => {
     }
 }
 
+const ban = async (data) => {
+    try {
+        const {userId, isBanned, isAdmin} = data
+        console.log("Inputs :", userId, isBanned, isAdmin)
+        if (userId == null || isBanned == null || isAdmin == null) {
+            throw new Error('Missing field')
+        }
+        if (!isAdmin) {
+            throw new Error('Only admin can ban other users.')
+        }
+        const user = await User.findOne({_id: userId})
+        if (!user) {
+            throw new Error('user not exists')
+        }
+
+        // handle uploaded files...
+        await User.updateOne(
+            { _id: userId },
+            { $set: { isBanned }},
+            { new: true}
+        )
+        return true
+    }
+    catch (err) {
+        console.log("Ban user error:", err)
+        return {
+            error: err.message
+        }
+    }
+}
+
+
 const getAll = async (data) => {
     try {
         const {isAdmin} = data
@@ -108,5 +140,6 @@ module.exports = {
     deletee,
     detail,
     getBriefUser,
-    getAll
+    getAll,
+    ban
 }

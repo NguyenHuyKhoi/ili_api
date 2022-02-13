@@ -14,6 +14,9 @@ const login = async (data) => {
         if (!user) {
             throw new Error('Email not found!')
         }
+        if (user.isBanned == true) {
+            throw new Error('User is banned')
+        }
 
         const securePassword = decrypt(user.password)
         if (password != securePassword) {

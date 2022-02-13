@@ -17,6 +17,7 @@ const create = async (data) => {
         return 'Create successfully'
     }
     catch (err) {
+        console.log("Err create collection:", err);
         return {
             error: err.message
         }
