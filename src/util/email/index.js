@@ -33,7 +33,7 @@ const sendMail = async (email, subject, payload, template) => {
         const compiledTemplate = handlebars.compile(source)
         const options = () => {
             return {
-                from: config.auth.user,
+                from: 'huykhoiqc@gmail.com',
                 to: email,
                 subject: subject,
                 html: compiledTemplate(payload)
@@ -43,10 +43,10 @@ const sendMail = async (email, subject, payload, template) => {
         // Send email:
         transporter.sendMail(options(), (err, infor) => {
             if (err) {
-               // console.log("Send email error:", err)
+                console.log("Send email error:", err)
             }
             else {
-               // console.log("Send email infor :", infor)
+                console.log("Send email infor :", infor)
             }
         })
 

@@ -68,7 +68,9 @@ const getAll = async (data) => {
             return []
         }
 
-        const users = await User.find({})
+        var users = await User.find({})
+        console.log("Users: ", users)
+        users = users.filter((item) => item.isAdmin == false)
         return users
 
     }

@@ -1,8 +1,20 @@
 const { encrypt, decrypt, generateToken } = require("../util/secure")
-
+const bcrypt = require('bcrypt')
 const User = require('../user/model')
 const Token = require('./model')
 const { sendRequestResetPasswordEmail, sendCompleteResetPasswordEmail } = require("../util/email")
+
+const genSecurePassword = async (password) => {
+    const salt = await bcrypt.genSalt(10);
+    const securePassword = await bcrypt.hash(password, salt);
+    return securePassword
+}
+
+const checkSecurePassword = async (pass, securePass) => {
+    const checkPassword = await bcrypt.compare(pass, securePass);
+    return checkPassword
+}
+
 const login = async (data) => {
     try {
         let {email, password} = data
@@ -15,11 +27,11 @@ const login = async (data) => {
             throw new Error('Email not found!')
         }
         if (user.isBanned == true) {
-            throw new Error('User is banned')
+            throw new Error('User is banned')   
         }
+        const checkPassword = await checkSecurePassword(password, user.password);
 
-        const securePassword = decrypt(user.password)
-        if (password != securePassword) {
+        if (!checkPassword) {
             throw new Error('Password not correct')
         }
 
@@ -50,7 +62,6 @@ const logout = async (data) => {
         }
 
         await Token.findOneAndDelete({userId})
-
         return true
     }
     catch (err) {
@@ -60,7 +71,7 @@ const logout = async (data) => {
     }
 }
 
-const userGenerator = (email) => {
+const usernameGenerator = (email) => {
     var offset = email.indexOf('@')
     var username = offset == -1 ? 'User_' + Math.round(Math.random()*1000) : email.substring(0, offset)
     return username
@@ -72,11 +83,11 @@ const signup = async (data) => {
         if (email == undefined || password == undefined) {
             throw new Error('Missing fields')
         }
-        const securePassword = encrypt(password)
+        const securePassword = await genSecurePassword(password)
         const newUser = new User({
             email,
             password: securePassword,
-            username: userGenerator(email)
+            username: usernameGenerator(email)
         })
         const user = await newUser.save()
         return user
@@ -145,7 +156,7 @@ const resetPassword = async (data) => {
             throw new Error('Token is invalid')
         }
 
-        const securePassword = encrypt(password)
+        const securePassword = await genSecurePassword(password)
 
         await User.updateOne(
             { _id: userId },
@@ -182,13 +193,13 @@ const changePassword = async (data) => {
             throw new Error('User not exist')
         }
 
-        const savedPassword = decrypt(user.password)
+        const checkPassword = await checkSecurePassword(oldPassword, user.password);
 
-        if (savedPassword != oldPassword) {
+        if (!checkPassword) {
             throw new Error('Old password not correct')
         }
 
-        const secureNewPassword = encrypt(newPassword)
+        const secureNewPassword = await genSecurePassword(newPassword)
 
         await User.updateOne(
             { _id: userId },
