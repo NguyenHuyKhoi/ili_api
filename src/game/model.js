@@ -7,6 +7,7 @@ const GameSchema = new mongoose.Schema({
     description: {type: String},
     cover: {type: String},
     visibility: {type: String, required: true},
+    hiddenByAdmin: {type: Boolean, default: false},
     questions: {type: [QuestionSchema], required: true}
 }, {
     timestamps: true

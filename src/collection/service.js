@@ -2,7 +2,41 @@ const Collection = require('./model')
 const {Game} = require('../game/model')
 const { getBriefUser } = require('../user/service')
 
+const adminHide = async (data) => {
+    try {
+        const {isAdmin, isHidden, _id} = data
+        console.log("Hide game fields:", isAdmin, isHidden, _id)
+        if (isAdmin == undefined || isHidden == undefined || _id == undefined) {
+            throw new Error('Missing fields')
+        }
+        if (!isAdmin) {
+            throw new Error('Only admn can hide other\'s collections.')
+        }
 
+        const saved = await Collection.findOne({_id})
+        if (!saved) {
+            throw new Error('Not exist')
+        }
+
+        await Collection.updateOne(
+            { _id },
+            { $set: { 
+                visibility: isHidden ? 'private' : 'public', 
+                hiddenByAdmin: isHidden ? true : false 
+            }
+            },
+            { new: true}
+        )
+        return 'Set hide successfully'
+
+    }
+    catch (err) {
+        console.log("error on set hide collection:", err)
+        return {
+            error: err.message
+        }
+    }
+}
 const create = async (data) => {
     try {
         const {item, userId} = data
@@ -194,5 +228,6 @@ module.exports = {
     deletee,
     search,
     getLibrary,
-    getAll
+    getAll,
+    adminHide
 }

@@ -1,6 +1,6 @@
 const express = require('express')
 const authMiddleware = require('../auth/middleware')
-const {createController, deleteController, editController, detailController, getLibraryController, searchController, cloneController, getDetailController, getAllController } = require('./controller')
+const {createController, deleteController, editController, detailController, getLibraryController, searchController, cloneController, getDetailController, getAllController, adminHideController } = require('./controller')
 const router = express.Router()
 
 router.get('/search', searchController)
@@ -11,6 +11,7 @@ router.post('/create', createController)
 router.post('/edit/:id', editController)
 router.post('/clone/:id', cloneController)
 
+router.get('/hide', adminHideController)
 router.get('/library', getLibraryController)
 router.get('/all', getAllController)
 router.delete('/:id', deleteController)

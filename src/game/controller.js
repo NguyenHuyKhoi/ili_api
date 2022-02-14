@@ -1,5 +1,5 @@
 
-const {create, detail, edit, deletee, getLibrary, search, clone, getDetail, getAll } = require("./service")
+const {create, detail, edit, deletee, getLibrary, search, clone, getDetail, getAll, adminHide } = require("./service")
 
 
 const createController = async (req, res, next) => {
@@ -42,6 +42,7 @@ const deleteController = async (req, res, next) => {
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 
+
 const getLibraryController = async (req, res, next) => {
     console.log("call library controller")
     const result = await getLibrary({
@@ -53,6 +54,15 @@ const getLibraryController = async (req, res, next) => {
 const getDetailController = async (req, res, next) => {
     const result = await getDetail({
         _id: req.params.id
+    })
+    return res.status(result.error != undefined ? 500 : 200).json(result)
+}
+
+const adminHideController = async (req, res, next) => {
+    const result = await adminHide({
+        _id: req.query._id,
+        isHidden: req.query.isHidden,
+        isAdmin: req.user.isAdmin
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
@@ -81,5 +91,6 @@ module.exports = {
     getDetailController,
     cloneController,
     getAllController,
-    searchController
+    searchController,
+    adminHideController
 }

@@ -108,6 +108,42 @@ const edit = async (data) => {
     }
 }
 
+const adminHide = async (data) => {
+    try {
+        const {isAdmin, isHidden, _id} = data
+        console.log("Hide game fields:", isAdmin, isHidden, _id)
+        if (isAdmin == undefined || isHidden == undefined || _id == undefined) {
+            throw new Error('Missing fields')
+        }
+        if (!isAdmin) {
+            throw new Error('Only admn can hide other\'s games.')
+        }
+
+        const saved = await Game.findOne({_id})
+        if (!saved) {
+            throw new Error('Not exist')
+        }
+
+        await Game.updateOne(
+            { _id },
+            { $set: { 
+                visibility: isHidden ? 'private' : 'public', 
+                hiddenByAdmin: isHidden ? true : false 
+            }
+            },
+            { new: true}
+        )
+        return 'Set hide successfully'
+
+    }
+    catch (err) {
+        console.log("error on set hide game:", err)
+        return {
+            error: err.message
+        }
+    }
+}
+
 const detail = async (data) => {
     try {
         const {_id} = data
@@ -268,5 +304,6 @@ module.exports = {
     search,
     clone,
     getDetail,
-    getAll
+    getAll,
+    adminHide
 }

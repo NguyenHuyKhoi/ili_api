@@ -1,6 +1,13 @@
-const {create, detail, edit, deletee, getLibrary, search, getAll } = require("./service")
+const {create, detail, edit, deletee, getLibrary, search, getAll, adminHide } = require("./service")
 
-
+const adminHideController = async (req, res, next) => {
+    const result = await adminHide({
+        _id: req.query._id,
+        isHidden: req.query.isHidden,
+        isAdmin: req.user.isAdmin
+    })
+    return res.status(result.error != undefined ? 500 : 200).json(result)
+}
 const createController = async (req, res, next) => {
     const result = await create({
         userId: req.user._id,
@@ -61,5 +68,6 @@ module.exports = {
     deleteController,
     searchController,
     getLibraryController,
-    getAllController
+    getAllController,
+    adminHideController
 }

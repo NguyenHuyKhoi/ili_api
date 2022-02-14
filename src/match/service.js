@@ -38,9 +38,10 @@ const getLibrary = async (data) => {
             }
             else {
                   //Replace with condition : match.mode == 'livestream'
-                  matches = matches.filter((match) => match.livestream != null)
+                matches = matches.filter((match) => match.livestream != null)
             }
         }
+        matches = matches.filter((match) => (match.players.length > 0))
         return matches
     }
     catch (err) {

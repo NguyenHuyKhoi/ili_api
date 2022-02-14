@@ -6,6 +6,7 @@ const CollectionSchema = new mongoose.Schema({
     description: {type: String},
     cover: {type: String},
     visibility: {type: String, required: true},
+    hiddenByAdmin: {type: Boolean, default: false},
     games: {type: [String], required: true, ref: 'Game'}
 }, {
     timestamps: true
