@@ -56,7 +56,7 @@ const deleteController = async (req, res, next) => {
 
 const searchController = async (req, res, next) => {
     const result = await search({
-        userId: req.params.userId
+        userId: req.query.userId
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }

@@ -44,7 +44,11 @@ const drawQuestionMultiple =  async (canvas, bg, data, genImg = false) => {
         ctx.fillText(answer, cv(565), cv(540 + 100 * index));
     })
 
-
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `${cv(35)}px SetoFont-SP`;
+    ctx.fillStyle = '#707070';
+    ctx.fillText('Comment 1,2,3,4 or a,b,c,d to answer. ', cv(960), cv(1050) )
 
     if (genImg) {
         const name = `/generated/question_multiple_screen_${time}.jpeg`

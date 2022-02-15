@@ -48,6 +48,7 @@ const ProgressSchema = new mongoose.Schema({
 const LivestreamSchema = new mongoose.Schema({
     livestreamId: {type: String},
     liveChatId: {type: String},
+    livestreamUrl: {type: String},
     accessToken: {type: String},
     platform: { type: String},
     type: {type: String}, // With platform is FB -> type = profile/group/page

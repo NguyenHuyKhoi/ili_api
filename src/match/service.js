@@ -42,7 +42,7 @@ const getLibrary = async (data) => {
             }
         }
         matches = matches.filter((match) => (match.players.length > 0))
-        return matches
+        return matches.reverse()
     }
     catch (err) {
         return {
@@ -109,8 +109,8 @@ const completeLivestream = async (data) => {
 
 const startLivestream = async (data) => {
     try {   
-        const {pinCode} = data 
-        console.log("Start livestream with pincode:", pinCode)
+        const {pinCode, livestreamUrl} = data 
+        console.log("Start livestream with pincode:", pinCode, livestreamUrl)
         let matchHandler = await MatchCenter.findMatchHandler(pinCode)
         if (!matchHandler) {
             console.log("No match found")
@@ -118,6 +118,7 @@ const startLivestream = async (data) => {
         }
 
         console.log("Call matchhandle to start")
+        matchHandler.updateLivestreamUrl(livestreamUrl)
         matchHandler.onStart()
         return true
     }

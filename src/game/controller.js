@@ -73,7 +73,7 @@ const getAllController = async (req, res, next) => {
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
 const searchController = async (req, res, next) => {
-    console.log("Params req: ", req.query)
+    console.log("Params req: ", req.query.userId)
     const result = await search({
         userId: req.query.userId,
         keyword: req.query.keyword,

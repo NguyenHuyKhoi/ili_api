@@ -127,6 +127,12 @@ const drawQuestionWordTable =  async (canvas, bg, data, genImg = false) => {
     await drawCharTable(ctx, char_table, correct_answers, open_word_states )
     console.log("Usr answers:", userAnswers);
     await drawUserAnswers(ctx, userAnswers, correct_answers, open_word_states)
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `${cv(35)}px SetoFont-SP`;
+    ctx.fillStyle = '#707070';
+    ctx.fillText('Only first person comment each keyword is scored.', cv(960), cv(1050) )
     if (genImg) {
         const name = `/generated/question_word_table_screen_${time}.jpeg`
         const out = fs.createWriteStream(__dirname + name)

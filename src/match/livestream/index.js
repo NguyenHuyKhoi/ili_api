@@ -346,13 +346,14 @@ class LiveStreamHandler {
 
     retrieveAnswers =  async () => {
         if (this.isRetrievedAnswers) return 
+        this.isRetrievedAnswers = this.canRetrieveAnswers()
+        if (!this.isRetrievedAnswers )  return
+        
         let {match, platformHander} = this
         let stage = match.progress[match.progress.length -1]
 
+        if (stage == null) return
         let {typeId} = stage.question
-
-        this.isRetrievedAnswers = this.canRetrieveAnswers()
-        if (!this.isRetrievedAnswers )  return
 
         var answers = await platformHander.retrieveAnswers(stage.startAt, typeId)
         

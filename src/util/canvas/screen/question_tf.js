@@ -45,6 +45,11 @@ const drawQuestionTF =  async (canvas, bg, data, genImg = false) => {
         ctx.fillText(answer, cv(610), cv(620 + 170 * index));
     })
 
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `${cv(35)}px SetoFont-SP`;
+    ctx.fillStyle = '#707070';
+    ctx.fillText('Comment 1,2 or T/F to answer. ', cv(960), cv(1050) )
 
     if (genImg) {
         const name = `/generated/question_tf_screen_${time}.jpeg`

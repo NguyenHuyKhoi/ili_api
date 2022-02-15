@@ -42,7 +42,7 @@ class FacebookHandler {
 
     extractAnswer = (msg) => {
         try {
-            console.log('Get msg user:', msg.from);
+            console.log('Get msg user:', msg);
             
             // Check answer is on time 
             let answerPublishTime = new Date(msg.created_time)
@@ -65,6 +65,14 @@ class FacebookHandler {
             }
             var {answerContent, aliasName} = temp
 
+             // FB don't return author infor of comment in real account 
+            if (msg.from == null) {
+                msg.from = {
+                    id: '',
+                    name: aliasName,
+                    picture: null
+                }
+            }
 
             var playerName = aliasName == '' ? msg.from.name : aliasName
             var playerId = (msg.from.id + '_' + playerName)
@@ -75,7 +83,7 @@ class FacebookHandler {
                 username: playerName,
                 avatar: msg.from.picture ? msg.from.picture.data.url : null
             }
-            // //console.log("Player infor: ", player)
+            console.log("Player infor: ", player)
 
             var isExist = false
             this.legalAnswerPlayers.forEach((answerPlayer, index) => {

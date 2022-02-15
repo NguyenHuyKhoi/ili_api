@@ -212,7 +212,7 @@ class MatchHandler {
         let match = this.match
 
         // Must config in setting match
-        let time = match.showLeaderboardTime != undefined ? match.showQuestionEndTime : 10
+        let time = match.showLeaderboardTime != undefined ? match.showLeaderboardTime : 10
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_LEADERBOARD, {
             rid: match.pinCode,
             match,
@@ -237,8 +237,18 @@ class MatchHandler {
         }, 1000)
     }    
 
-    analysic = () => {
+    analysis = () => {
         let match = this.match
+        match.finishAt = new Date()
+        match.players.sort((a,b) => {
+            if (a.score > b.score) return -1
+            if (a.score == b.score) {
+                if (a.username < b.username) {
+                    return -1
+                }
+            }
+            return 1
+        })
         match.players.forEach((player, index) => {
             match.players[index].rank = index + 1
 
@@ -275,18 +285,7 @@ class MatchHandler {
 
     handleSummary =  () => {
         let match = this.match
-        match.finishAt = new Date()
-        match.players.sort((a,b) => {
-            if (a.score > b.score) return -1
-            if (a.score == b.score) {
-                if (a.username < b.username) {
-                    return -1
-                }
-            }
-            return 1
-        })
         // Calculate 
-        this.analysic()
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_SUMMARY, {
             rid: match.pinCode,
             match
@@ -305,8 +304,20 @@ class MatchHandler {
         }
     }
     
+    updateLivestreamUrl = (url) => {
+        let match = this.match 
+        console.log("Update livestream url on match handler: ", url, match.livestream)
+        if (match.livestream == null) {
+            return
+        }
+        match.livestream.livestreamUrl = url
+        this.handleUpdateToDB()
+        console.log("Update livestream url :", url)
+    }
     handleEndMatch = () => {
         let match = this.match
+        this.analysis()
+        this.match.finishAt = new Date()
         this.match.state = 'finished'
         this.handleUpdateToDB()
         if (this.subcriber) this.subcriber.emit(MATCH_EVENTS.ON_END_MATCH, {

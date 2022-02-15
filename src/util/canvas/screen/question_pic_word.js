@@ -54,6 +54,12 @@ const drawQuestionPicWord =  async (canvas, bg, data, genImg = false) => {
         var py = 840
         ctx.fillText('?' , cv(px), cv(py));
     });
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `${cv(35)}px SetoFont-SP`;
+    ctx.fillStyle = '#707070';
+    ctx.fillText('Comment keyword you guess.', cv(960), cv(1050) )
     if (genImg) {
         const name = `/generated/question_pic_word_screen_${time}.jpeg`
         const out = fs.createWriteStream(__dirname + name)

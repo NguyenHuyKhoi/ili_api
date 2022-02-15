@@ -26,7 +26,8 @@ const getDetailController = async (req, res, next) => {
 const startLivestreamController = async (req, res, next) => {
     console.log("start livestream controller: ", req.body.pinCode)
     const result = await startLivestream({
-        pinCode: req.body.pinCode
+        pinCode: req.body.pinCode,
+        livestreamUrl: req.body.livestreamUrl
     })
     return res.status(result.error != undefined ? 500 : 200).json(result)
 }
