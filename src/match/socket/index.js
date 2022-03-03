@@ -131,7 +131,6 @@ module.exports =  (io, socket) => {
             }
             matchHandler.onKickPlayer(player._id)
             callback(true)
-            socket.leave(pinCode)
         }
 
         static onLock = (pinCode, callback) => {
