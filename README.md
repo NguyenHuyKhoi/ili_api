@@ -1,4 +1,10 @@
-# Installation guide for ILI server:
+# ILI PLatform - server side
+This website help you can create quizzes pack and host a quiz gameshow on Facebook/Youtube livestream. Moveover, any livestream viewer can comment to answer and this website will auto detect and give score for them (update rank realtime on livestream dashboard).
+Link web: https://ili-client.herokuapp.com/
+Link demo: 
+
+
+# Installation
 Pls check demo before: https://ili-client.herokuapp.com/
 > 1. Clone git.
 
